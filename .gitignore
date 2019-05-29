@@ -1,0 +1,10 @@
+.idea/
+obj/
+*.gch
+*.so
+*.o
+*.a
+
+# Executable
+a.out
+ft_ssl
