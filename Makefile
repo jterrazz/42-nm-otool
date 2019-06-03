@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/05/27 15:50:27 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/05/30 14:00:38 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 # **************************************************************************** #
 
 PATH_INC = inc
-PATH_LIB = lib
+PATH_LIB = libs
 PATH_OBJ = obj
 PATH_SRC = src
 
@@ -34,7 +34,7 @@ CC = gcc
 FLAGS_CC = -Wall -Wextra -Werror
 FLAGS_LCC = -Wall -Wextra -Werror
 
-LIBS = lib/ft_printf/libftprintf.a # lib/libft/libft.a
+LIBS = libs/ft_printf/libftprintf.a # libs/libft/libft.a
 
 # **************************************************************************** #
 # COMMANDS  		    													   #
