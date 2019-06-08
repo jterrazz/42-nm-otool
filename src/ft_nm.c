@@ -6,46 +6,23 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/05/29 23:32:48 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/08 11:20:40 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <stdlib.h> // For uint32_t2
-#include "ft_printf.h"
-
-uint32_t ft_nm(int fd) {
-	struct stat buf;
-
-	if (fstat(fd, &buf) < 0) {
-		ft_printf("fstat error");
-		return 1;
-	}
-
-	ft_printf("");
-
-	return 0;
-}
+#include "./ft_nm.h"
 
 int main(int argc, char const *argv[]) {
+	t_env env;
 	int i;
-	int fd;
 
-	i = 0;
-	if (argc < 2) {
-		//yo
-		ft_printf("no args\n");
-		return 1;
-	}
+	i = cmd_init_env(&env, argc, argv, BIN_NM);
+
 	while (i < argc) {
-		if ((fd = open(argv[i], O_RDONLY)) < 0) {
-			ft_printf("open error\n");
-		} else if (ft_nm(fd) < 0) {
-			ft_printf("nm error\n");
-			return 1;
-		}
+		cmd_process_file(&env, argv[i]);
 		i++;
 	}
-	return 0;
+
+	// free(env->...)
+	return (EXIT_SUCCESS);
 }

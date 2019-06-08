@@ -4,6 +4,7 @@ obj/
 *.so
 *.o
 *.a
+.DS_Store
 
 # Executable
 a.out
