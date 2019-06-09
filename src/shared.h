@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/09 23:28:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 00:24:23 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,14 @@ typedef struct symtab_command t_symtab_command;
 typedef struct nlist t_nlist;
 typedef struct nlist_64 t_nlist_64;
 
+typedef struct s_symbol { // Maybe delete some (probably :) in simtab file particulary )
+	char *name;
+	uint8_t type;
+	uint8_t sect;
+	uint16_t desc;
+	uint64_t value;
+}				t_symbol;
+
 // TODO Check all properties are used
 
 typedef struct s_env {
@@ -65,7 +73,9 @@ typedef struct s_file {
 int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin);
 int cmd_process_file(t_env *env, char const *filename);
 
-void parse_file(t_env *env, t_file *file);
-int	parse_segment(void *segment_command, t_arch arch);
+void handle_file(t_env *env, t_file *file);
+
+int	parse_segment(t_env *env, void *segment_command, t_arch arch);
+int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch);
 
 #endif
