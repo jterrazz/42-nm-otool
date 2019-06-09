@@ -1,26 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   mach_header.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/09 19:37:32 by jterrazz         ###   ########.fr       */
+/*   Created: 2019/06/09 18:51:18 by jterrazz          #+#    #+#             */
+/*   Updated: 2019/06/09 18:51:19 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../shared.h"
-
-/*
-** Returns the index of the last flag found or 0
-*/
-
-int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin) {
-	// ft_bzero(env);
-	env->argc = argc;
-	env->argv = argv;
-	env->bin = bin;
-
-	return 1;
-}
