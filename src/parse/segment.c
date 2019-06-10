@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 13:07:08 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 15:12:09 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ static void file_add_mysection(t_file *file, void *sect, t_arch arch) {
 
 	ft_lstadd(&file->mysects, ft_lstnew(&mysect, sizeof(t_mysection)));
 }
+
+/*
+** Parse the segment, supports for :
+** - hexdumping a segment content
+** - setting the file->mysects
+*/
 
 int	parse_segment(t_env *env, t_file *file, void *segment_command, t_arch arch) {
 	// Check seg ?

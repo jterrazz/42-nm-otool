@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 12:37:17 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 15:10:14 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_file {
 	t_arch arch;
 	uint64_t nsects;
 	t_list *mysects;
-	void *mysyms;
+	t_list *mysyms;
 }				t_file;
 
 int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin);

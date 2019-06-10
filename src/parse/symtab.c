@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 13:08:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 15:12:17 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,6 @@ static void match_sym_section(t_list *mysect_lst, t_symbol *mysym) {
 	t_mysection *mysect;
 
 	if ((mysect = find_mysection(mysect_lst, mysym->sect))) {
-		// __data
-		// __const
-		// __common
 		if (!ft_strcmp(mysect->name, SECT_TEXT))
 			mysym->type_p = 'T'; // Never found
 		else if (!ft_strcmp(mysect->name, SECT_DATA))
@@ -59,7 +56,7 @@ static void match_sym_section(t_list *mysect_lst, t_symbol *mysym) {
 	}
 }
 
-static void complete_mysym(t_file *file, t_symbol *mysym, t_arch arch) {
+static void fill_mysym(t_file *file, t_symbol *mysym) {
 	// #define N_ABS 0x2		/* absolute, n_sect == NO_SECT */
 	// #define N_SECT 0xe		/* defined in section number n_sect */
 	// #define N_PBUD 0xc		/* prebound undefined (defined in a dylib) */
@@ -69,9 +66,11 @@ static void complete_mysym(t_file *file, t_symbol *mysym, t_arch arch) {
 	} else if ((N_TYPE & mysym->type) == N_UNDF) {
 		mysym->type_p = 'U';
 	}
-	ft_printf("%0*llx %c %s\n", (arch == ARCH_32) ? 8 : 16, mysym->value, mysym->type_p, mysym->name);
-	(void)arch;
 }
+
+/*
+** Parse the symbol table, and set the file->mysym variable
+*/
 
 int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch) { // No need for 64 ?
 	void *symtab;
@@ -89,7 +88,8 @@ int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch) { 
 			init_mysym(&mysym, strtab + ((t_nlist *)symtab + i)->n_un.n_strx, (t_nlist *)symtab + i, arch);
 		else
 			init_mysym(&mysym, strtab + ((t_nlist_64 *)symtab + i)->n_un.n_strx, (t_nlist_64 *)symtab + i, arch);
-		complete_mysym(file, &mysym, arch);
+		fill_mysym(file, &mysym);
+		ft_lstadd(&file->mysyms, ft_lstnew(&mysym, sizeof(t_symbol)));
 		i++;
 	}
 
