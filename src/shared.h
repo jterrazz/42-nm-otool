@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 00:24:23 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 02:00:40 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 // TODO Check for endian everywhere + for 64/32
 // TODO Check for all offsets
+// Makefile messages
 
 #define FAILURE -1
 #define SUCCESS 0
@@ -42,6 +43,7 @@ typedef struct load_command t_load_command;
 typedef struct segment_command t_segment_command;
 typedef struct segment_command_64 t_segment_command_64;
 typedef struct section t_section;
+typedef struct section_64 t_section_64;
 
 typedef struct symtab_command t_symtab_command;
 typedef struct nlist t_nlist;
@@ -66,7 +68,7 @@ typedef struct s_env {
 typedef struct s_file {
 	char const *filename;
 	size_t filesize;
-	char *start;
+	void *start;
 	t_arch arch;
 }				t_file;
 
@@ -75,7 +77,9 @@ int cmd_process_file(t_env *env, char const *filename);
 
 void handle_file(t_env *env, t_file *file);
 
-int	parse_segment(t_env *env, void *segment_command, t_arch arch);
+int	parse_segment(t_env *env, t_file *file, void *segment_command, t_arch arch);
 int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch);
+
+void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
 
 #endif

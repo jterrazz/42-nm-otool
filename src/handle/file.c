@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 00:24:24 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 01:48:45 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void parse_load_commands(t_env *env, t_file *file, t_arch arch) { // dedicated f
 
 	while (ncmds--) {
 		if (lc->cmd == LC_SEGMENT || lc->cmd == LC_SEGMENT_64)
-			parse_segment(env, lc, arch);
+			parse_segment(env, file, lc, arch);
 		else if (env->bin == BIN_NM && lc->cmd == LC_SYMTAB) // 64 / If no otool
 			parse_symtab(file, (void *)lc, arch);
 		lc = (void *)lc + lc->cmdsize;
