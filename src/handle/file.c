@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 16:26:00 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 16:44:55 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,55 +41,6 @@ void parse_mach_file(t_env *env, t_file *file, uint32_t magic) {
 	}
 }
 
-// static int sort_mysyms_alpha(t_list *lst1, t_list *lst2) {
-// 	t_symbol *sym1;
-// 	t_symbol *sym2;
-//
-// 	if (!lst1 || !lst2 || !lst1->content || !lst2->content)
-// 		return 1;
-// 	sym1 = lst1->content;
-// 	sym2 = lst2->content;
-// 	// ft_printf("s1 :%s, s3 %s\n",sym1->name, sym2->name);
-// 	return (ft_strcmp(sym1->name, sym2->name) > 0);
-// }
-//
-// static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
-// 	t_list *start;
-// 	t_list *el;
-// 	void *content_tmp;
-// 	size_t content_size_tmp;
-//
-// 	if (!lst)
-// 		return;
-// 	start = lst;
-// 	el = lst;
-// 	int i = 30;
-// 	t_list *el2;
-// 	while (i-- && el && el->next)
-// 	{
-// 		if ((*f)(el, el->next)) {
-// 			content_tmp = el->content;
-// 			content_size_tmp = el->content_size;
-// 			el->content = el->next->content;
-// 			el->content_size = el->next->content_size;
-// 			el->next->content = content_tmp;
-// 			el->next->content_size = content_size_tmp;
-// 			el = start;
-//
-//
-// 			el2 = start;
-// 			while (el2) {
-// 				ft_printf("%x \n", el2->next);
-// 				// ft_printf("%s ", ((t_symbol *)(el2->content))->name);
-// 				el2 = el2->next;
-// 			}
-// 			ft_printf("\n\n");
-// 		} else {
-// 			el = el->next;
-// 		}
-// 	}
-// }
-
 void handle_file(t_env *env, t_file *file) {
 	uint32_t magic;
 	uint32_t filetype;
@@ -103,15 +54,8 @@ void handle_file(t_env *env, t_file *file) {
 	if (magic == MH_MAGIC || magic == MH_CIGAM || magic == MH_MAGIC_64 || magic == MH_CIGAM_64) { // Check cigam is working
 		parse_mach_file(env, file, magic);
 		if (env->bin == BIN_NM) {
-			// ft_lstsort(file->mysyms, sort_mysyms_alpha);
-
-
-			t_list *tmp = file->mysyms;
-			while (tmp) {
-				tmp = tmp->next;
-			}
-
-
+			// Do sort in print
+			print_mysyms(file);
 		}
 	} else
 		ft_printf("Not a valid file"); // Do a better msg ???

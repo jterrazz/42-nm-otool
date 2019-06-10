@@ -6,10 +6,11 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/06/10 01:52:46 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/06/10 17:01:10 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# Loader in makefile + replace in global libs
 INC_PATH = inc
 LIB_PATH = libs
 BUILD_PATH = obj
@@ -18,7 +19,7 @@ SRC_PATH = src
 SOURCES += cmd/env.c cmd/process_file.c
 SOURCES += handle/file.c
 SOURCES += parse/segment.c parse/symtab.c
-SOURCES += print/ft_hexdump.c
+SOURCES += print/ft_hexdump.c print/mysyms.c
 
 SOURCES1 = ft_nm.c $(SOURCES)
 SOURCES2 = ft_otool.c $(SOURCES)

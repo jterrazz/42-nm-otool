@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 15:12:17 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 17:10:26 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../ft_nm.h"
 
 static void init_mysym(t_symbol *mysym, char *symname, void *sym, t_arch arch) {
-	ft_bzero(mysym, sizeof(t_symbol *));
+	ft_bzero(mysym, sizeof(t_symbol));
 	mysym->type_p = ' ';
 	mysym->name = symname;
 	if (arch == ARCH_32) {
@@ -66,12 +66,21 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 	} else if ((N_TYPE & mysym->type) == N_UNDF) {
 		mysym->type_p = 'U';
 	}
+	// 	#define	N_STAB	0xe0  /* if any of these bits set, a symbolic debugging entry */
+	// #define	N_PEXT	0x10  /* private external symbol bit */
+	// #define	N_TYPE	0x0e  /* mask for the type bits */
+	// #define	N_EXT	0x01  /* external symbol bit, set for external symbols */
+
+	// Maybe not for debug ?
+	if (!(mysym->type & N_EXT))
+		mysym->type_p -= ('A' - 'a');
 }
 
 /*
 ** Parse the symbol table, and set the file->mysym variable
 */
 
+// Secure all the lstnew
 int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch) { // No need for 64 ?
 	void *symtab;
 	void *strtab;
@@ -89,6 +98,7 @@ int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch) { 
 		else
 			init_mysym(&mysym, strtab + ((t_nlist_64 *)symtab + i)->n_un.n_strx, (t_nlist_64 *)symtab + i, arch);
 		fill_mysym(file, &mysym);
+
 		ft_lstadd(&file->mysyms, ft_lstnew(&mysym, sizeof(t_symbol)));
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 15:10:14 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 16:44:54 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,6 @@ int	parse_segment(t_env *env, t_file *file, void *segment_command, t_arch arch);
 int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch);
 
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
+void print_mysyms(t_file *file);
 
 #endif
