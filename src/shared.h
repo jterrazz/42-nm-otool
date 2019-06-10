@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 02:00:40 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 12:37:17 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 // TODO Check for endian everywhere + for 64/32
 // TODO Check for all offsets
 // Makefile messages
+// Test to make a malloc fails (by limiting memory ?)
+// Printf rename t_flag and update in global libs
 
 #define FAILURE -1
 #define SUCCESS 0
@@ -23,6 +25,7 @@
 #include <stdlib.h> // For uint32_t (check we use it)
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+#include "libft.h" // Remove in others ?
 
 typedef enum { BIN_NM, BIN_OTOOL } t_bin;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
@@ -49,16 +52,22 @@ typedef struct symtab_command t_symtab_command;
 typedef struct nlist t_nlist;
 typedef struct nlist_64 t_nlist_64;
 
+// Rename to mysymbal
 typedef struct s_symbol { // Maybe delete some (probably :) in simtab file particulary )
 	char *name;
 	uint8_t type;
+	char type_p;
 	uint8_t sect;
 	uint16_t desc;
 	uint64_t value;
 }				t_symbol;
 
-// TODO Check all properties are used
+typedef struct s_mysection {
+	char *name;
+	uint64_t index;
+}				t_mysection;
 
+// Put in cmd.h
 typedef struct s_env {
 	int argc;
 	char const **argv;
@@ -66,10 +75,13 @@ typedef struct s_env {
 }				t_env;
 
 typedef struct s_file {
-	char const *filename;
-	size_t filesize;
 	void *start;
+	char const *filename;
+	uint64_t filesize;
 	t_arch arch;
+	uint64_t nsects;
+	t_list *mysects;
+	void *mysyms;
 }				t_file;
 
 int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin);

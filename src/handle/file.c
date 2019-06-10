@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 01:48:45 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 11:28:27 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../ft_nm.h"
 
 void parse_load_commands(t_env *env, t_file *file, t_arch arch) { // dedicated file
-	size_t ncmds;
+	uint64_t ncmds;
 	t_load_command *lc;
 	(void)env;
 
@@ -40,9 +40,9 @@ void parse_load_commands(t_env *env, t_file *file, t_arch arch) { // dedicated f
 void handle_file(t_env *env, t_file *file) {
 	uint32_t magic;
 	uint32_t filetype;
-
+	// FILE IS PROBABLY DEFINED HERE (BECAUSE FILE IS THE  EXECUTABLE AND NOT ARCHIVE)
 	magic = *(uint32_t *)(file->start);
-	filetype = ((t_mach_header *)file->start)->filetype; // 64bits
+	filetype = ((t_mach_header *)(file->start))->filetype; // 64bits
 
 	// Handle ar
 	// Handle fat

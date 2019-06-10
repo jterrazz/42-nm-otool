@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:45:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 00:08:22 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 11:25:27 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int cmd_process_file(t_env *env, char const *filename)
     if (munmap(ptr, file.filesize) < 0)
         return FAILURE; // same
     close(fd);
+    // free file (with mysects ...)
 
     return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 02:14:19 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 13:07:08 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,46 @@
 #include "ft_printf.h"
 #include "../ft_nm.h"
 
-void hexdump_segment_content(t_env *env, t_file *file, void *section, t_arch arch) { // 64
+static void hexdump_segment_content(t_file *file, void *sect, t_arch arch) { // 64
 	uint64_t segstart;
 	uint64_t size;
 	uint32_t offset;
 	char *name;
 
 	if (arch == ARCH_32) {
-		segstart = ((t_section *)section)->addr;
-		size = ((t_section *)section)->size;
-		offset = ((t_section *)section)->offset;
-		name = ((t_section *)section)->sectname;
+		segstart = ((t_section *)sect)->addr;
+		size = ((t_section *)sect)->size;
+		offset = ((t_section *)sect)->offset;
+		name = ((t_section *)sect)->sectname;
 	} else {
-		segstart = ((t_section_64 *)section)->addr;
-		size = ((t_section_64 *)section)->size;
-		offset = ((t_section_64 *)section)->offset;
-		name = ((t_section_64 *)section)->sectname;
+		segstart = ((t_section_64 *)sect)->addr;
+		size = ((t_section_64 *)sect)->size;
+		offset = ((t_section_64 *)sect)->offset;
+		name = ((t_section_64 *)sect)->sectname;
 	}
 	if (!ft_strcmp(SECT_TEXT, name)) {
 		ft_printf("Contents of (__TEXT,__text) section\n");
 		ft_hexdump(file->start + offset, size, segstart, arch);
 	}
-	(void)env;
 }
 
-// Test to make a malloc fails (by limiting memory ?)
+// malloc secure
+static void file_add_mysection(t_file *file, void *sect, t_arch arch) {
+	t_mysection mysect;
+
+	if (arch == ARCH_32)
+		mysect.name = ((t_section *)sect)->sectname;
+	else
+		mysect.name = ((t_section_64 *)sect)->sectname;
+	mysect.index =  file->nsects;
+
+	ft_lstadd(&file->mysects, ft_lstnew(&mysect, sizeof(t_mysection)));
+}
+
 int	parse_segment(t_env *env, t_file *file, void *segment_command, t_arch arch) {
 	// Check seg ?
-	size_t nsects;
-	void *section; // t_section_64
+	uint64_t nsects;
+	void *section;
 
 	if (arch == ARCH_32) {
 		nsects = ((t_segment_command *) segment_command)->nsects;
@@ -53,11 +64,11 @@ int	parse_segment(t_env *env, t_file *file, void *segment_command, t_arch arch) 
 	}
 
 	while (nsects--) {
+		file->nsects++;
 		if (env->bin == BIN_OTOOL) {
-			hexdump_segment_content(env, file, section, arch);
+			hexdump_segment_content(file, section, arch);
 		} else {
-			// ft_printf("%s: %s\n", section->sectname, section->segname);
-			// Copy data to list here
+			file_add_mysection(file, section, arch);
 		}
 		section = (arch == ARCH_32)
 			? section + sizeof(t_section)
