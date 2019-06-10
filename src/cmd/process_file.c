@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:45:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 11:25:27 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 17:34:50 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int cmd_process_file(t_env *env, char const *filename)
     if ((ptr = mmap(NULL, file.filesize, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
         return FAILURE; //same
     file.start = ptr;
-    handle_file(env, &file);
+    handle_file(env, &file, file.start);
     if (munmap(ptr, file.filesize) < 0)
         return FAILURE; // same
     close(fd);

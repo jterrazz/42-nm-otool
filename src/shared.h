@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 16:44:54 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/10 17:34:09 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@
 #include <stdlib.h> // For uint32_t (check we use it)
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+#include <ar.h>
 #include "libft.h" // Remove in others ?
 
+
+// Removes ft_nm.h
 typedef enum { BIN_NM, BIN_OTOOL } t_bin;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
 
@@ -87,8 +90,9 @@ typedef struct s_file {
 int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin);
 int cmd_process_file(t_env *env, char const *filename);
 
-void handle_file(t_env *env, t_file *file);
+void handle_file(t_env *env, t_file *file, void *ptr);
 
+void parse_mach_file(t_env *env, t_file *file, uint32_t magic);
 int	parse_segment(t_env *env, t_file *file, void *segment_command, t_arch arch);
 int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch);
 
