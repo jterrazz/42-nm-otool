@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 17:10:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:36:06 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static t_mysection *find_mysection(t_list *lst, uint8_t n_sect) {
 	return NULL;
 }
 
+//https://github.com/opensource-apple/cctools/blob/master/include/mach-o/nlist.h
 static void match_sym_section(t_list *mysect_lst, t_symbol *mysym) {
 	t_mysection *mysect;
 
@@ -80,8 +81,7 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 ** Parse the symbol table, and set the file->mysym variable
 */
 
-// Secure all the lstnew
-int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch) { // No need for 64 ?
+int parse_symtab(t_file *file, t_symtab_command *symtab_command) { // No need for 64 ?
 	void *symtab;
 	void *strtab;
 	uint64_t nsyms;
@@ -93,10 +93,10 @@ int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch) { 
 	nsyms = symtab_command->nsyms;
 	i = 0;
 	while (i < nsyms) {
-		if (arch == ARCH_32)
-			init_mysym(&mysym, strtab + ((t_nlist *)symtab + i)->n_un.n_strx, (t_nlist *)symtab + i, arch);
+		if (file->arch == ARCH_32)
+			init_mysym(&mysym, strtab + ((t_nlist *)symtab + i)->n_un.n_strx, (t_nlist *)symtab + i, file->arch);
 		else
-			init_mysym(&mysym, strtab + ((t_nlist_64 *)symtab + i)->n_un.n_strx, (t_nlist_64 *)symtab + i, arch);
+			init_mysym(&mysym, strtab + ((t_nlist_64 *)symtab + i)->n_un.n_strx, (t_nlist_64 *)symtab + i, file->arch);
 		fill_mysym(file, &mysym);
 
 		ft_lstadd(&file->mysyms, ft_lstnew(&mysym, sizeof(t_symbol)));

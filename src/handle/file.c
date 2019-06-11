@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:24:42 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:27:22 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void handle_file(t_env *env, t_file *file)
 		handle_archive(env, file);
 	}
 
-	// Handle ar
 	// Handle fat
 	// Handle not supported
 	else if (magic == MH_MAGIC || magic == MH_CIGAM

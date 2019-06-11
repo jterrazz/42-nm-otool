@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:23:29 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:36:03 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 // Makefile messages
 // Test to make a malloc fails (by limiting memory ?)
 // Printf rename t_flag and update in global libs
+// Secure all the lstnew
 
 // Replace My ft_atoi 	int is_neg; ~!!!!!!!!!!!!!!!!! and in global libs !!!!!!!!
 
@@ -100,8 +101,8 @@ void handle_file(t_env *env, t_file *file);
 void handle_archive(t_env *env, t_file *file);
 
 void parse_mach_file(t_env *env, t_file *file, uint32_t magic);
-int	parse_segment(t_env *env, t_file *file, void *segment_command, t_arch arch);
-int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch);
+int	parse_segment(t_env *env, t_file *file, void *segment_command);
+int parse_symtab(t_file *file, t_symtab_command *symtab_command);
 
 void init_file(t_file *file, char const *name, uint64_t size, void *start);
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
