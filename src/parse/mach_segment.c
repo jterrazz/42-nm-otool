@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   segment.c                                          :+:      :+:    :+:   */
+/*   mach_segment.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:35:54 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:46:04 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void file_add_mysection(t_file *file, void *sect)
 ** - setting the file->mysects
 */
 
-int	parse_segment(t_env *env, t_file *file, void *segment_command) {
+int	parse_mach_segment(t_env *env, t_file *file, void *segment_command) {
 	uint64_t nsects;
 	void *section;
 

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:36:03 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:46:15 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ int cmd_process_file(t_env *env, char const *filename);
 void handle_file(t_env *env, t_file *file);
 void handle_archive(t_env *env, t_file *file);
 
-void parse_mach_file(t_env *env, t_file *file, uint32_t magic);
-int	parse_segment(t_env *env, t_file *file, void *segment_command);
-int parse_symtab(t_file *file, t_symtab_command *symtab_command);
+void parse_mach(t_env *env, t_file *file);
+int	parse_mach_segment(t_env *env, t_file *file, void *segment_command);
+int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command);
 
 void init_file(t_file *file, char const *name, uint64_t size, void *start);
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);

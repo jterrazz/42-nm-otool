@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   symtab.c                                           :+:      :+:    :+:   */
+/*   mach_symtab.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:36:06 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:46:17 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 ** Parse the symbol table, and set the file->mysym variable
 */
 
-int parse_symtab(t_file *file, t_symtab_command *symtab_command) { // No need for 64 ?
+int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command) { // No need for 64 ?
 	void *symtab;
 	void *strtab;
 	uint64_t nsyms;
