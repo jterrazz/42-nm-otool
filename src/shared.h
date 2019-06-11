@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/10 17:34:09 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:23:29 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 // Makefile messages
 // Test to make a malloc fails (by limiting memory ?)
 // Printf rename t_flag and update in global libs
+
+// Replace My ft_atoi 	int is_neg; ~!!!!!!!!!!!!!!!!! and in global libs !!!!!!!!
 
 #define FAILURE -1
 #define SUCCESS 0
@@ -32,6 +34,9 @@
 // Removes ft_nm.h
 typedef enum { BIN_NM, BIN_OTOOL } t_bin;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
+typedef int t_bool;
+
+typedef struct ar_hdr t_ar_hdr;
 
 typedef struct mach_header t_mach_header;
 typedef struct mach_header_64 t_mach_header_64;
@@ -81,6 +86,7 @@ typedef struct s_file {
 	void *start;
 	char const *filename;
 	uint64_t filesize;
+	t_bool is_virtual;
 	t_arch arch;
 	uint64_t nsects;
 	t_list *mysects;
@@ -90,12 +96,14 @@ typedef struct s_file {
 int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin);
 int cmd_process_file(t_env *env, char const *filename);
 
-void handle_file(t_env *env, t_file *file, void *ptr);
+void handle_file(t_env *env, t_file *file);
+void handle_archive(t_env *env, t_file *file);
 
 void parse_mach_file(t_env *env, t_file *file, uint32_t magic);
 int	parse_segment(t_env *env, t_file *file, void *segment_command, t_arch arch);
 int parse_symtab(t_file *file, t_symtab_command *symtab_command, t_arch arch);
 
+void init_file(t_file *file, char const *name, uint64_t size, void *start);
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
 void print_mysyms(t_file *file);
 

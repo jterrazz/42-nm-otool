@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/06/10 17:17:42 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/06/11 12:22:00 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ BUILD_PATH = obj
 SRC_PATH = src
 
 SOURCES += cmd/env.c cmd/process_file.c
-SOURCES += handle/file.c
+SOURCES += handle/file.c handle/archive.c
 SOURCES += parse/segment.c parse/symtab.c parse/mach_file.c
 SOURCES += print/ft_hexdump.c print/mysyms.c
 
