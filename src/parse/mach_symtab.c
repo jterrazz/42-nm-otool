@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:46:17 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:19:55 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void match_sym_section(t_list *mysect_lst, t_symbol *mysym) {
 
 	if ((mysect = find_mysection(mysect_lst, mysym->sect))) {
 		if (!ft_strcmp(mysect->name, SECT_TEXT))
-			mysym->type_p = 'T'; // Never found
+			mysym->type_p = !(mysym->type & N_EXT) ? 't' : 'T'; // Never found
 		else if (!ft_strcmp(mysect->name, SECT_DATA))
 			mysym->type_p = 'D';
 		else if (!ft_strcmp(mysect->name, SECT_BSS)) // Not sure in print cause never found ?
@@ -71,10 +71,6 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 	// #define	N_PEXT	0x10  /* private external symbol bit */
 	// #define	N_TYPE	0x0e  /* mask for the type bits */
 	// #define	N_EXT	0x01  /* external symbol bit, set for external symbols */
-
-	// Maybe not for debug ?
-	if (!(mysym->type & N_EXT))
-		mysym->type_p -= ('A' - 'a');
 }
 
 /*
