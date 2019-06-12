@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:46:24 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:48:46 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void parse_load_command(t_env *env, t_file *file, t_load_command *lc) {
 
 void parse_mach(t_env *env, t_file *file)
 {
-
 	uint64_t ncmds;
 	t_load_command *lc;
 

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:45:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:23:48 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:47:45 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <sys/mman.h>
 #include "../shared.h"
 #include "libft.h"
+
+// Where init_file = free_file
 
 int cmd_process_file(t_env *env, char const *filename)
 {
@@ -36,7 +38,6 @@ int cmd_process_file(t_env *env, char const *filename)
     if (munmap(ptr, buf.st_size) < 0)
         return FAILURE; // same
     close(fd);
-    // free file (with mysects ...)
 
     return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:45:38 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/11 13:35:58 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 // Also try with archive in archive (mayb go overflow with the size)
 // Check with files that don't start with this BSD thing AR_EFMT1
 // https://en.wikipedia.org/wiki/Ar_(Unix)           BSD Variant !
+
+// make && ./ft_nm /bin/bash
 
 void init_file(t_file *file, char const *name, uint64_t size, void *start)
 {
@@ -41,12 +43,14 @@ void handle_file(t_env *env, t_file *file)
 {
 	uint32_t magic;
 	// uint32_t filetype;
-	// FILE IS PROBABLY DEFINED HERE (BECAUSE FILE IS THE  EXECUTABLE AND NOT ARCHIVE)
+
 	magic = *(uint32_t *)(file->start);
 	// filetype = ((t_mach_header *)ptr)->filetype; // 64bits
 
 	if (!ft_strncmp(file->start, ARMAG, SARMAG)) { // or magic == *(uint32_t *)ARMAG
 		handle_archive(env, file);
+	} else if (magic == FAT_MAGIC || magic == FAT_CIGAM) {
+
 	}
 
 	// Handle fat
@@ -55,5 +59,5 @@ void handle_file(t_env *env, t_file *file)
 		|| magic == MH_MAGIC_64 || magic == MH_CIGAM_64) { // Check cigam is working
 		handle_mach(env, file, magic);
 	} else
-		ft_printf("Not a valid file"); // Do a better msg ???
+		ft_printf("The file was not recognized as a valid object file"); // add filename
 }
