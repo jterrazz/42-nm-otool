@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/12 21:04:36 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:05:08 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void handle_fat_binary(t_env *env, t_file *file, uint32_t magic)
 			init_file(&virtual_file, file->filename, (file->swap_bits)
 				? ft_bswap_uint32(fat_arch->size)
 				: fat_arch->size, file->start + offset);
-			handle_file(env, &virtual_file);
+			return handle_file(env, &virtual_file);
 		}
 		fat_arch = (void *) fat_arch + sizeof(t_fat_arch);
 	}
