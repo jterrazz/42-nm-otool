@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/12 20:27:24 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:28:48 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ void print_mysyms(t_file *file)
 
 	while (symlst) {
 		sym = symlst->content;
-		if (sym->type_p == 't' || sym->type_p == 'T') // TODO Find better condition ?
+		if (sym->type & N_STAB) // Maybe do something with that
+			break;
+		if (sym->type_p != 'U') // TODO Find better condition ?
 			ft_printf("%0*llx %c %s\n", left_padding, sym->value, sym->type_p, sym->name);
 		else
 			ft_printf("%*c %c %s\n", left_padding, ' ', sym->type_p, sym->name);
