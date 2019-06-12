@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:59:53 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:01:57 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@
 
 #include <stdlib.h> // For uint32_t (check we use it)
 #include <mach-o/loader.h>
-#include <mach-o/nlist.h>
-#include <mach-o/fat.h>
-#include <ar.h>
+#include <mach-o/nlist.h> // For segment structure
+#include <mach/machine.h> // For CPU type
+#include <mach-o/fat.h> // For fat structure
+#include <ar.h> // Fir archive structure
 #include "libft.h" // Remove in others ?
 
 
@@ -38,6 +39,8 @@ typedef enum { BIN_NM, BIN_OTOOL } t_bin;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
 typedef int t_bool;
 
+typedef struct fat_header t_fat_header;
+typedef struct fat_arch t_fat_arch;
 typedef struct ar_hdr t_ar_hdr;
 
 typedef struct mach_header t_mach_header;
@@ -80,6 +83,7 @@ typedef struct s_mysection {
 // Put in cmd.h
 typedef struct s_env {
 	int argc;
+	cpu_type_t cputype;
 	char const **argv;
 	t_bin bin;
 }				t_env;
@@ -88,6 +92,7 @@ typedef struct s_file {
 	void *start;
 	char const *filename;
 	uint64_t filesize;
+	t_bool swap_bits;
 	t_bool is_virtual;
 	t_arch arch;
 	uint64_t nsects;
@@ -108,5 +113,9 @@ int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command);
 void init_file(t_file *file, char const *name, uint64_t size, void *start);
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
 void print_mysyms(t_file *file);
+
+int32_t ft_bswap_int32(int32_t x);
+uint32_t ft_bswap_uint32(uint32_t x);
+uint64_t ft_bswap_uint64(uint64_t x);
 
 #endif

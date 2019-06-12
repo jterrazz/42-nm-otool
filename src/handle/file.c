@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 13:35:58 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:04:36 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // Also try with archive in archive (mayb go overflow with the size)
 // Check with files that don't start with this BSD thing AR_EFMT1
 // https://en.wikipedia.org/wiki/Ar_(Unix)           BSD Variant !
+// https://opensource.apple.com/source/xnu/xnu-344/EXTERNAL_HEADERS/mach-o/fat.h
 
 // make && ./ft_nm /bin/bash
 
@@ -25,18 +26,47 @@ void init_file(t_file *file, char const *name, uint64_t size, void *start)
 	file->filename = name;
 	file->filesize = size;
 	file->start = start;
+	file->swap_bits = FALSE;
 }
 
 void handle_mach(t_env *env, t_file *file, uint32_t magic)
 {
-	t_arch arch;
-	arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
+	file->arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
+	// file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE;
 
-	file->arch = arch;
 	parse_mach(env, file);
 
 	if (env->bin == BIN_NM)
 		print_mysyms(file);
+}
+
+void handle_fat_binary(t_env *env, t_file *file, uint32_t magic)
+{
+	uint32_t offset;
+	uint32_t nfat_arch;
+	t_fat_arch *fat_arch;
+	t_file virtual_file;
+	cpu_type_t cputype;
+
+	file->swap_bits = magic == FAT_CIGAM ? TRUE : FALSE;
+	nfat_arch = ((t_fat_header *)file->start)->nfat_arch;
+	nfat_arch = (file->swap_bits) ? ft_bswap_uint32(nfat_arch) : nfat_arch;
+	fat_arch = file->start + sizeof(t_fat_header);
+
+	while (nfat_arch-- > 0) {
+		// Check for offset forbidden values ?
+		cputype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cputype) : fat_arch->cputype;
+		if (env->cputype == cputype) {
+			offset = (file->swap_bits)
+				? ft_bswap_uint32(fat_arch->offset)
+				: fat_arch->offset;
+			init_file(&virtual_file, file->filename, (file->swap_bits)
+				? ft_bswap_uint32(fat_arch->size)
+				: fat_arch->size, file->start + offset);
+			handle_file(env, &virtual_file);
+		}
+		fat_arch = (void *) fat_arch + sizeof(t_fat_arch);
+	}
 }
 
 void handle_file(t_env *env, t_file *file)
@@ -50,10 +80,8 @@ void handle_file(t_env *env, t_file *file)
 	if (!ft_strncmp(file->start, ARMAG, SARMAG)) { // or magic == *(uint32_t *)ARMAG
 		handle_archive(env, file);
 	} else if (magic == FAT_MAGIC || magic == FAT_CIGAM) {
-
+		handle_fat_binary(env, file, magic);
 	}
-
-	// Handle fat
 	// Handle not supported
 	else if (magic == MH_MAGIC || magic == MH_CIGAM
 		|| magic == MH_MAGIC_64 || magic == MH_CIGAM_64) { // Check cigam is working
