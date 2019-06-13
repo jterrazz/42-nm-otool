@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/12 21:28:48 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/13 10:52:05 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,37 @@ static int sort_mysyms_alpha(t_list *lst1, t_list *lst2) {
 	return (ft_strcmp(sym1->name, sym2->name) > 0);
 }
 
-static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
-	t_list *start;
-	t_list *el;
+static void lst_swap(t_list *lst1, t_list *lst2)
+{
 	void *content_tmp;
 	size_t content_size_tmp;
 
-	if (!lst)
-		return;
-	start = lst;
-	el = lst;
-	while (el && el->next)
-	{
-		if ((*f)(el, el->next)) {
-			content_tmp = el->content;
-			content_size_tmp = el->content_size;
-			el->content = el->next->content;
-			el->content_size = el->next->content_size;
-			el->next->content = content_tmp;
-			el->next->content_size = content_size_tmp;
-			el = start;
-		} else {
+	content_tmp = lst1->content;
+	content_size_tmp = lst1->content_size;
+	lst1->content = lst2->content;
+	lst1->content_size = lst2->content_size;
+	lst2->content = content_tmp;
+	lst2->content_size = content_size_tmp;
+}
+
+static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
+	t_list *to_replace;
+	t_list *el;
+	t_list *min;
+
+	to_replace = lst;
+	while (to_replace->next) {
+		min = NULL;
+		el = to_replace;
+		while (el) {
+			if (!min || (*f)(min, el)) {
+				min = el;
+			}
 			el = el->next;
 		}
+		if (min && to_replace != min)
+			lst_swap(to_replace, min);
+		to_replace = to_replace->next;
 	}
 }
 
@@ -56,6 +64,7 @@ void print_mysyms(t_file *file)
 	t_symbol *sym;
 	uint8_t left_padding;
 
+	ft_printf("Will print mysyms\n");
 	left_padding = (file->arch == ARCH_32) ? 8 : 16;
 	symlst = file->mysyms;
 	ft_lstsort(symlst, sort_mysyms_alpha);

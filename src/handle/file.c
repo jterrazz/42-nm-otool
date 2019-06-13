@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/12 21:05:08 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/13 10:14:56 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,41 +32,13 @@ void init_file(t_file *file, char const *name, uint64_t size, void *start)
 void handle_mach(t_env *env, t_file *file, uint32_t magic)
 {
 	file->arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
-	// file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE;
-
+	file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE; // Delete is not used
+	ft_printf("Handling mach of %d size\n", file->filesize);
+	ft_printf("Is swap: %d\n", file->swap_bits);
 	parse_mach(env, file);
 
 	if (env->bin == BIN_NM)
 		print_mysyms(file);
-}
-
-void handle_fat_binary(t_env *env, t_file *file, uint32_t magic)
-{
-	uint32_t offset;
-	uint32_t nfat_arch;
-	t_fat_arch *fat_arch;
-	t_file virtual_file;
-	cpu_type_t cputype;
-
-	file->swap_bits = magic == FAT_CIGAM ? TRUE : FALSE;
-	nfat_arch = ((t_fat_header *)file->start)->nfat_arch;
-	nfat_arch = (file->swap_bits) ? ft_bswap_uint32(nfat_arch) : nfat_arch;
-	fat_arch = file->start + sizeof(t_fat_header);
-
-	while (nfat_arch-- > 0) {
-		// Check for offset forbidden values ?
-		cputype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cputype) : fat_arch->cputype;
-		if (env->cputype == cputype) {
-			offset = (file->swap_bits)
-				? ft_bswap_uint32(fat_arch->offset)
-				: fat_arch->offset;
-			init_file(&virtual_file, file->filename, (file->swap_bits)
-				? ft_bswap_uint32(fat_arch->size)
-				: fat_arch->size, file->start + offset);
-			return handle_file(env, &virtual_file);
-		}
-		fat_arch = (void *) fat_arch + sizeof(t_fat_arch);
-	}
 }
 
 void handle_file(t_env *env, t_file *file)
