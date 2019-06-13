@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 10:14:56 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/13 15:22:19 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void handle_mach(t_env *env, t_file *file, uint32_t magic)
 {
 	file->arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
 	file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE; // Delete is not used
-	ft_printf("Handling mach of %d size\n", file->filesize);
-	ft_printf("Is swap: %d\n", file->swap_bits);
+	// ft_printf("Handling mach of %d size\n", file->filesize);
+	// ft_printf("Is swap: %d\n", file->swap_bits);
 	parse_mach(env, file);
 
 	if (env->bin == BIN_NM)
@@ -52,7 +52,7 @@ void handle_file(t_env *env, t_file *file)
 	if (!ft_strncmp(file->start, ARMAG, SARMAG)) { // or magic == *(uint32_t *)ARMAG
 		handle_archive(env, file);
 	} else if (magic == FAT_MAGIC || magic == FAT_CIGAM) {
-		handle_fat_binary(env, file, magic);
+		handle_fat(env, file, magic);
 	}
 	// Handle not supported
 	else if (magic == MH_MAGIC || magic == MH_CIGAM

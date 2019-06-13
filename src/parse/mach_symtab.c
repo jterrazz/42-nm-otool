@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/12 21:19:55 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/13 15:47:24 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,16 @@ static void match_sym_section(t_list *mysect_lst, t_symbol *mysym) {
 
 	if ((mysect = find_mysection(mysect_lst, mysym->sect))) {
 		if (!ft_strcmp(mysect->name, SECT_TEXT))
-			mysym->type_p = !(mysym->type & N_EXT) ? 't' : 'T'; // Never found
+			mysym->type_p = 'T'; // Never found
 		else if (!ft_strcmp(mysect->name, SECT_DATA))
 			mysym->type_p = 'D';
 		else if (!ft_strcmp(mysect->name, SECT_BSS)) // Not sure in print cause never found ?
 			mysym->type_p = 'B';
 		else
 			mysym->type_p = 'S';
+
+		if (!(mysym->type & N_EXT))
+			mysym->type_p -= 'A' - 'a';
 	}
 }
 
@@ -62,6 +65,9 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 	// #define N_SECT 0xe		/* defined in section number n_sect */
 	// #define N_PBUD 0xc		/* prebound undefined (defined in a dylib) */
 	// #define N_INDR 0xa
+	if (N_STAB & mysym->type) {
+		mysym->type_p = '-'; // Remove if no debug
+	} else
 	if ((N_TYPE & mysym->type) == N_SECT) {
 		match_sym_section(file->mysects, mysym);
 	} else if ((N_TYPE & mysym->type) == N_UNDF) {
@@ -88,6 +94,7 @@ int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command) { // No ne
 	symtab = (void *) file->start + symtab_command->symoff;
 	nsyms = symtab_command->nsyms;
 	i = 0;
+
 	while (i < nsyms) {
 		if (file->arch == ARCH_32)
 			init_mysym(&mysym, strtab + ((t_nlist *)symtab + i)->n_un.n_strx, (t_nlist *)symtab + i, file->arch);

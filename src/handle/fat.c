@@ -6,13 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 10:11:43 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/13 14:24:47 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_nm.h"
 
-void handle_fat_binary(t_env *env, t_file *file, uint32_t magic)
+void handle_fat(t_env *env, t_file *file, uint32_t magic)
 {
 	uint32_t offset;
 	uint32_t nfat_arch;

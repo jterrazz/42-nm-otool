@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 10:25:22 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/13 15:22:09 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ void parse_mach(t_env *env, t_file *file)
 	lc = (t_load_command *)(file->start +
 		((file->arch == ARCH_32) ?
 		sizeof(t_mach_header) : sizeof(t_mach_header_64))); // secure
-	ft_printf("The are %lld load commands\n", ncmds);
+	// ft_printf("There are %lld load commands\n", ncmds);
 	while (ncmds--) {
-		ft_printf("Command nb %ld start %d\n", ncmds);
+		// ft_printf("Command nb %lld start\n", ncmds);
 		parse_load_command(env, file, lc);
 		lc = (void *)lc + lc->cmdsize; // Secure for corruption ?
-		ft_printf("Command nb %ld end %d\n", ncmds);
+		// ft_printf("Command nb %lld end\n", ncmds);
 	}
-	ft_printf("Ending parsing mach files\n");
+	// ft_printf("Ending parsing mach files\n");
 }

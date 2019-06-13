@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 10:52:05 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/13 15:48:23 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ static int sort_mysyms_alpha(t_list *lst1, t_list *lst2) {
 		return 1;
 	sym1 = lst1->content;
 	sym2 = lst2->content;
+	if (!ft_strcmp(sym1->name, sym2->name)) {
+		return sym1->value >= sym2->value;
+	}
 	return (ft_strcmp(sym1->name, sym2->name) > 0);
 }
 
@@ -64,16 +67,16 @@ void print_mysyms(t_file *file)
 	t_symbol *sym;
 	uint8_t left_padding;
 
-	ft_printf("Will print mysyms\n");
 	left_padding = (file->arch == ARCH_32) ? 8 : 16;
 	symlst = file->mysyms;
 	ft_lstsort(symlst, sort_mysyms_alpha);
+	// ft_printf("Will print mysyms\n");
 
 	while (symlst) {
 		sym = symlst->content;
-		if (sym->type & N_STAB) // Maybe do something with that
-			break;
-		if (sym->type_p != 'U') // TODO Find better condition ?
+		if (sym->type_p == '-') // Maybe do something with that
+			;
+		else if (sym->type_p != 'U') // TODO Find better condition ?
 			ft_printf("%0*llx %c %s\n", left_padding, sym->value, sym->type_p, sym->name);
 		else
 			ft_printf("%*c %c %s\n", left_padding, ' ', sym->type_p, sym->name);
