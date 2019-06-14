@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 14:25:12 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 11:37:06 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,7 @@ void print_mysyms(t_file *file);
 int32_t ft_bswap_int32(int32_t x);
 uint32_t ft_bswap_uint32(uint32_t x);
 uint64_t ft_bswap_uint64(uint64_t x);
+uint32_t swapif_u32(t_file *file, uint32_t x);
+uint64_t swapif_u64(t_file *file, uint64_t x);
 
 #endif

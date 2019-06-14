@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/06/13 14:25:02 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/06/14 11:01:58 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SOURCES += cmd/env.c cmd/process_file.c
 SOURCES += handle/file.c handle/archive.c handle/fat.c
 SOURCES += parse/mach_segment.c parse/mach_symtab.c parse/mach.c
 SOURCES += print/ft_hexdump.c print/mysyms.c
-SOURCES += utils/ft_bswap.c
+SOURCES += utils/ft_bswap.c utils/ft_bswap_helper.c
 
 SOURCES1 = ft_nm.c $(SOURCES)
 SOURCES2 = ft_otool.c $(SOURCES)

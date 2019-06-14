@@ -6,27 +6,27 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 15:47:24 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 11:39:32 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "../ft_nm.h"
 
-static void init_mysym(t_symbol *mysym, char *symname, void *sym, t_arch arch) {
+static void init_mysym(t_file *file, t_symbol *mysym, char *symname, void *sym) {
 	ft_bzero(mysym, sizeof(t_symbol));
 	mysym->type_p = ' ';
 	mysym->name = symname;
-	if (arch == ARCH_32) {
-		mysym->type = ((t_nlist *)sym)->n_type;
-		mysym->sect = ((t_nlist *)sym)->n_sect;
-		mysym->desc = ((t_nlist *)sym)->n_desc;
-		mysym->value = ((t_nlist *)sym)->n_value;
+	if (file->arch == ARCH_32) {
+		mysym->type = ((t_nlist *)sym)->n_type; // No swap ???
+		mysym->sect = ((t_nlist *)sym)->n_sect; // No swap ???
+		mysym->desc = ((t_nlist *)sym)->n_desc; // No swap ???
+		mysym->value = swapif_u32(file, ((t_nlist *)sym)->n_value);
 	} else {
-		mysym->type = ((t_nlist_64 *)sym)->n_type;
-		mysym->sect = ((t_nlist_64 *)sym)->n_sect;
-		mysym->desc = ((t_nlist_64 *)sym)->n_desc;
-		mysym->value = ((t_nlist_64 *)sym)->n_value;
+		mysym->type = ((t_nlist_64 *)sym)->n_type; // No swap ???
+		mysym->sect = ((t_nlist_64 *)sym)->n_sect; // No swap ???
+		mysym->desc = ((t_nlist_64 *)sym)->n_desc; // No swap ???
+		mysym->value = swapif_u64(file, ((t_nlist_64 *)sym)->n_value);
 	}
 }
 
@@ -70,8 +70,10 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 	} else
 	if ((N_TYPE & mysym->type) == N_SECT) {
 		match_sym_section(file->mysects, mysym);
+	} else if ((N_TYPE & mysym->type) == N_ABS) {
+		mysym->type_p = 'A';
 	} else if ((N_TYPE & mysym->type) == N_UNDF) {
-		mysym->type_p = 'U';
+		mysym->type_p = 'U'; // Second U condition and I !!!
 	}
 	// 	#define	N_STAB	0xe0  /* if any of these bits set, a symbolic debugging entry */
 	// #define	N_PEXT	0x10  /* private external symbol bit */
@@ -89,17 +91,21 @@ int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command) { // No ne
 	uint64_t nsyms;
 	uint64_t i;
 	t_symbol mysym;
+	char *symname;
 
-	strtab = (void *) file->start + symtab_command->stroff;
-	symtab = (void *) file->start + symtab_command->symoff;
-	nsyms = symtab_command->nsyms;
+	strtab = (void *) file->start + swapif_u32(file, symtab_command->stroff);
+	symtab = (void *) file->start + swapif_u32(file, symtab_command->symoff);
+	nsyms = swapif_u32(file, symtab_command->nsyms);
 	i = 0;
 
 	while (i < nsyms) {
-		if (file->arch == ARCH_32)
-			init_mysym(&mysym, strtab + ((t_nlist *)symtab + i)->n_un.n_strx, (t_nlist *)symtab + i, file->arch);
-		else
-			init_mysym(&mysym, strtab + ((t_nlist_64 *)symtab + i)->n_un.n_strx, (t_nlist_64 *)symtab + i, file->arch);
+		if (file->arch == ARCH_32) {
+			symname = strtab + swapif_u32(file, ((t_nlist *)symtab + i)->n_un.n_strx);
+			init_mysym(file, &mysym, symname, (t_nlist *)symtab + i);
+		} else {
+			symname = strtab + swapif_u32(file, ((t_nlist_64 *)symtab + i)->n_un.n_strx);
+			init_mysym(file, &mysym, symname, (t_nlist_64 *)symtab + i);
+		}
 		fill_mysym(file, &mysym);
 
 		ft_lstadd(&file->mysyms, ft_lstnew(&mysym, sizeof(t_symbol)));

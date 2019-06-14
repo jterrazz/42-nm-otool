@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 15:21:56 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 11:21:44 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void file_add_mysection(t_file *file, void *sect)
 */
 
 int	parse_mach_segment(t_env *env, t_file *file, void *segment_command) {
-	uint64_t nsects;
+	uint32_t nsects;
 	void *section;
 
 	if (file->arch == ARCH_32) {
@@ -69,12 +69,13 @@ int	parse_mach_segment(t_env *env, t_file *file, void *segment_command) {
 		nsects = ((t_segment_command_64 *) segment_command)->nsects;
 		section = segment_command + sizeof(t_segment_command_64);
 	}
+	nsects = swapif_u32(file, nsects);
 
 	while (nsects--) {
 		// ft_printf("Start of section %d\n", nsects);
 		file->nsects++;
 		if (env->bin == BIN_OTOOL) {
-			hexdump_segment_content(file, section);
+			hexdump_segment_content(file, section); // reverse
 		} else {
 			file_add_mysection(file, section);
 		}

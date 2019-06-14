@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 15:48:23 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 11:05:12 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
 	t_list *min;
 
 	to_replace = lst;
-	while (to_replace->next) {
+	while (to_replace && to_replace->next) {
 		min = NULL;
 		el = to_replace;
 		while (el) {
