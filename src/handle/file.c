@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 11:29:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 12:45:07 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,5 @@ void handle_file(t_env *env, t_file *file)
 		|| magic == MH_MAGIC_64 || magic == MH_CIGAM_64) { // Check cigam is working
 		handle_mach(env, file, magic);
 	} else
-		ft_printf("The file was not recognized as a valid object file"); // add filename
+		ft_printf("The file was not recognized as a valid object file\n"); // add filename
 }

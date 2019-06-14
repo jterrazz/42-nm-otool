@@ -6,17 +6,44 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 11:39:32 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 12:43:44 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "../ft_nm.h"
 
+char	*ft_strdup_safe(const char *s1, char c, t_bool inc_c)
+{
+	char	*str;
+	size_t		size;
+	size_t		i;
+
+	i = 0;
+	size = 0;
+	while (s1[size] && s1[size] != c)
+		size++;
+	if ((str = (char *)malloc(sizeof(*str) * (size + 1 + inc_c))) == NULL)
+		return (NULL);
+	while (s1[i] && s1[i] != c)
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	if (inc_c && s1[size] == c)
+		str[i] = c;
+	str[i + inc_c] = 0;
+	return (str);
+}
+
 static void init_mysym(t_file *file, t_symbol *mysym, char *symname, void *sym) {
+
 	ft_bzero(mysym, sizeof(t_symbol));
 	mysym->type_p = ' ';
-	mysym->name = symname;
+	mysym->name = ft_strdup_safe(symname, '\n', TRUE);
+	(void)symname;
+	(void)strlen;
+	// TODO Free it !!!!!!
 	if (file->arch == ARCH_32) {
 		mysym->type = ((t_nlist *)sym)->n_type; // No swap ???
 		mysym->sect = ((t_nlist *)sym)->n_sect; // No swap ???
