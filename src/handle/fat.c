@@ -1,16 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fat_binary.c                                       :+:      :+:    :+:   */
+/*   fat.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 14:24:47 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 10:50:30 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "../ft_nm.h"
+
+static char *get_cpu_string(cpu_type_t cputype)
+{
+	if (cputype == CPU_TYPE_I386)
+		return "i386";
+	return NULL;
+}
+
+static void fallback_handle_all_archs(t_env *env, t_file *file, uint32_t nfat_arch)
+{
+	t_fat_arch *fat_arch;
+	cpu_type_t cputype;
+	uint32_t offset;
+	t_file virtual_file;
+
+	fat_arch = file->start + sizeof(t_fat_header);
+	while (nfat_arch-- > 0) {
+		cputype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cputype) : fat_arch->cputype;
+		ft_printf("%s (for architecture %s)", file->filename, get_cpu_string(cputype));
+		offset = (file->swap_bits)
+			? ft_bswap_uint32(fat_arch->offset)
+			: fat_arch->offset;
+		init_file(&virtual_file, file->filename, (file->swap_bits)
+			? ft_bswap_uint32(fat_arch->size)
+			: fat_arch->size, file->start + offset);
+		handle_file(env, &virtual_file);
+		fat_arch = (void *) fat_arch + sizeof(t_fat_arch);
+	}
+}
 
 void handle_fat(t_env *env, t_file *file, uint32_t magic)
 {
@@ -39,4 +69,5 @@ void handle_fat(t_env *env, t_file *file, uint32_t magic)
 		}
 		fat_arch = (void *) fat_arch + sizeof(t_fat_arch);
 	}
+	fallback_handle_all_archs(env, file, nfat_arch);
 }

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 12:20:55 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/11 12:25:34 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/13 16:23:09 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void handle_archive(t_env *env, t_file *file)
 		ptr += sizeof(t_ar_hdr);
 		if (i) {
 			name_size = !ft_strncmp(header->ar_name, AR_EFMT1, ft_strlen(AR_EFMT1)) ? ft_atoi(header->ar_name + ft_strlen(AR_EFMT1)) : 0;
-			ft_printf("%s(%.*s)\n", file->filename, name_size, ptr);
+			ft_printf("\n%s(%.*s):\n", file->filename, name_size, ptr);
 			init_file(&virtual_file, ptr, ft_atoi(header->ar_size), ptr + name_size);
 			virtual_file.is_virtual = TRUE;
 			handle_file(env, &virtual_file);

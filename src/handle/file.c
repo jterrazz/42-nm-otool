@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/13 15:22:19 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 10:29:42 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void handle_mach(t_env *env, t_file *file, uint32_t magic)
 {
 	file->arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
 	file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE; // Delete is not used
-	// ft_printf("Handling mach of %d size\n", file->filesize);
-	// ft_printf("Is swap: %d\n", file->swap_bits);
+	ft_printf("Handling mach of %d size\n", file->filesize);
+	ft_printf("Is swap: %d\n", file->swap_bits);
 	parse_mach(env, file);
 
 	if (env->bin == BIN_NM)
