@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 12:43:44 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 13:02:30 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ char	*ft_strdup_safe(const char *s1, char c, t_bool inc_c)
 		str[i] = s1[i];
 		i++;
 	}
-	if (inc_c && s1[size] == c)
+	if (inc_c && s1[size] == c){
 		str[i] = c;
-	str[i + inc_c] = 0;
+		str[i + 1] = 0;
+	} else
+		str[i] = 0;
 	return (str);
 }
 
@@ -40,9 +42,7 @@ static void init_mysym(t_file *file, t_symbol *mysym, char *symname, void *sym) 
 
 	ft_bzero(mysym, sizeof(t_symbol));
 	mysym->type_p = ' ';
-	mysym->name = ft_strdup_safe(symname, '\n', TRUE);
-	(void)symname;
-	(void)strlen;
+	mysym->name = ft_strdup_safe(symname, '\n', 1);
 	// TODO Free it !!!!!!
 	if (file->arch == ARCH_32) {
 		mysym->type = ((t_nlist *)sym)->n_type; // No swap ???
@@ -99,8 +99,10 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 		match_sym_section(file->mysects, mysym);
 	} else if ((N_TYPE & mysym->type) == N_ABS) {
 		mysym->type_p = 'A';
+	} else if ((N_TYPE & mysym->type) == N_INDR) {
+		mysym->type_p = 'I';
 	} else if ((N_TYPE & mysym->type) == N_UNDF) {
-		mysym->type_p = 'U'; // Second U condition and I !!!
+		mysym->type_p = 'U'; // Second U condition !!!
 	}
 	// 	#define	N_STAB	0xe0  /* if any of these bits set, a symbolic debugging entry */
 	// #define	N_PEXT	0x10  /* private external symbol bit */

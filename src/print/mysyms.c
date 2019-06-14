@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 11:05:12 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 13:04:42 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
 		to_replace = to_replace->next;
 	}
 }
-
+#include <stdio.h>
 void print_mysyms(t_file *file)
 {
 	t_list *symlst;
@@ -76,7 +76,9 @@ void print_mysyms(t_file *file)
 		sym = symlst->content;
 		if (sym->type_p == '-') // Maybe do something with that
 			;
-		else if (sym->type_p != 'U') // TODO Find better condition ?
+		else if (sym->type_p == 'I') {
+			ft_printf("%*c %c %s (indirect for %s)\n", left_padding, ' ', sym->type_p, sym->name, sym->name);
+		} else if (sym->type_p != 'U')
 			ft_printf("%0*llx %c %s\n", left_padding, sym->value, sym->type_p, sym->name);
 		else
 			ft_printf("%*c %c %s\n", left_padding, ' ', sym->type_p, sym->name);
