@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 13:04:42 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/14 13:07:21 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
 		to_replace = to_replace->next;
 	}
 }
-#include <stdio.h>
+
+// Is a directory. error
+
 void print_mysyms(t_file *file)
 {
 	t_list *symlst;
