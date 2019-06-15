@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 14:22:00 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 14:25:48 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void handle_mach(t_env *env, t_file *file, uint32_t magic) // Stop in case of er
 	if (parse_mach(env, file) && file->error == E_OVERFLOW) // Make different error is no virtualname
 		ft_printf("%s truncated or malformed archive (offset to next archive member past the end of the archive after member %s)\n", file->filename, file->virtualname);
 
-	if (env->bin == BIN_NM)
+	else if (env->bin == BIN_NM)
 		print_mysyms(file);
 }
 
