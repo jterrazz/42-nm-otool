@@ -6,14 +6,14 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 13:02:30 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 13:51:29 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "../ft_nm.h"
 
-char	*ft_strdup_safe(const char *s1, char c, t_bool inc_c)
+char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c)
 {
 	char	*str;
 	size_t		size;
@@ -21,8 +21,10 @@ char	*ft_strdup_safe(const char *s1, char c, t_bool inc_c)
 
 	i = 0;
 	size = 0;
-	while (s1[size] && s1[size] != c)
+	while (!check_over(file, s1 + size) && s1[size] && s1[size] != c)
 		size++;
+	if (check_over(file, s1 + size))
+		return NULL;
 	if ((str = (char *)malloc(sizeof(*str) * (size + 1 + inc_c))) == NULL)
 		return (NULL);
 	while (s1[i] && s1[i] != c)
@@ -39,10 +41,12 @@ char	*ft_strdup_safe(const char *s1, char c, t_bool inc_c)
 }
 
 static void init_mysym(t_file *file, t_symbol *mysym, char *symname, void *sym) {
-
 	ft_bzero(mysym, sizeof(t_symbol));
+
 	mysym->type_p = ' ';
-	mysym->name = ft_strdup_safe(symname, '\n', 1);
+	mysym->name = ft_strdup_safe(file, symname, '\n', 1); // maybe retest with last line /n to remove the special car in ftsafe
+	if (!mysym->name)
+		return; // Set file to error and return (maybe some will return null in not check_over)
 	// TODO Free it !!!!!!
 	if (file->arch == ARCH_32) {
 		mysym->type = ((t_nlist *)sym)->n_type; // No swap ???
@@ -127,10 +131,12 @@ int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command) { // No ne
 	nsyms = swapif_u32(file, symtab_command->nsyms);
 	i = 0;
 
+	if (check_over(file, strtab) || check_over(file, symtab))
+		return FAILURE;
 	while (i < nsyms) {
 		if (file->arch == ARCH_32) {
 			symname = strtab + swapif_u32(file, ((t_nlist *)symtab + i)->n_un.n_strx);
-			init_mysym(file, &mysym, symname, (t_nlist *)symtab + i);
+			init_mysym(file, &mysym, symname, (t_nlist *)symtab + i); // TODO Check for failure with overflow ???
 		} else {
 			symname = strtab + swapif_u32(file, ((t_nlist_64 *)symtab + i)->n_un.n_strx);
 			init_mysym(file, &mysym, symname, (t_nlist_64 *)symtab + i);

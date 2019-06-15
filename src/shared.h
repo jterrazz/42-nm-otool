@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 11:37:06 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 14:19:06 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 // Removes ft_nm.h
 typedef enum { BIN_NM, BIN_OTOOL } t_bin;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
+typedef enum { E_NULL, E_OVERFLOW } t_file_error;
 typedef int t_bool;
 
 typedef struct fat_header t_fat_header;
@@ -90,7 +91,10 @@ typedef struct s_env {
 
 typedef struct s_file {
 	void *start;
+	void *end;
+	t_file_error error;
 	char const *filename;
+	char const *virtualname;
 	uint64_t filesize;
 	t_bool swap_bits;
 	t_bool is_virtual;
@@ -103,15 +107,16 @@ typedef struct s_file {
 int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin);
 int cmd_process_file(t_env *env, char const *filename);
 
-void handle_file(t_env *env, t_file *file);
+int handle_file(t_env *env, t_file *file);
 void handle_archive(t_env *env, t_file *file);
 void handle_fat(t_env *env, t_file *file, uint32_t magic);
 
-void parse_mach(t_env *env, t_file *file);
+int parse_mach(t_env *env, t_file *file);
 int	parse_mach_segment(t_env *env, t_file *file, void *segment_command);
 int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command);
 
 void init_file(t_file *file, char const *name, uint64_t size, void *start);
+void init_virtual_file(t_file *file, t_file *old_file, char *virtualname);
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
 void print_mysyms(t_file *file);
 
@@ -120,5 +125,8 @@ uint32_t ft_bswap_uint32(uint32_t x);
 uint64_t ft_bswap_uint64(uint64_t x);
 uint32_t swapif_u32(t_file *file, uint32_t x);
 uint64_t swapif_u64(t_file *file, uint64_t x);
+
+t_bool check_over(t_file *file, void *ptr);
+char *get_cpu_string(cpu_type_t cputype);
 
 #endif

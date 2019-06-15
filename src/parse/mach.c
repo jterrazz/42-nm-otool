@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 12:47:02 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 14:06:15 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void parse_load_command(t_env *env, t_file *file, t_load_command *lc) {
 		parse_mach_symtab(file, (void *)lc);
 }
 
-void parse_mach(t_env *env, t_file *file)
+int parse_mach(t_env *env, t_file *file)
 {
 	uint32_t ncmds;
 	t_load_command *lc;
@@ -38,12 +38,16 @@ void parse_mach(t_env *env, t_file *file)
 	lc = (t_load_command *)(file->start +
 		((file->arch == ARCH_32) ?
 		sizeof(t_mach_header) : sizeof(t_mach_header_64))); // secure
+
 	// ft_printf("There are %lld load commands\n", ncmds);
 	while (ncmds--) {
+		if (check_over(file, lc))
+			return FAILURE;
 		// ft_printf("Command nb %lld start\n", ncmds);
 		parse_load_command(env, file, lc);
 		lc = (void *)lc + swapif_u32(file, lc->cmdsize); // Secure for corruption ?
 		// ft_printf("Command nb %lld end\n", ncmds);
 	}
 	// ft_printf("Ending parsing mach files\n");
+	return SUCCESS;
 }

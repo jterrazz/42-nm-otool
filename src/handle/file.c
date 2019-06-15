@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 12:45:07 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 14:22:00 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,32 @@ void init_file(t_file *file, char const *name, uint64_t size, void *start)
 {
 	ft_bzero(file, sizeof(t_file));
 	file->filename = name;
-	file->filesize = size;
+	file->filesize = size; // announced filesize
 	file->start = start;
+	file->error = E_NULL;
 	file->swap_bits = FALSE;
+	file->end = file->start + file->filesize; // end also checking for larger data
 }
 
-void handle_mach(t_env *env, t_file *file, uint32_t magic)
+void init_virtual_file(t_file *file, t_file *old_file, char *virtualname)
+{
+	file->end = file->end < old_file->end ? file->end : old_file->end;
+	file->virtualname = virtualname;
+}
+
+void handle_mach(t_env *env, t_file *file, uint32_t magic) // Stop in case of error with return
 {
 	file->arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
 	file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE; // Delete is not used
-	// ft_printf("Handling mach of %d size\n", file->filesize);
-	// ft_printf("Is swap: %d\n", file->swap_bits);
-	parse_mach(env, file);
+
+	if (parse_mach(env, file) && file->error == E_OVERFLOW) // Make different error is no virtualname
+		ft_printf("%s truncated or malformed archive (offset to next archive member past the end of the archive after member %s)\n", file->filename, file->virtualname);
 
 	if (env->bin == BIN_NM)
 		print_mysyms(file);
 }
 
-void handle_file(t_env *env, t_file *file)
+int handle_file(t_env *env, t_file *file)
 {
 	uint32_t magic;
 	// uint32_t filetype;
@@ -58,6 +66,12 @@ void handle_file(t_env *env, t_file *file)
 	else if (magic == MH_MAGIC || magic == MH_CIGAM
 		|| magic == MH_MAGIC_64 || magic == MH_CIGAM_64) { // Check cigam is working
 		handle_mach(env, file, magic);
-	} else
-		ft_printf("The file was not recognized as a valid object file\n"); // add filename
+	} else {
+		if (file->virtualname)
+			ft_printf("Mach-O universal file: %s for architecture x86_64 is not a Mach-O file or an archive file.\n", file->filename);
+		else
+			ft_printf("%s The file was not recognized as a valid object file\n", file->filename);
+		return FAILURE;
+	}
+	return SUCCESS;
 }
