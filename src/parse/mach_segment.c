@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 15:20:44 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 16:24:28 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "ft_printf.h"
 #include "../ft_nm.h"
 
+// Probably secure this too
 static void hexdump_segment_content(t_file *file, void *sect)
 {
 	uint64_t segstart;
