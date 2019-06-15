@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 14:36:12 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 15:12:29 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,19 @@ int parse_mach(t_env *env, t_file *file)
 	uint32_t ncmds;
 	t_load_command *lc;
 
+	lc = (t_load_command *)(file->start +
+		((file->arch == ARCH_32) ?
+		sizeof(t_mach_header) : sizeof(t_mach_header_64))); // secure
+	if (check_over(file, lc))
+		return FAILURE;
 	ncmds = (file->arch == ARCH_32) ?
 		((t_mach_header *)(file->start))->ncmds : // inverted
 		((t_mach_header_64 *)(file->start))->ncmds; // inverted
 	ncmds = swapif_u32(file, ncmds);
 
-	lc = (t_load_command *)(file->start +
-		((file->arch == ARCH_32) ?
-		sizeof(t_mach_header) : sizeof(t_mach_header_64))); // secure
-
 	// ft_printf("There are %lld load commands\n", ncmds);
 	while (ncmds--) {
-		if (check_over(file, lc))
+		if (check_over(file, lc + sizeof(t_load_command)))
 			return FAILURE;
 		// ft_printf("Command nb %lld start\n", ncmds);
 		if (parse_load_command(env, file, lc))

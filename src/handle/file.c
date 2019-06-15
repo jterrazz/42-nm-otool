@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 14:25:48 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 15:07:32 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void handle_mach(t_env *env, t_file *file, uint32_t magic) // Stop in case of er
 {
 	file->arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
 	file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE; // Delete is not used
-
+	// check with sizeof
 	if (parse_mach(env, file) && file->error == E_OVERFLOW) // Make different error is no virtualname
 		ft_printf("%s truncated or malformed archive (offset to next archive member past the end of the archive after member %s)\n", file->filename, file->virtualname);
 
@@ -58,9 +58,12 @@ int handle_file(t_env *env, t_file *file)
 	// filetype = ((t_mach_header *)ptr)->filetype; // 64bits
 
 	if (!ft_strncmp(file->start, ARMAG, SARMAG)) { // or magic == *(uint32_t *)ARMAG
-		handle_archive(env, file);
+		return handle_archive(env, file);
 	} else if (magic == FAT_MAGIC || magic == FAT_CIGAM) {
-		handle_fat(env, file, magic);
+		if (handle_fat(env, file, magic)) {
+			ft_printf("%s truncated or malformed fat file (cputype (0) cpusubtype (0) offset 0 overlaps universal headers)", file->filename); // Replace data
+			return FAILURE;
+		}
 	}
 	// Handle not supported
 	else if (magic == MH_MAGIC || magic == MH_CIGAM

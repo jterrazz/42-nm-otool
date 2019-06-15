@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 14:39:57 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 15:20:44 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,18 @@ static void hexdump_segment_content(t_file *file, void *sect)
 	}
 }
 
-static void file_add_mysection(t_file *file, void *sect)
+static int file_add_mysection(t_file *file, void *sect)
 {
 	t_mysection mysect;
 
-	if (file->arch == ARCH_32)
-		mysect.name = ((t_section *)sect)->sectname;
-	else
-		mysect.name = ((t_section_64 *)sect)->sectname;
+	if (check_over(file, sect + (file->arch == ARCH_32 ? sizeof(t_section) : sizeof(t_section_64))))
+		return FAILURE;
+	mysect.name = file->arch == ARCH_32 ? ((t_section *)sect)->sectname : ((t_section_64 *)sect)->sectname;
 	mysect.index =  file->nsects;
 
 	// malloc secure
 	ft_lstadd(&file->mysects, ft_lstnew(&mysect, sizeof(t_mysection)));
+	return SUCCESS;
 }
 
 /*
@@ -62,13 +62,10 @@ int	parse_mach_segment(t_env *env, t_file *file, void *segment_command) {
 	uint32_t nsects;
 	void *section;
 
-	if (file->arch == ARCH_32) {
-		nsects = ((t_segment_command *) segment_command)->nsects;
-		section = segment_command + sizeof(t_segment_command);
-	} else {
-		nsects = ((t_segment_command_64 *) segment_command)->nsects;
-		section = segment_command + sizeof(t_segment_command_64);
-	}
+	section = segment_command + ((file->arch == ARCH_32) ? sizeof(t_segment_command) : sizeof(t_segment_command_64));
+	if (check_over(file, section))
+		return FAILURE;
+	nsects = (file->arch == ARCH_32) ? ((t_segment_command *) segment_command)->nsects : ((t_segment_command_64 *) segment_command)->nsects;
 	nsects = swapif_u32(file, nsects);
 
 	while (nsects--) {
@@ -79,11 +76,10 @@ int	parse_mach_segment(t_env *env, t_file *file, void *segment_command) {
 		if (env->bin == BIN_OTOOL) {
 			hexdump_segment_content(file, section); // reverse
 		} else {
-			file_add_mysection(file, section);
+			if (file_add_mysection(file, section))
+				return FAILURE;
 		}
-		section = (file->arch == ARCH_32)
-			? section + sizeof(t_section)
-			: section + sizeof(t_section_64);
+		section += ((file->arch == ARCH_32) ? sizeof(t_section) : sizeof(t_section_64));
 		// ft_printf("End of section %d\n", nsects);
 	}
 

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 14:19:06 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 14:51:16 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin);
 int cmd_process_file(t_env *env, char const *filename);
 
 int handle_file(t_env *env, t_file *file);
-void handle_archive(t_env *env, t_file *file);
-void handle_fat(t_env *env, t_file *file, uint32_t magic);
+int handle_archive(t_env *env, t_file *file);
+int handle_fat(t_env *env, t_file *file, uint32_t magic);
 
 int parse_mach(t_env *env, t_file *file);
 int	parse_mach_segment(t_env *env, t_file *file, void *segment_command);
