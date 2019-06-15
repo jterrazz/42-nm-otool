@@ -6,14 +6,14 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 14:34:21 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 16:01:26 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "../ft_nm.h"
 
-char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c)
+char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c, int *failed)
 {
 	char	*str;
 	size_t		size;
@@ -23,8 +23,10 @@ char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c)
 	size = 0;
 	while (!check_over(file, s1 + size) && s1[size] && s1[size] != c)
 		size++;
-	if (check_over(file, s1 + size))
-		return NULL;
+	if (check_over(file, s1 + size)) {
+		*failed = 1;
+		return ft_strdup("bad string index");
+	}
 	if ((str = (char *)malloc(sizeof(*str) * (size + 1 + inc_c))) == NULL)
 		return (NULL);
 	while (s1[i] && s1[i] != c)
@@ -41,10 +43,14 @@ char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c)
 }
 
 static void init_mysym(t_file *file, t_symbol *mysym, char *symname, void *sym) {
+	int failed;
 	ft_bzero(mysym, sizeof(t_symbol));
 
-	mysym->type_p = ' ';
-	mysym->name = ft_strdup_safe(file, symname, '\n', 1); // maybe retest with last line /n to remove the special car in ftsafe
+	failed = 0;
+	mysym->type_p = ' '; (void)symname;
+	mysym->name = ft_strdup_safe(file, symname, '\n', 1, &failed); // maybe retest with last line /n to remove the special car in ftsafe
+	if (failed)
+		mysym->namefailed = TRUE;
 	if (!mysym->name)
 		return; // Set file to error and return (maybe some will return null in not check_over)
 	// TODO Free it !!!!!!
@@ -98,15 +104,20 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 	// #define N_INDR 0xa
 	if (N_STAB & mysym->type) {
 		mysym->type_p = '-'; // Remove if no debug
-	} else
-	if ((N_TYPE & mysym->type) == N_SECT) {
+	} else if ((N_TYPE & mysym->type) == N_UNDF) {
+		if (mysym->namefailed)
+			mysym->type_p = 'C';
+		else if (mysym->type & N_EXT)
+			mysym->type_p = 'U'; // Second U condition !!!
+		else
+			mysym->type_p = '?';
+		// mysym->type_p = 'C';
+	} else if ((N_TYPE & mysym->type) == N_SECT) {
 		match_sym_section(file->mysects, mysym);
 	} else if ((N_TYPE & mysym->type) == N_ABS) {
 		mysym->type_p = 'A';
 	} else if ((N_TYPE & mysym->type) == N_INDR) {
 		mysym->type_p = 'I';
-	} else if ((N_TYPE & mysym->type) == N_UNDF) {
-		mysym->type_p = 'U'; // Second U condition !!!
 	}
 	// 	#define	N_STAB	0xe0  /* if any of these bits set, a symbolic debugging entry */
 	// #define	N_PEXT	0x10  /* private external symbol bit */
@@ -131,14 +142,13 @@ int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command) { // No ne
 	nsyms = swapif_u32(file, symtab_command->nsyms);
 	i = 0;
 
-	if (check_over(file, strtab) || check_over(file, symtab))
-		return FAILURE;
 	while (i < nsyms) {
+		if (check_over(file, strtab) || check_over(file, symtab + ((file->arch == ARCH_32) ? sizeof(t_nlist) : sizeof(t_nlist_64))))
+			return FAILURE;
+		symname = strtab + swapif_u32(file, (file->arch == ARCH_32) ? ((t_nlist *)symtab + i)->n_un.n_strx : ((t_nlist_64 *)symtab + i)->n_un.n_strx);
 		if (file->arch == ARCH_32) {
-			symname = strtab + swapif_u32(file, ((t_nlist *)symtab + i)->n_un.n_strx);
 			init_mysym(file, &mysym, symname, (t_nlist *)symtab + i); // TODO Check for failure with overflow ???
 		} else {
-			symname = strtab + swapif_u32(file, ((t_nlist_64 *)symtab + i)->n_un.n_strx);
 			init_mysym(file, &mysym, symname, (t_nlist_64 *)symtab + i);
 		}
 		fill_mysym(file, &mysym);

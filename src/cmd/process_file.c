@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:45:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 12:37:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 15:35:31 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 #include "libft.h"
 
 // Where init_file = free_file
-
+// Use ft_printf in errors FD ????
+#include "ft_printf.h"
 int cmd_process_file(t_env *env, char const *filename)
 {
     struct stat buf;
@@ -31,6 +32,10 @@ int cmd_process_file(t_env *env, char const *filename)
         return FAILURE; // Print error no such file
     if (fstat(fd, &buf) < 0)
         return FAILURE; // Print error (we can use official errors)
+    if (buf.st_size == 0) {
+        ft_printf("%s The file was not recognized as a valid object file\n", filename);
+        return FAILURE;
+    }
     if ((ptr = mmap(NULL, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
         return FAILURE; //same
     init_file(&file, filename, buf.st_size, ptr);

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 14:51:16 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 16:00:57 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct nlist_64 t_nlist_64;
 // Rename to mysymbal
 typedef struct s_symbol { // Maybe delete some (probably :) in simtab file particulary )
 	char *name;
+	t_bool namefailed;
 	uint8_t type;
 	char type_p;
 	uint8_t sect;

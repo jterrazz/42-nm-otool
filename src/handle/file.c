@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 15:07:32 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/06/15 15:34:16 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,21 @@ void handle_mach(t_env *env, t_file *file, uint32_t magic) // Stop in case of er
 		print_mysyms(file);
 }
 
+static int handle_file_error(t_file *file)
+{
+	if (file->virtualname)
+		ft_printf("Mach-O universal file: %s for architecture x86_64 is not a Mach-O file or an archive file.\n", file->filename);
+	else
+		ft_printf("%s The file was not recognized as a valid object file\n", file->filename);
+	return FAILURE;
+}
+
 int handle_file(t_env *env, t_file *file)
 {
 	uint32_t magic;
 	// uint32_t filetype;
-
+	if (check_over(file, file->start + sizeof(uint32_t)))
+		return handle_file_error(file);
 	magic = *(uint32_t *)(file->start);
 	// filetype = ((t_mach_header *)ptr)->filetype; // 64bits
 
@@ -70,11 +80,7 @@ int handle_file(t_env *env, t_file *file)
 		|| magic == MH_MAGIC_64 || magic == MH_CIGAM_64) { // Check cigam is working
 		handle_mach(env, file, magic);
 	} else {
-		if (file->virtualname)
-			ft_printf("Mach-O universal file: %s for architecture x86_64 is not a Mach-O file or an archive file.\n", file->filename);
-		else
-			ft_printf("%s The file was not recognized as a valid object file\n", file->filename);
-		return FAILURE;
+		return handle_file_error(file);
 	}
 	return SUCCESS;
 }
