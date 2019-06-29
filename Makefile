@@ -6,11 +6,11 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/06/14 11:01:58 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/06/16 23:45:28 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Loader in makefile + replace in global libs
+# Progress bar in makefile + replace in global libs
 INC_PATH = inc
 LIB_PATH = libs
 BUILD_PATH = obj
