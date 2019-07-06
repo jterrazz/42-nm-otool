@@ -9,4 +9,5 @@ tmp*
 
 # Executable
 a.out
-ft_ssl
+ft_nm
+ft_otool
