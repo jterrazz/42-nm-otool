@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../ft_nm.h"
+#include "../shared.h"
 
 // Secure the hexdump
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch)

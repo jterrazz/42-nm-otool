@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../ft_nm.h"
+#include "../shared.h"
 
 static int sort_mysyms_alpha(t_list *lst1, t_list *lst2) {
 	t_symbol *sym1;

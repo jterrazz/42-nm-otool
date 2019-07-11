@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../ft_nm.h"
+#include "../shared.h"
 
 // Move this ft
 t_bool check_over(t_file *file, void *ptr)

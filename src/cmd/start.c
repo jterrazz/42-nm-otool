@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_file.c                                     :+:      :+:    :+:   */
+/*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:45:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 15:35:31 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 00:10:47 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // Where init_file = free_file
 // Use ft_printf in errors FD ????
 #include "ft_printf.h"
-int cmd_process_file(t_env *env, char const *filename)
+int cmd_start(t_env *env, char const *filename)
 {
     struct stat buf;
     t_file file;

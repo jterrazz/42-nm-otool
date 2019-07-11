@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../ft_nm.h"
+#include "../shared.h"
 
 static int parse_load_command(t_env *env, t_file *file, t_load_command *lc) { // return failure ????
 	// + Do clearer way to separate otool/nm

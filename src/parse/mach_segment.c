@@ -6,13 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 16:24:28 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/11 23:48:12 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_printf.h"
-#include "../ft_nm.h"
+#include "../shared.h"
 
 // Probably secure this too
 static void hexdump_segment_content(t_file *file, void *sect)
@@ -49,6 +49,7 @@ static int file_add_mysection(t_file *file, void *sect)
 	mysect.index =  file->nsects;
 
 	// malloc secure
+	// free all items
 	ft_lstadd(&file->mysects, ft_lstnew(&mysect, sizeof(t_mysection)));
 	return SUCCESS;
 }

@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/06/16 23:45:28 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/07/12 00:12:02 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIB_PATH = libs
 BUILD_PATH = obj
 SRC_PATH = src
 
-SOURCES += cmd/env.c cmd/process_file.c
+SOURCES += cmd/init.c cmd/start.c
 SOURCES += handle/file.c handle/archive.c handle/fat.c
 SOURCES += parse/mach_segment.c parse/mach_symtab.c parse/mach.c
 SOURCES += print/ft_hexdump.c print/mysyms.c

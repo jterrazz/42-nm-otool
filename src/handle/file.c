@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../ft_nm.h"
+#include "../shared.h"
 
 // Also try with archive in archive (mayb go overflow with the size)
 // Check with files that don't start with this BSD thing AR_EFMT1

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../ft_nm.h"
+#include "../shared.h"
 
 char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c, int *failed)
 {

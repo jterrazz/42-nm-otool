@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 16:00:57 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 00:14:59 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,17 @@ typedef struct s_mysection {
 	uint64_t index;
 }				t_mysection;
 
+typedef struct s_flags {
+	t_bool n;
+} t_flags;
+
 // Put in cmd.h
 typedef struct s_env {
 	int argc;
 	cpu_type_t cputype;
 	char const **argv;
 	t_bin bin;
+	t_flags **flags;
 }				t_env;
 
 typedef struct s_file {
@@ -105,8 +110,8 @@ typedef struct s_file {
 	t_list *mysyms;
 }				t_file;
 
-int cmd_init_env(t_env *env, int argc, char const *argv[], t_bin bin);
-int cmd_process_file(t_env *env, char const *filename);
+int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin);
+int cmd_start(t_env *env, char const *filename);
 
 int handle_file(t_env *env, t_file *file);
 int handle_archive(t_env *env, t_file *file);

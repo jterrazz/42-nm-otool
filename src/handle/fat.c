@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../ft_nm.h"
+#include "../shared.h"
 
 // Find global list ? http://web.mit.edu/darwin/src/modules/cctools/libmacho/arch.c
 char *get_cpu_string(cpu_type_t cputype)
