@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/12 15:43:50 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:53:45 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void lst_swap(t_list *lst1, t_list *lst2)
 /*
 Explain the algo here
 */
-static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
+static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2), t_bool reverse) {
 	t_list *to_replace;
 	t_list *el;
 	t_list *min;
@@ -65,7 +65,7 @@ static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
 		min = NULL;
 		el = to_replace;
 		while (el) {
-			if (!min || (*f)(min, el)) {
+			if (!min || reverse ? !(*f)(min, el) : (*f)(min, el)) {
 				min = el;
 			}
 			el = el->next;
@@ -85,11 +85,7 @@ void print_mysyms(t_env *env, t_file *file)
 
 	left_padding = (file->arch == ARCH_32) ? 8 : 16;
 	symlst = file->mysyms;
-	if (env->flags & FLAG_N)
-		ft_lstsort(symlst, sort_mysyms_num);
-	else
-		ft_lstsort(symlst, sort_mysyms_alpha);
-	// ft_printf("Will print mysyms\n");
+	ft_lstsort(symlst, env->flags & FLAG_N ? sort_mysyms_num : sort_mysyms_alpha, env->flags & FLAG_R);
 
 	while (symlst) {
 		sym = symlst->content;
