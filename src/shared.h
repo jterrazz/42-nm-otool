@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/12 00:14:59 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:43:47 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@
 
 
 // Removes ft_nm.h
-typedef enum { BIN_NM, BIN_OTOOL } t_bin;
+typedef enum e_bin { BIN_NM = 00000001, BIN_OTOOL = 00000010 } t_bin;
+typedef enum e_flag { FLAG_N = 00000001, FLAG_R = 00000010 } t_flag;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
 typedef enum { E_NULL, E_OVERFLOW } t_file_error;
 typedef int t_bool;
@@ -82,9 +83,12 @@ typedef struct s_mysection {
 	uint64_t index;
 }				t_mysection;
 
-typedef struct s_flags {
-	t_bool n;
-} t_flags;
+typedef struct s_flag_detail {
+	char symbol;
+	char fullname[20];
+	uint32_t value;
+	uint32_t binaries;
+} t_flag_detail;
 
 // Put in cmd.h
 typedef struct s_env {
@@ -92,7 +96,7 @@ typedef struct s_env {
 	cpu_type_t cputype;
 	char const **argv;
 	t_bin bin;
-	t_flags **flags;
+	uint32_t flags;
 }				t_env;
 
 typedef struct s_file {
@@ -124,7 +128,7 @@ int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command);
 void init_file(t_file *file, char const *name, uint64_t size, void *start);
 void init_virtual_file(t_file *file, t_file *old_file, char *virtualname);
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
-void print_mysyms(t_file *file);
+void print_mysyms(t_env *env, t_file *file);
 
 int32_t ft_bswap_int32(int32_t x);
 uint32_t ft_bswap_uint32(uint32_t x);

@@ -6,24 +6,36 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 13:07:21 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:43:50 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "../shared.h"
 
+static int sort_mysyms_num(t_list *lst1, t_list *lst2) {
+	t_symbol *sym1;
+	t_symbol *sym2;
+
+	if (!lst1 || !lst2 || !lst1->content || !lst2->content)
+		return 0;
+	sym1 = lst1->content;
+	sym2 = lst2->content;
+	if (sym1->value == sym2->value)
+		return ft_strcmp(sym1->name, sym2->name) > 0;
+	return (sym1->value >= sym2->value);
+}
+
 static int sort_mysyms_alpha(t_list *lst1, t_list *lst2) {
 	t_symbol *sym1;
 	t_symbol *sym2;
 
 	if (!lst1 || !lst2 || !lst1->content || !lst2->content)
-		return 1;
+		return 0;
 	sym1 = lst1->content;
 	sym2 = lst2->content;
-	if (!ft_strcmp(sym1->name, sym2->name)) {
+	if (!ft_strcmp(sym1->name, sym2->name))
 		return sym1->value >= sym2->value;
-	}
 	return (ft_strcmp(sym1->name, sym2->name) > 0);
 }
 
@@ -40,6 +52,9 @@ static void lst_swap(t_list *lst1, t_list *lst2)
 	lst2->content_size = content_size_tmp;
 }
 
+/*
+Explain the algo here
+*/
 static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
 	t_list *to_replace;
 	t_list *el;
@@ -62,8 +77,7 @@ static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
 }
 
 // Is a directory. error
-
-void print_mysyms(t_file *file)
+void print_mysyms(t_env *env, t_file *file)
 {
 	t_list *symlst;
 	t_symbol *sym;
@@ -71,12 +85,15 @@ void print_mysyms(t_file *file)
 
 	left_padding = (file->arch == ARCH_32) ? 8 : 16;
 	symlst = file->mysyms;
-	ft_lstsort(symlst, sort_mysyms_alpha);
+	if (env->flags & FLAG_N)
+		ft_lstsort(symlst, sort_mysyms_num);
+	else
+		ft_lstsort(symlst, sort_mysyms_alpha);
 	// ft_printf("Will print mysyms\n");
 
 	while (symlst) {
 		sym = symlst->content;
-		if (sym->type_p == '-') // Maybe do something with that
+		if (sym->type_p == '-') // Maybe do something with that, wtf is this
 			;
 		else if (sym->type_p == 'I') {
 			ft_printf("%*c %c %s (indirect for %s)\n", left_padding, ' ', sym->type_p, sym->name, sym->name);

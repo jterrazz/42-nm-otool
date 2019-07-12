@@ -6,13 +6,16 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 15:12:29 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:30:18 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "../shared.h"
 
+/*
+Otool will print directly when reading the segment
+*/
 static int parse_load_command(t_env *env, t_file *file, t_load_command *lc) { // return failure ????
 	// + Do clearer way to separate otool/nm
 	uint32_t cmd;

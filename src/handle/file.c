@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 15:34:16 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:31:33 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void handle_mach(t_env *env, t_file *file, uint32_t magic) // Stop in case of er
 		ft_printf("%s truncated or malformed archive (offset to next archive member past the end of the archive after member %s)\n", file->filename, file->virtualname);
 
 	else if (env->bin == BIN_NM)
-		print_mysyms(file);
+		print_mysyms(env, file);
 }
 
 static int handle_file_error(t_file *file)
