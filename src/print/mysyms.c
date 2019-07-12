@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/12 15:53:45 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 16:02:14 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2), t_bool
 	}
 }
 
+// Make tests with -g -n -r
 // Is a directory. error
+// Explain the letters meaning
 void print_mysyms(t_env *env, t_file *file)
 {
 	t_list *symlst;
@@ -89,14 +91,17 @@ void print_mysyms(t_env *env, t_file *file)
 
 	while (symlst) {
 		sym = symlst->content;
-		if (sym->type_p == '-') // Maybe do something with that, wtf is this
-			;
-		else if (sym->type_p == 'I') {
-			ft_printf("%*c %c %s (indirect for %s)\n", left_padding, ' ', sym->type_p, sym->name, sym->name);
-		} else if (sym->type_p != 'U')
-			ft_printf("%0*llx %c %s\n", left_padding, sym->value, sym->type_p, sym->name);
-		else
-			ft_printf("%*c %c %s\n", left_padding, ' ', sym->type_p, sym->name);
+		if (!(env->flags & FLAG_G) || (env->flags & FLAG_G && sym->type_p >= 'A' && sym->type_p <='Z')) {
+			if (sym->type_p == '-') // Maybe do something with that, wtf is this
+				;
+			else if (sym->type_p == 'I') {
+				ft_printf("%*c %c %s (indirect for %s)\n", left_padding, ' ', sym->type_p, sym->name, sym->name);
+			} else if (sym->type_p != 'U')
+				ft_printf("%0*llx %c %s\n", left_padding, sym->value, sym->type_p, sym->name);
+			else
+				ft_printf("%*c %c %s\n", left_padding, ' ', sym->type_p, sym->name);
+		}
+
 		symlst = symlst->next;
 	}
 }

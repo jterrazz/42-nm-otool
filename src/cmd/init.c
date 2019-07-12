@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/12 15:48:12 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/12 16:05:16 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 t_flag_detail g_flags[] = {
 	{'n', "numeric", FLAG_N, BIN_NM},
 	{'r', "reverse", FLAG_R, BIN_NM},
-	{0, "", 0, 0}
+	{'g', "global", FLAG_G, BIN_NM},
+	{0, "", 0, 0} // Usage description here
 };
 
 static t_flag_detail *get_flag(char *str, t_bin bin)
