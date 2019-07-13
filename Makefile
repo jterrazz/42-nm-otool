@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/07/12 12:17:18 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/07/13 10:26:14 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ NAME = ft_nm_otool
 NAME1 = ft_nm
 NAME2 = ft_otool
 
-CC = gcc
+CC = gcc -g # remove
 
 FLAGS_CC = -Wall -Wextra -Werror
 

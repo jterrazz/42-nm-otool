@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 10:23:05 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/13 11:51:27 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ static void ft_lstreverse(t_list *lst)
 
 static void print_mysyms_line(uint8_t left_padding, t_symbol *sym, t_bool minimal)
 {
-	if (sym->type_p == '-') // WHY '-' ?
-		return;
-	else if (minimal)
+	if (minimal)
 		ft_printf("%s\n", sym->name);
+	else if (sym->type_p == '-')
+		ft_printf("%0*llx %c %02d %5s %s\n", left_padding, sym->value, sym->type_p, sym->sect, sym->debug_symbol, sym->name);
 	else if (sym->type_p == 'I')
 		ft_printf("%*c %c %s (indirect for %s)\n", left_padding, ' ', sym->type_p, sym->name, sym->name);
 	else if (sym->type_p != 'U')
@@ -144,11 +144,15 @@ void print_mysyms(t_env *env, t_file *file)
 
 	while (symlst) {
 		sym = symlst->content;
-		if ((env->flags & FLAG_G && sym->type_p >= 'A' && sym->type_p <='Z')
-			|| (env->flags & FLAG_U && sym->type_p == 'U')
-			|| (!(env->flags & FLAG_UU)  && sym->type_p != 'U')) {
+		if ((!(env->flags & FLAG_A) && sym->type_p == '-')
+			|| (env->flags & FLAG_U && sym->type_p != 'U')
+			|| (env->flags & FLAG_UU && sym->type_p == 'U')
+			|| (env->flags & FLAG_G && (sym->type_p < 'A' || sym->type_p >'Z'))
+			|| (!(env->flags & FLAG_A) && sym->type_p == '-')
+		)
+			;
+		else
 			print_mysyms_line((file->arch == ARCH_32) ? 8 : 16, sym, env->flags & FLAG_U || env->flags & FLAG_J);
-		}
 		symlst = symlst->next;
 	}
 }

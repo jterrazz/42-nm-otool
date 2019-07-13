@@ -47,6 +47,13 @@ https://opensource.apple.com/source/xnu/xnu-344/EXTERNAL_HEADERS/mach-o/fat.h
 https://opensource.apple.com/source/xnu/xnu-4570.41.2/osfmk/mach/machine.h.auto.html
 
 ### Testing
+
+#### Build with debugger
+
+``` bash
+gcc -g
+```
+
 How to test files here (automate cmd)
 
 Thanks to the following repos for their executables:

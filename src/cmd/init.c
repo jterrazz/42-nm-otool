@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 10:16:49 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/13 11:26:21 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 // -n -n case
 t_flag_detail g_flags[] = {
-	{'n', "numeric", FLAG_N, BIN_NM},
-	{'r', "reverse", FLAG_R, BIN_NM},
-	{'g', "global", FLAG_G, BIN_NM},
-	{'p', "no-sort", FLAG_P, BIN_NM},
-	{'u', "undefined", FLAG_U, BIN_NM},
-	{'U', "no-undefined", FLAG_UU, BIN_NM},
-	{'j', "simple", FLAG_J, BIN_NM},
+	{'n', "-numeric-sort", FLAG_N, BIN_NM},
+	{'r', "-reverse-sort", FLAG_R, BIN_NM},
+	{'g', "-extern-only", FLAG_G, BIN_NM},
+	{'p', "-no-sort", FLAG_P, BIN_NM},
+	{'u', "-undefined-only", FLAG_U, BIN_NM},
+	{'U', "-defined-only", FLAG_UU, BIN_NM},
+	{'j', "-simple-output", FLAG_J, BIN_NM},
+	{'a', "-debug-syms", FLAG_A, BIN_NM},
 	// {'x', "hexa", FLAG_X, BIN_NM},
 	{0, "", 0, 0} // Usage description here
 };

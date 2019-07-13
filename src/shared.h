@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 10:17:00 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/13 11:07:21 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 
 // Removes ft_nm.h
 typedef enum e_bin { BIN_NM = 00000001, BIN_OTOOL = 00000010 } t_bin;
-typedef enum e_flag { FLAG_N = 00000001, FLAG_R = 00000010, FLAG_G = 00000100, FLAG_P = 00001000, FLAG_U = 00010000, FLAG_UU = 00100000, FLAG_J = 01000000 } t_flag;
+typedef enum e_flag { FLAG_N = 00000001, FLAG_R = 00000010, FLAG_G = 00000100, FLAG_P = 00001000, FLAG_U = 00010000, FLAG_UU = 00100000, FLAG_J = 01000000, FLAG_A = 010000000 } t_flag;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
 typedef enum { E_NULL, E_OVERFLOW } t_file_error;
 typedef int t_bool;
@@ -67,6 +67,11 @@ typedef struct symtab_command t_symtab_command;
 typedef struct nlist t_nlist;
 typedef struct nlist_64 t_nlist_64;
 
+typedef struct s_debug_symbol {
+	char *symbol;
+	uint16_t value;
+} t_debug_symbol;
+
 // Rename to mysymbal
 typedef struct s_symbol { // Maybe delete some (probably :) in simtab file particulary )
 	char *name;
@@ -76,6 +81,7 @@ typedef struct s_symbol { // Maybe delete some (probably :) in simtab file parti
 	uint8_t sect;
 	uint16_t desc;
 	uint64_t value;
+	char *debug_symbol;
 }				t_symbol;
 
 typedef struct s_mysection {
@@ -113,6 +119,9 @@ typedef struct s_file {
 	t_list *mysects;
 	t_list *mysyms;
 }				t_file;
+
+#define DEBUG_SYMBOLS_LENGTH 29
+extern t_debug_symbol g_debug_symbols[];
 
 int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin);
 int cmd_start(t_env *env, char const *filename);

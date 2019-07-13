@@ -6,12 +6,46 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/15 16:01:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/13 11:22:27 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "../shared.h"
+
+
+t_debug_symbol g_debug_symbols[] =
+{
+{"GSYM", 0x20},
+{"FNAME", 0x22},
+{"FUN", 0x24},
+{"STSYM", 0x26},
+{"LCSYM", 0x28},
+{"BNSYM", 0x2e},
+{"OPT", 0x3c},
+{"RSYM", 0x40},
+{"SLINE", 0x44},
+{"ENSYM", 0x4e},
+{"SSYM", 0x60},
+{"SO", 0x64},
+{"OSO", 0x66},
+{"LSYM", 0x80},
+{"BINCL", 0x82},
+{"SOL", 0x84},
+{"PARAMS" , 0x86},
+{"VERSION", 0x88},
+{"OLEVEL" , 0x8A},
+{"PSYM", 0xa0},
+{"EINCL", 0xa2},
+{"ENTRY", 0xa4},
+{"LBRAC", 0xc0},
+{"EXCL", 0xc2},
+{"RBRAC", 0xe0},
+{"BCOMM", 0xe2},
+{"ECOMM", 0xe4},
+{"ECOML", 0xe8},
+{"LENG", 0xfe}
+};
 
 char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c, int *failed)
 {
@@ -41,6 +75,9 @@ char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c, int *failed)
 		str[i] = 0;
 	return (str);
 }
+
+// For the debugging values
+// https://opensource.apple.com/source/cctools/cctools-773/include/mach-o/stab.h
 
 static void init_mysym(t_file *file, t_symbol *mysym, char *symname, void *sym) {
 	int failed;
@@ -104,6 +141,14 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 	// #define N_INDR 0xa
 	if (N_STAB & mysym->type) {
 		mysym->type_p = '-'; // Remove if no debug
+		int i = 0;
+
+		while (i < DEBUG_SYMBOLS_LENGTH) {
+			if (g_debug_symbols[i].value == mysym->type) {
+				mysym->debug_symbol = g_debug_symbols[i].symbol;
+			}
+			i++;
+		}
 	} else if ((N_TYPE & mysym->type) == N_UNDF) {
 		if (mysym->namefailed)
 			mysym->type_p = 'C';
@@ -111,7 +156,6 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 			mysym->type_p = 'U'; // Second U condition !!!
 		else
 			mysym->type_p = '?';
-		// mysym->type_p = 'C';
 	} else if ((N_TYPE & mysym->type) == N_SECT) {
 		match_sym_section(file->mysects, mysym);
 	} else if ((N_TYPE & mysym->type) == N_ABS) {
