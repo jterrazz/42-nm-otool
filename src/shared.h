@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 12:21:52 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/13 14:09:52 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 
 // Removes ft_nm.h
 typedef enum e_bin { BIN_NM = 00000001, BIN_OTOOL = 00000010 } t_bin;
-typedef enum e_flag { FLAG_N = 00000001, FLAG_R = 00000010, FLAG_G = 00000100, FLAG_P = 00001000, FLAG_U = 00010000, FLAG_UU = 00100000, FLAG_J = 01000000, FLAG_A = 010000000, FLAG_HELP = 0100000000 } t_flag;
+typedef enum e_flag { FLAG_N = 00000001, FLAG_R = 00000010, FLAG_G = 00000100, FLAG_P = 00001000, FLAG_U = 00010000, FLAG_UU = 00100000, FLAG_J = 01000000, FLAG_A = 010000000, FLAGw_HELP = 0100000000 } t_flag;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
 typedef enum { E_NULL, E_OVERFLOW } t_file_error;
 typedef int t_bool;
