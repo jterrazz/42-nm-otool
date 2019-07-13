@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:45:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/12 12:35:29 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/13 13:40:31 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,24 @@ int cmd_start(t_env *env, char const *filename)
 
     ft_bzero(&file, sizeof(t_file));
     if ((fd = open(filename, O_RDONLY)) < 0) {
-        ft_printf("%s Can't open file\n", filename); // Use official error
-        return FAILURE; // Print error no such file
-    }
-    if (fstat(fd, &buf) < 0)
-        return FAILURE; // Print error (we can use official errors)
-    if (buf.st_size == 0) {
-        ft_printf("%s The file was not recognized as a valid object file\n", filename);
+        ft_printf("error: %s: Can't open file %s\n", env->argv[0], filename);
         return FAILURE;
     }
-    if ((ptr = mmap(NULL, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
-        return FAILURE; //same
+    if (fstat(fd, &buf) < 0) {
+        ft_printf("error: %s: Can't fstat file %s\n", env->argv[0], filename);
+        return FAILURE;
+    }
+    if (buf.st_size == 0) {
+        ft_printf("%s: is not an object file\n", filename);
+        return FAILURE;
+    }
+    if ((ptr = mmap(NULL, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED) {
+        ft_printf("error: %s: Can't mmap file %s\n", env->argv[0], filename);
+        return FAILURE;
+    }
     init_file(&file, filename, buf.st_size, ptr);
     handle_file(env, &file);
-    if (munmap(ptr, buf.st_size) < 0)
-        return FAILURE; // same
-    close(fd);
-
+    if (munmap(ptr, buf.st_size) < 0 || close(fd) < 0)
+        return FAILURE;
     return (SUCCESS);
 }
