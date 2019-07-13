@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/12 16:00:02 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/13 10:00:12 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 
 // Removes ft_nm.h
 typedef enum e_bin { BIN_NM = 00000001, BIN_OTOOL = 00000010 } t_bin;
-typedef enum e_flag { FLAG_N = 00000001, FLAG_R = 00000010, FLAG_G = 00000100 } t_flag;
+typedef enum e_flag { FLAG_N = 00000001, FLAG_R = 00000010, FLAG_G = 00000100, FLAG_P = 00001000, FLAG_U = 00010000, FLAG_UU = 00100000 } t_flag;
 typedef enum { ARCH_32, ARCH_64 } t_arch;
 typedef enum { E_NULL, E_OVERFLOW } t_file_error;
 typedef int t_bool;
@@ -70,7 +70,7 @@ typedef struct nlist_64 t_nlist_64;
 // Rename to mysymbal
 typedef struct s_symbol { // Maybe delete some (probably :) in simtab file particulary )
 	char *name;
-	t_bool namefailed;
+	t_bool namefailed; // for what ?
 	uint8_t type;
 	char type_p;
 	uint8_t sect;
