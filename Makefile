@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/07/23 19:59:35 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/07/23 20:52:49 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,4 +77,5 @@ fclean: clean
 	@rm -f $(NAME1) $(NAME2) $(LIB_NAME)
 	@echo "Fclean \033[33mok\033[0m"
 
-re: fclean $(NAME)
+re: fclean
+	$(NAME)

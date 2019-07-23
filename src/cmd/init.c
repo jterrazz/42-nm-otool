@@ -6,13 +6,11 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:50:11 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:59:32 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
-
-// -n -n case
 
 t_flag_info g_flags[] = {
 	{'n', "-numeric-sort", FLAG_N, BIN_NM},
@@ -40,26 +38,34 @@ static t_flag_info *get_flag(char *str, t_bin bin)
 	return NULL;
 }
 
-static int set_flags(t_env *env, int argc, char const *argv[], t_bin bin)
+static int set_flags(t_env *env, char *argv, t_bin bin)
 {
 	t_flag_info *flag;
+
+	if (!(flag = get_flag(argv + 1, bin)))
+	{
+		ft_printf("%s: Unknow command line argument '%s'. Try '%s' -help\n", argv, *argv, argv); // TODO
+		return (FAILURE);
+	}
+	if (env->flags & flag->value)
+	{
+		ft_printf("%s: for the %s option: may only occur zero or one times!\n", argv, flag->fullname); // TODO
+		return (FAILURE);
+	}
+	env->flags |= flag->value;
+	return (SUCCESS);
+}
+
+static int set_args(t_env *env, int argc, char const *argv[], t_bin bin)
+{
 	char **filenames;
 
 	while (--argc && ++argv)
 	{
 		if ((*argv)[0] == '-')
 		{
-			if (!(flag = get_flag((char *) *argv + 1, bin)))
-			{
-				ft_printf("%s: Unknow command line argument '%s'. Try '%s' -help\n", argv[0], *argv, argv[0]); // TODO
-				return (-1);
-			}
-			if (env->flags & flag->value)
-			{
-				ft_printf("%s: for the %s option: may only occur zero or one times!\n", argv[0], flag->fullname); // TODO
-				return (-1);
-			}
-			env->flags |= flag->value;
+			if (set_flags(env, (char *)*argv, bin))
+				return (FAILURE);
 		}
 		else
 		{
@@ -88,5 +94,5 @@ int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin) {
 	env->bin = bin;
 	env->cputype = CPU_TYPE_X86_64;
 
-	return set_flags(env, argc, argv, bin);
+	return set_args(env, argc, argv, bin);
 }
