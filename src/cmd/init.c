@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 21:13:40 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 21:15:33 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_flag_info g_flags[] = {
 	{'U', "-defined-only", FLAG_UU, BIN_NM},
 	{'j', "-simple-output", FLAG_J, BIN_NM},
 	{'a', "-debug-syms", FLAG_A, BIN_NM},
-	{'d', "-data", FLAG_HELP, BIN_OTOOL},
+	{'d', "-data", FLAG_D, BIN_OTOOL},
 	{'h', "-help", FLAG_HELP, BIN_NM | BIN_OTOOL},
 	{0, "", 0, 0}
 };

@@ -6,13 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:44:42 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 21:17:28 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-static int print_section(t_file *file, void *sect)
+static int print_section(t_env *env, t_file *file, void *sect)
 {
 	uint64_t segstart;
 	uint64_t size;
@@ -32,7 +32,13 @@ static int print_section(t_file *file, void *sect)
 	}
 	if (check_overflow(file, file->start + offset + size))
 		return (FAILURE);
-	if (!ft_strcmp(SECT_TEXT, name))
+	if (env->flags & FLAG_D)
+	{
+		if (!ft_strcmp(SECT_DATA, name)) {
+			ft_printf("Contents of (__DATA,__data) section\n");
+			ft_hexdump(file->start + offset, size, segstart, file->arch);
+		}
+	} else if (!ft_strcmp(SECT_TEXT, name))
 	{
 		ft_printf("Contents of (__TEXT,__text) section\n");
 		ft_hexdump(file->start + offset, size, segstart, file->arch);
@@ -74,7 +80,7 @@ int	parse_machoo_segment(t_env *env, t_file *file, void *segment_command) {
 		if (check_overflow(file, section) || check_overflow(file, section + section_size))
 			return (FAILURE);
 		file->nsects++;
-		if ((env->bin == BIN_OTOOL && print_section(file, section))
+		if ((env->bin == BIN_OTOOL && print_section(env, file, section))
 			|| (env->bin == BIN_NM && create_mysects(file, section)))
 			return (FAILURE);
 		section += section_size;
