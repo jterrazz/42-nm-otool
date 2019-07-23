@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 08:29:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:24:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:25:39 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int handle_binary(t_env *env, t_file *file)
 	else if (magic == FAT_MAGIC || magic == FAT_CIGAM)
 	{
 		file->swap_bits = magic == FAT_CIGAM ? TRUE : FALSE;
-		if (handle_fat(env, file, magic))
+		if (handle_fat(env, file))
 			return print_binary_error(file);
 	}
 	else if (magic == MH_MAGIC || magic == MH_CIGAM || magic == MH_MAGIC_64 || magic == MH_CIGAM_64)

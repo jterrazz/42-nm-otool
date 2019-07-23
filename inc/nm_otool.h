@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:19:03 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:25:30 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,21 @@
  // Check to create a file with 1 char size
  // Compare errors results
 
-// Replace My ft_atoi 	int is_neg; ~!!!!!!!!!!!!!!!!! and in global libs !!!!!!!!
-
 #define FAILURE -1
 #define SUCCESS 0
 #define DEFAULT_FILE "a.out"
 
-#include <stdlib.h> // For uint32_t (check we use it)
+#include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 
 #include <mach-o/loader.h>
-#include <mach-o/nlist.h> // For segment structure nope
-#include <mach/machine.h> // Do we need it ?
-#include <mach-o/fat.h> // For fat structure
-#include <ar.h> // Fir archive structure
+#include <mach-o/nlist.h>
+// #include <mach/machine.h>
+#include <mach-o/fat.h>
+#include <ar.h>
 
 #include "libft.h"
 #include "ft_printf.h"
@@ -195,7 +193,7 @@ void cmd_end(t_env *env);
 
 int handle_binary(t_env *env, t_file *file);
 int handle_archive(t_env *env, t_file *file);
-int handle_fat(t_env *env, t_file *file, uint32_t magic);
+int handle_fat(t_env *env, t_file *file);
 
 /*
 ** Mach-o methods

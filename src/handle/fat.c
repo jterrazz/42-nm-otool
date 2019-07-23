@@ -6,12 +6,11 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:22:39 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:25:49 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
-#include <mach-o/arch.h> // delete if not using official arr.
 
 // Find global list ? http://web.mit.edu/darwin/src/modules/cctools/libmacho/arch.c
 // Put in static var (remove all globals)
@@ -57,7 +56,7 @@ static int fallback_handle_all_archs(t_env *env, t_file *file)
 
 // Check the checkft all have sizeof()
 
-int handle_fat(t_env *env, t_file *file, uint32_t magic) // Secure the ft up the same
+int handle_fat(t_env *env, t_file *file) // Secure the ft up the same
 {
 	uint32_t offset;
 	uint32_t nfat_arch;
