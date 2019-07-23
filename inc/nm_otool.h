@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:59:48 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:19:03 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 // Test to make a malloc fails (by limiting memory ?)
 // Printf rename t_flag and update in global libs
 // Where init_file = free_file
+ // Check to create a file with 1 char size
+ // Compare errors results
 
 // Replace My ft_atoi 	int is_neg; ~!!!!!!!!!!!!!!!!! and in global libs !!!!!!!!
 
@@ -194,7 +196,6 @@ void cmd_end(t_env *env);
 int handle_binary(t_env *env, t_file *file);
 int handle_archive(t_env *env, t_file *file);
 int handle_fat(t_env *env, t_file *file, uint32_t magic);
-void handle_macho(t_env *env, t_file *file, uint32_t magic);
 
 /*
 ** Mach-o methods

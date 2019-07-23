@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:44:08 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:22:39 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int handle_fat(t_env *env, t_file *file, uint32_t magic) // Secure the ft up the
 
 	if (check_overflow(file, file->start + sizeof(t_fat_header)))
 		return (FAILURE);
-	file->swap_bits = magic == FAT_CIGAM ? TRUE : FALSE;
 	nfat_arch = ((t_fat_header *)file->start)->nfat_arch;
 	nfat_arch = swapif_u32(file, nfat_arch);
 	fat_arch = file->start + sizeof(t_fat_header);

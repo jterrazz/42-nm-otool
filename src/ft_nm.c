@@ -6,13 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:29:23 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:02:47 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-static void print_usage(char const *argv[])
+static void usage(char const *argv[])
 {
 	ft_printf("USAGE: %s [options] <input files>\n", argv[0]);
 	ft_printf("\nOPTIONS:\n\nGeneral options:\n\n");
@@ -36,7 +36,7 @@ int main(int argc, char const *argv[]) {
 		return (EXIT_FAILURE);
 
 	if (env.flags & FLAG_HELP)
-		print_usage(argv);
+		usage(argv);
 	else {
 		if (!env.nfiles)
 			cmd_start(&env, DEFAULT_FILE);
@@ -46,7 +46,5 @@ int main(int argc, char const *argv[]) {
 		}
 	}
 	cmd_end(&env);
-
-	// free(env->...)
 	return (EXIT_SUCCESS);
 }

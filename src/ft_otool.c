@@ -6,14 +6,14 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:12:06 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:02:41 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 #include "ft_printf.h"
 
-static void print_usage(char const *argv[])
+static void usage(char const *argv[])
 {
 	ft_printf("Usage: %s <object file>\n", argv[0]);
 }
@@ -28,7 +28,7 @@ int main(int argc, char const *argv[])
 		return (EXIT_FAILURE);
 
 	if (env.flags & FLAG_HELP)
-		print_usage(argv);
+		usage(argv);
 	else {
 		if (!env.nfiles) {
 			ft_printf("error: %s: at least one file must be specified\n", argv[0]);
@@ -41,6 +41,5 @@ int main(int argc, char const *argv[])
 	}
 
 	cmd_end(&env);
-	// free(env->...)
 	return (EXIT_SUCCESS);
 }
