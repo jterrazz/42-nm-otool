@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 19:58:50 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:12:16 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:20:17 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym
 
 	failed = 0;
 	mysym->type_p = ' ';
-	mysym->name = ft_strdup_overflow(file, symname, '\n', 1, &failed); // maybe retest with last line /n to remove the special car in ftsafe
+	mysym->name = ft_strdup_overflow(file, symname, '\n', &failed); // maybe retest with last line /n to remove the special car in ftsafe
 	if (failed)
 		mysym->namefailed = TRUE;
 	if (!mysym->name)

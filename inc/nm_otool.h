@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:12:05 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:20:13 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
  // Test flag -u WITH -U
  // Is a directory. error
  // Explain the letters meaning
+ // Reset test from git + add 3 others
 
 #define FAILURE -1
 #define SUCCESS 0
@@ -221,7 +222,7 @@ t_bool check_overflow(t_file *file, void *ptr);
 char *get_cpu_string(cpu_type_t cputype);
 t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym);
 void fill_mysym(t_file *file, t_mysymbol *mysym);
-char	*ft_strdup_overflow(t_file *file, char *s1, char c, t_bool inc_c, int *failed);
+char	*ft_strdup_overflow(t_file *file, char *s1, char c, int *failed);
 
 int32_t ft_bswap_int32(int32_t x);
 uint32_t ft_bswap_uint32(uint32_t x);
