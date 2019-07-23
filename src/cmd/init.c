@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:09:46 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:27:11 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,33 +48,42 @@ static int set_flags(t_env *env, int argc, char const *argv[], t_bin bin)
 {
 	t_flag_detail *flag;
 	char **filenames;
-	int i;
 
-	i = 1;
-	while (i < argc && argv[i]) {
-		if (argv[i][0] == '-') {
-			if (!(flag = get_flag((char *) argv[i] + 1, bin))) {
-				ft_printf("nmnm: Unknow command line argument %s. Try nmnmnmnmnmnmnmnmnmnmnmnmnmnmnmnmnmnmnmm -help\n", argv[i]); // TODO
+	while (--argc && ++argv)
+	{
+		if ((*argv)[0] == '-')
+		{
+			if (!(flag = get_flag((char *) *argv + 1, bin)))
+			{
+				ft_printf("%s: Unknow command line argument '%s'. Try '%s' -help\n", argv[0], *argv, argv[0]); // TODO
+				return (-1);
+			}
+			if (env->flags & flag->value)
+			{
+				ft_printf("%s: for the %s option: may only occur zero or one times!\n", argv[0], flag->fullname); // TODO
 				return (-1);
 			}
 			env->flags |= flag->value;
-		} else {
+		}
+		else
+		{
 			if (!(filenames = malloc((env->nfiles + 1) * sizeof(char *)))) // print malloc error ? ? ? ? ?
 				return (-1);
 			ft_memmove(filenames, env->filenames, env->nfiles * sizeof(char *));
 			free(env->filenames);
-			filenames[env->nfiles] = (char *) argv[i];
-			env->filenames = (const char **) filenames;
+			filenames[env->nfiles] = (char *) *argv;
+			env->filenames = (char const **) filenames;
 			env->nfiles++;
 		}
-
-		i++;
 	}
-	return (i);
+	return (SUCCESS);
 }
 
 /*
-** Returns the index of the first not flag argument, -1 for errors
+** Initialise a t_env variable with argv values.
+** It saves the flags values in env->flags.
+** Filenames are saved in the env->filenames list.
+** Returns SUCCESS or FAILURE.
 */
 
 int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin) {
