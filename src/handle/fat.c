@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 00:41:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 00:58:44 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 			file->error = E_OVERFLOW;
 			return (-1);
 		}
+		ft_printf("%s:\n", virtual_file.filename);
 		handle_binary(env, &virtual_file);
 		destroy_file(&virtual_file);
 		if (!all_cputypes)

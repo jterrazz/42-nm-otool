@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 09:20:31 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:30:18 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 00:50:50 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*ft_strdup_overflow(t_file *file, char *src, char end_char, int *failed)
 
 	i = 0;
 	size = 0;
-	while (!check_overflow_wo_error(file, src + size) && src[size] && src[size] != end_char)
+	while (!check_overflow_wo_error(file, src + size) && src[size] && src[size] != end_char && ft_isprint(src[size]))
 		size++;
 	if (check_overflow_wo_error(file, src + size))
 	{

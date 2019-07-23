@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 00:19:19 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 00:58:16 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,12 @@ static int print_section(t_env *env, t_file *file, void *sect)
 		return (SUCCESS);
 	if (!ft_strcmp(SECT_TEXT, name) && (env->flags & FLAG_T || !(env->flags & FLAG_D)))
 	{
-		ft_printf("%s:\n", file->filename);
 		ft_printf("Contents of (__TEXT,__text) section\n");
 		ft_hexdump(file->start + offset, size, segstart, file->arch);
 	}
 	if (env->flags & FLAG_D)
 	{
 		if (!ft_strcmp(SECT_DATA, name)) {
-			ft_printf("%s:\n", file->filename);
 			ft_printf("Contents of (__DATA,__data) section\n");
 			ft_hexdump(file->start + offset, size, segstart, file->arch);
 		}
