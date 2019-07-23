@@ -6,15 +6,15 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:51:31 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:48:43 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-static void usage(char const *argv[])
+static void usage(char const *bin)
 {
-	ft_printf("USAGE: %s [options] <input files>\n", argv[0]);
+	ft_printf("USAGE: %s [options] <input files>\n", bin);
 	ft_printf("\nOPTIONS:\n\nGeneral options:\n\n");
 	ft_printf("%-25s %s\n", "-n --numeric-sort", "Sort symbols by address");
 	ft_printf("%-25s %s\n", "-r --reverse-sort", "Sort in reverse order");
@@ -37,7 +37,7 @@ int main(int argc, char const *argv[])
 		return (EXIT_FAILURE);
 
 	if (env.flags & FLAG_HELP)
-		usage(argv);
+		usage(argv[0]);
 	else {
 		if (!env.nfiles)
 			cmd_start(&env, DEFAULT_FILE);
