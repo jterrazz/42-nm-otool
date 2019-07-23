@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 19:19:18 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 19:42:35 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // Makefile messages
 // Test to make a malloc fails (by limiting memory ?)
 // Printf rename t_flag and update in global libs
-// Where init_file = free_file
+// Where create_file = free_file
  // Check to create a file with 1 char size
  // Compare errors results
  // Simulate a malloc error in mach_segment
@@ -203,14 +203,14 @@ int handle_fat(t_env *env, t_file *file);
 
 int parse_macho(t_env *env, t_file *file);
 int	parse_machoo_segment(t_env *env, t_file *file, void *segment_command);
-int parse_machoo_symtab(t_file *file, t_symtab_command *symtab_command);
+int parse_macho_symtab(t_file *file, t_symtab_command *symtab_command);
 
 /*
 ** Shared methods
 */
 
-void init_file(t_file *file, char const *name, uint64_t size, void *start);
-void init_virtual_file(t_file *file, t_file *old_file, char *virtualname);
+void create_file(t_file *file, char const *name, uint64_t size, void *start);
+void create_virtual_file(t_file *file, t_file *old_file, char *virtualname);
 void destroy_file(t_file *file);
 t_bool check_overflow(t_file *file, void *ptr);
 char *get_cpu_string(cpu_type_t cputype);

@@ -6,13 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 19:20:32 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 19:21:25 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-static int print_section(t_file *file, void *sect) // Section not segment
+static int print_section(t_file *file, void *sect)
 {
 	uint64_t segstart;
 	uint64_t size;

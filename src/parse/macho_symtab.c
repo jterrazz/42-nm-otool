@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 16:28:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 19:45:55 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,8 @@ static void match_sym_section(t_list *mysect_lst, t_mysymbol *mysym) {
 }
 
 static void fill_mysym(t_file *file, t_mysymbol *mysym) {
-	// #define N_ABS 0x2		/* absolute, n_sect == NO_SECT */
-	// #define N_SECT 0xe		/* defined in section number n_sect */
-	// #define N_PBUD 0xc		/* prebound undefined (defined in a dylib) */
-	// #define N_INDR 0xa
 	if (N_STAB & mysym->type) {
-		mysym->type_p = '-'; // Remove if no debug
+		mysym->type_p = '-';
 		int i = 0;
 
 		while (i < DEBUG_SYMBOLS_LENGTH) {
@@ -167,32 +163,37 @@ static void fill_mysym(t_file *file, t_mysymbol *mysym) {
 	} else if ((N_TYPE & mysym->type) == N_INDR) {
 		mysym->type_p = 'I';
 	}
-	// 	#define	N_STAB	0xe0  /* if any of these bits set, a symbolic debugging entry */
-	// #define	N_PEXT	0x10  /* private external symbol bit */
-	// #define	N_TYPE	0x0e  /* mask for the type bits */
-	// #define	N_EXT	0x01  /* external symbol bit, set for external symbols */
 }
 
-/*
-** Parse the symbol table, and set the file->mysym variable
-*/
+// static int create_mysym(t_file *file, char *strtab, )
+// {
+//
+// }
 
-int parse_machoo_symtab(t_file *file, t_symtab_command *symtab_command) { // No need for 64 ?
+/*
+** Parse the load command LC_SYMTAB.
+*/
+// Add void * for all of check_overflow
+
+int parse_macho_symtab(t_file *file, t_symtab_command *symtab_command)
+{
 	void *symtab;
 	void *strtab;
-	uint64_t nsyms; // 32
-	uint64_t i; // 32too
+	uint64_t nsyms;
+	uint64_t i;
 	t_mysymbol mysym;
 	char *symname;
 
+	i = 0;
+	if (check_overflow(file, (void *)symtab_command + sizeof(t_symtab_command *)))
+		return (FAILURE);
 	strtab = (void *) file->start + swapif_u32(file, symtab_command->stroff);
 	symtab = (void *) file->start + swapif_u32(file, symtab_command->symoff);
 	nsyms = swapif_u32(file, symtab_command->nsyms);
-	i = 0;
 
 	while (i < nsyms) {
-		if (check_overflow(file, strtab) || check_overflow(file, symtab + ((file->arch == ARCH_32) ? sizeof(t_nlist) : sizeof(t_nlist_64))))
-			return FAILURE;
+		if (check_overflow(file, strtab) || check_overflow(file, symtab + ((file->arch == ARCH_32) ? sizeof(t_nlist) : sizeof(t_nlist_64)))) // secure + i
+			return (FAILURE);
 		symname = strtab + swapif_u32(file, (file->arch == ARCH_32) ? ((t_nlist *)symtab + i)->n_un.n_strx : ((t_nlist_64 *)symtab + i)->n_un.n_strx);
 		if (file->arch == ARCH_32) {
 			init_mysym(file, &mysym, symname, (t_nlist *)symtab + i); // TODO Check for failure with overflow ???
@@ -201,7 +202,7 @@ int parse_machoo_symtab(t_file *file, t_symtab_command *symtab_command) { // No 
 		}
 		fill_mysym(file, &mysym);
 
-		ft_lstadd(&file->mysyms, ft_lstnew(&mysym, sizeof(t_mysymbol)));
+		ft_lstadd(&file->mysyms, ft_lstnew(&mysym, sizeof(t_mysymbol))); // sec
 		i++;
 	}
 

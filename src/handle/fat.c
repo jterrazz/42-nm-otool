@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 19:04:45 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 19:40:02 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 		offset = (file->swap_bits) ? ft_bswap_uint32(fat_arch->offset) : fat_arch->offset;
 		if (offset == 0)
 			return (-1);
-		init_file(&virtual_file, file->filename, (file->swap_bits)
+		create_file(&virtual_file, file->filename, (file->swap_bits)
 			? ft_bswap_uint32(fat_arch->size) : fat_arch->size, file->start + offset);
-		init_virtual_file(&virtual_file, file, (char *)file->filename);
+		create_virtual_file(&virtual_file, file, (char *)file->filename);
 		handle_binary(env, &virtual_file); // handle return ????????
 		destroy_file(&virtual_file);
 		if (!all_cputypes)
@@ -88,6 +88,7 @@ int handle_fat(t_env *env, t_file *file)
 		{
 			i = 0;
 			print_all_archs = TRUE;
+			fat_arch = file->start + sizeof(t_fat_header);
 		}
 	}
 	return (SUCCESS);

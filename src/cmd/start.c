@@ -40,7 +40,7 @@ int cmd_start(t_env *env, char const *filename)
         ft_printf("error: %s: Mmap error on file %s\n", env->execname, filename);
         return (FAILURE);
     }
-    init_file(&file, filename, buf.st_size, ptr);
+    create_file(&file, filename, buf.st_size, ptr);
     handle_binary(env, &file);
     destroy_file(&file);
     if (munmap(ptr, buf.st_size) < 0 || close(fd) < 0)

@@ -36,8 +36,8 @@ int handle_archive(t_env *env, t_file *file)
 			name_size = !ft_strncmp(ar_header->ar_name, AR_EFMT1, ft_strlen(AR_EFMT1)) ? ft_atoi(ar_header->ar_name + ft_strlen(AR_EFMT1)) : 0;
 			if (check_overflow(file, ptr + name_size))
 				return FAILURE;
-			init_file(&virtual_file, file->filename, ar_size, ptr + name_size);
-			init_virtual_file(&virtual_file, file, ptr);
+			create_file(&virtual_file, file->filename, ar_size, ptr + name_size);
+			create_virtual_file(&virtual_file, file, ptr);
 			handle_binary(env, &virtual_file); // Handle return ?
 			destroy_file(&virtual_file);
 		}
