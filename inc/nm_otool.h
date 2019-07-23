@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:20:13 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:33:22 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ typedef struct nlist_64 t_nlist_64;
 
 typedef struct s_debug_symbol {
 	char *symbol;
-	uint16_t value;
+	uint16_t typevalue;
 } t_debug_symbol;
 
 extern t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH];

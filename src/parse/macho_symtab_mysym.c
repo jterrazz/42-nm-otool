@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 19:58:50 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:20:17 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:42:52 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,19 @@ t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH] =
 	{"LENG", 0xfe}
 };
 
-static t_mysection *find_mysection(t_list *lst, uint8_t n_sect) {
+static t_mysection *find_mysection(t_list *lst, uint8_t n_sect)
+{
 	while (lst && lst->content) {
-		if (((t_mysection *)lst->content)->index == n_sect) {
+		if (((t_mysection *)lst->content)->index == n_sect)
 			return lst->content;
-		}
 		lst = lst->next;
 	}
 
 	return NULL;
 }
 
-static void match_sym_section(t_list *mysect_lst, t_mysymbol *mysym) {
+static void match_sym_section(t_list *mysect_lst, t_mysymbol *mysym)
+{
 	t_mysection *mysect;
 
 	if ((mysect = find_mysection(mysect_lst, mysym->sect)))
@@ -74,10 +75,22 @@ static void match_sym_section(t_list *mysect_lst, t_mysymbol *mysym) {
 			mysym->type_p = 'B';
 		else
 			mysym->type_p = 'S';
-
 		if (!(mysym->type & N_EXT))
 			mysym->type_p -= 'A' - 'a';
 	}
+}
+
+char *get_debug_symbol(uint16_t type)
+{
+	int i;
+
+	i = 0;
+	while (i < DEBUG_SYMBOLS_LENGTH) {
+		if (g_debug_symbols[i].typevalue == type)
+			 return g_debug_symbols[i].symbol;
+		i++;
+	}
+	return (NULL);
 }
 
 void fill_mysym(t_file *file, t_mysymbol *mysym)
@@ -85,28 +98,23 @@ void fill_mysym(t_file *file, t_mysymbol *mysym)
 	if (N_STAB & mysym->type)
 	{
 		mysym->type_p = '-';
-		int i = 0;
-
-		while (i < DEBUG_SYMBOLS_LENGTH) {
-			if (g_debug_symbols[i].value == mysym->type) {
-				mysym->debug_symbol = g_debug_symbols[i].symbol;
-			}
-			i++;
-		}
-	} else if ((N_TYPE & mysym->type) == N_UNDF) {
+		mysym->debug_symbol = get_debug_symbol(mysym->type);
+	}
+	else if ((N_TYPE & mysym->type) == N_UNDF)
+	{
 		if (mysym->namefailed)
 			mysym->type_p = 'C';
 		else if (mysym->type & N_EXT)
 			mysym->type_p = 'U';
 		else
 			mysym->type_p = '?';
-	} else if ((N_TYPE & mysym->type) == N_SECT) {
-		match_sym_section(file->mysects, mysym);
-	} else if ((N_TYPE & mysym->type) == N_ABS) {
-		mysym->type_p = 'A';
-	} else if ((N_TYPE & mysym->type) == N_INDR) {
-		mysym->type_p = 'I';
 	}
+	else if ((N_TYPE & mysym->type) == N_SECT)
+		match_sym_section(file->mysects, mysym);
+	else if ((N_TYPE & mysym->type) == N_ABS)
+		mysym->type_p = 'A';
+	else if ((N_TYPE & mysym->type) == N_INDR)
+		mysym->type_p = 'I';
 }
 
 /*
@@ -116,13 +124,13 @@ void fill_mysym(t_file *file, t_mysymbol *mysym)
 
 t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym)
 {
-	int failed;
-	ft_bzero(mysym, sizeof(t_mysymbol));
+	int namefailed;
 
-	failed = 0;
+	ft_bzero(mysym, sizeof(t_mysymbol));
+	namefailed = 0;
 	mysym->type_p = ' ';
-	mysym->name = ft_strdup_overflow(file, symname, '\n', &failed); // maybe retest with last line /n to remove the special car in ftsafe
-	if (failed)
+	mysym->name = ft_strdup_overflow(file, symname, '\n', &namefailed);
+	if (namefailed)
 		mysym->namefailed = TRUE;
 	if (!mysym->name)
 		return (NULL);
@@ -137,5 +145,5 @@ t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym
 		mysym->desc = ((t_nlist_64 *)sym)->n_desc; // No swap ???
 		mysym->value = swapif_u64(file, ((t_nlist_64 *)sym)->n_value);
 	}
-	return mysym;
+	return (mysym);
 }
