@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 19:58:50 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 22:43:11 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:19:53 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,14 +136,14 @@ t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym
 	if (!mysym->name)
 		return (NULL);
 	if (file->arch == ARCH_32) {
-		mysym->type = ((t_nlist *)sym)->n_type; // No swap ???
-		mysym->sect = ((t_nlist *)sym)->n_sect; // No swap ???
-		mysym->desc = ((t_nlist *)sym)->n_desc; // No swap ???
+		mysym->type = swapif_u32(file, ((t_nlist *)sym)->n_type);
+		mysym->sect = swapif_u32(file, ((t_nlist *)sym)->n_sect);
+		mysym->desc = swapif_u32(file, ((t_nlist *)sym)->n_desc);
 		mysym->value = swapif_u32(file, ((t_nlist *)sym)->n_value);
 	} else {
-		mysym->type = ((t_nlist_64 *)sym)->n_type; // No swap ???
-		mysym->sect = ((t_nlist_64 *)sym)->n_sect; // No swap ???
-		mysym->desc = ((t_nlist_64 *)sym)->n_desc; // No swap ???
+		mysym->type = swapif_u64(file, ((t_nlist_64 *)sym)->n_type);
+		mysym->sect = swapif_u64(file, ((t_nlist_64 *)sym)->n_sect);
+		mysym->desc = swapif_u64(file, ((t_nlist_64 *)sym)->n_desc);
 		mysym->value = swapif_u64(file, ((t_nlist_64 *)sym)->n_value);
 	}
 	return (mysym);
