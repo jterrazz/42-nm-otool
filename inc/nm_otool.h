@@ -6,24 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 23:49:38 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 00:08:47 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef NM_OTOOL_H
 #define NM_OTOOL_H
 
-// Add void * for all of check_overflow
-// TODO Check for endian everywhere + for 64/32
-// TODO Check for all offsets
-// Free all virtual files
-// Makefile messages
-// Test to make a malloc fails (by limiting memory ?)
-// Printf rename t_flag and update in global libs
-// Where create_file = free_file
- // Check to create a file with 1 char size
- // Compare errors results
- // Simulate a malloc error in mach_segment
  /// Leaks
  // Make tests with -g -n -r
  // Test flag -u WITH -U
@@ -67,7 +56,8 @@ typedef enum e_flag {
 	FLAG_D = 1<<9,
 	FLAG_M = 1<<10,
 	FLAG_F = 1<<11,
-	FLAG_HELP = 1<<12
+	FLAG_T = 1<<12,
+	FLAG_HELP = 1<<13
 } t_flag;
 
 typedef enum {

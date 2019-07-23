@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 22:48:48 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 00:09:22 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static t_flag_info g_flags[2][10] = {
 		{0, "", 0}
 	},
 	{
-		{'d', "-data", FLAG_D},
+		{'t', "-text-section", FLAG_T},
+		{'d', "-data-section", FLAG_D},
 		{'m', "-macho-header", FLAG_M},
 		{'f', "-fat-header", FLAG_F},
 		{'h', "-help", FLAG_HELP},

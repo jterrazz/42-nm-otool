@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 21:17:28 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 00:19:19 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,21 @@ static int print_section(t_env *env, t_file *file, void *sect)
 		offset = ((t_section_64 *)sect)->offset;
 		name = ((t_section_64 *)sect)->sectname;
 	}
-	if (check_overflow(file, file->start + offset + size))
-		return (FAILURE);
+	if ((env->flags & FLAG_M) || (env->flags & FLAG_F))
+		return (SUCCESS);
+	if (!ft_strcmp(SECT_TEXT, name) && (env->flags & FLAG_T || !(env->flags & FLAG_D)))
+	{
+		ft_printf("%s:\n", file->filename);
+		ft_printf("Contents of (__TEXT,__text) section\n");
+		ft_hexdump(file->start + offset, size, segstart, file->arch);
+	}
 	if (env->flags & FLAG_D)
 	{
 		if (!ft_strcmp(SECT_DATA, name)) {
+			ft_printf("%s:\n", file->filename);
 			ft_printf("Contents of (__DATA,__data) section\n");
 			ft_hexdump(file->start + offset, size, segstart, file->arch);
 		}
-	} else if (!ft_strcmp(SECT_TEXT, name))
-	{
-		ft_printf("Contents of (__TEXT,__text) section\n");
-		ft_hexdump(file->start + offset, size, segstart, file->arch);
 	}
 	return (SUCCESS);
 }
@@ -80,11 +83,15 @@ int	parse_machoo_segment(t_env *env, t_file *file, void *segment_command) {
 		if (check_overflow(file, section) || check_overflow(file, section + section_size))
 			return (FAILURE);
 		file->nsects++;
-		if ((env->bin == BIN_OTOOL && print_section(env, file, section))
-			|| (env->bin == BIN_NM && create_mysects(file, section)))
-			return (FAILURE);
+		if (env->bin == BIN_OTOOL)
+		{
+			if (print_section(env, file, section))
+				return (FAILURE);
+		} else {
+			if (create_mysects(file, section))
+				return (FAILURE);
+		}
 		section += section_size;
 	}
-
-	return SUCCESS;
+	return (SUCCESS);
 }
