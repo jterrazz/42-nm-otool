@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:09:44 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:50:36 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,8 @@ void create_file(t_file *file, char const *name, uint64_t size, void *start)
 	file->end = file->start + file->filesize;
 }
 
-void create_virtual_file(t_file *file, t_file *old_file, char *virtualname)
+void create_virtual_file(t_file *file, char *virtualname)
 {
-	file->end = file->end < old_file->end ? file->end : old_file->end; // probably delete
 	file->virtualname = virtualname;
 	file->is_virtual = TRUE;
 }

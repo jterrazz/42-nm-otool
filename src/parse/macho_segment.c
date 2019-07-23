@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 19:21:25 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:44:42 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static int print_section(t_file *file, void *sect)
 		offset = ((t_section_64 *)sect)->offset;
 		name = ((t_section_64 *)sect)->sectname;
 	}
+	if (check_overflow(file, file->start + offset + size))
+		return (FAILURE);
 	if (!ft_strcmp(SECT_TEXT, name))
 	{
 		ft_printf("Contents of (__TEXT,__text) section\n");
