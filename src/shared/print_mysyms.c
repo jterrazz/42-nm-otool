@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:51:21 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:47:01 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
 	}
 }
 
-// Make a real reverse of the list (for P option and replace old lst_sort)
 /*
  A B C D
  B A C D
