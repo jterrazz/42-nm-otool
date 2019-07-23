@@ -6,12 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:59:32 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 21:13:40 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
+// Redo **
 t_flag_info g_flags[] = {
 	{'n', "-numeric-sort", FLAG_N, BIN_NM},
 	{'r', "-reverse-sort", FLAG_R, BIN_NM},
@@ -21,6 +22,7 @@ t_flag_info g_flags[] = {
 	{'U', "-defined-only", FLAG_UU, BIN_NM},
 	{'j', "-simple-output", FLAG_J, BIN_NM},
 	{'a', "-debug-syms", FLAG_A, BIN_NM},
+	{'d', "-data", FLAG_HELP, BIN_OTOOL},
 	{'h', "-help", FLAG_HELP, BIN_NM | BIN_OTOOL},
 	{0, "", 0, 0}
 };
@@ -44,12 +46,12 @@ static int set_flags(t_env *env, char *argv, t_bin bin)
 
 	if (!(flag = get_flag(argv + 1, bin)))
 	{
-		ft_printf("%s: Unknow command line argument '%s'. Try '%s' -help\n", argv, *argv, argv); // TODO
+		ft_printf("%s: Unknow command line argument '%s'. Try '%s' -help\n", env->execname, argv, env->execname);
 		return (FAILURE);
 	}
 	if (env->flags & flag->value)
 	{
-		ft_printf("%s: for the %s option: may only occur zero or one times!\n", argv, flag->fullname); // TODO
+		ft_printf("%s: for the %s option: may only occur zero or one times!\n", env->execname, flag->fullname);
 		return (FAILURE);
 	}
 	env->flags |= flag->value;

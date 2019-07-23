@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:50:42 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 21:01:28 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ typedef enum e_flag {
 	FLAG_UU = 1<<6,
 	FLAG_J = 1<<7,
 	FLAG_A = 1<<8,
-	FLAG_HELP = 1<<9 // Check it indeed does a long value
+	FLAG_D = 1<<9,
+	FLAG_HELP = 1<<10 // Check it indeed does a long value
 	// Add flag for otool -t (also default) -...
 } t_flag;
 

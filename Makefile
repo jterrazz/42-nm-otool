@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/07/23 20:52:49 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/07/23 21:09:36 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,4 +78,4 @@ fclean: clean
 	@echo "Fclean \033[33mok\033[0m"
 
 re: fclean
-	$(NAME)
+	@make $(NAME)
