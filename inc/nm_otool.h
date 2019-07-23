@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:25:30 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:26:57 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@
 
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
-// #include <mach/machine.h>
 #include <mach-o/fat.h>
 #include <ar.h>
 
