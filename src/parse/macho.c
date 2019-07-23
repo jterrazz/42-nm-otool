@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 23:43:02 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:53:12 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int parse_macho(t_env *env, t_file *file)
 
 	while (ncmds--)
 	{
-		if (check_overflow(file, lc + sizeof(t_load_command)))
+		if (check_overflow(file, lc + 1))
 			return (FAILURE);
 		if (parse_load_command(env, file, lc))
 			return (FAILURE);

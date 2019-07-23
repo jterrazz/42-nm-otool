@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 23:40:57 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:49:38 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,8 @@
  // Test flag -u WITH -U
  // Is a directory. error
  // Explain the letters meaning
+
  // Reset test from git + add 3 others
- // Also try with archive in archive (mayb go overflow with the size)
- // Check with files that don't start with this BSD thing AR_EFMT1
- // https://en.wikipedia.org/wiki/Ar_(Unix)           BSD Variant !
- // https://opensource.apple.com/source/xnu/xnu-344/EXTERNAL_HEADERS/mach-o/fat.h
 
 #define FAILURE -1
 #define SUCCESS 0

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:08:56 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:52:28 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int parse_macho_symtab(t_file *file, t_symtab_command *symtab_command)
 	uint64_t nsyms;
 	t_list *lst;
 
-	if (check_overflow(file, (void *)symtab_command + sizeof(t_symtab_command *)))
+	if (check_overflow(file, symtab_command + 1))
 		return (FAILURE);
 	strtab = (void *) file->start + swapif_u32(file, symtab_command->stroff);
 	sym = (void *) file->start + swapif_u32(file, symtab_command->symoff);

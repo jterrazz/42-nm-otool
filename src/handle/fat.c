@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 23:17:55 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:51:49 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int print_fat_header(t_file *file, t_fat_header *fat_header, unsigned lon
 	ft_printf("nfat_arch %d\n", swapif_u32(file, fat_header->nfat_arch));
 	while (i < nfat_arch)
 	{
-		if (check_overflow(file, fat_arch + sizeof(fat_arch)))
+		if (check_overflow(file, fat_arch + 1))
 			return (-1);
 		ft_printf("architecture\n", i);
 		ft_printf("    cputype %d\n", swapif_u32(file, fat_arch->cputype));
@@ -65,7 +65,7 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 	uint32_t offset;
 	cpu_type_t cputype;
 
-	if (check_overflow(file, fat_arch + sizeof(fat_arch)))
+	if (check_overflow(file, fat_arch + 1))
 		return (-1);
 	cputype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cputype) : fat_arch->cputype;
 	if (all_cputypes || env->cputype == cputype)

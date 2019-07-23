@@ -3,6 +3,7 @@
 Custom C implementation of **nm** and **otool** commands.
 - **ft_nm** displays the name list (symbol table of nlist structures) of each object file in the argument list.
 - **ft_tool** display the contents of the (\__TEXT,__text).
+https://linux.die.net/man/1/nm
 
 ## How to use it
 
