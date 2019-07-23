@@ -6,25 +6,36 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 21:15:33 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 22:48:48 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-// Redo **
-t_flag_info g_flags[] = {
-	{'n', "-numeric-sort", FLAG_N, BIN_NM},
-	{'r', "-reverse-sort", FLAG_R, BIN_NM},
-	{'g', "-extern-only", FLAG_G, BIN_NM},
-	{'p', "-no-sort", FLAG_P, BIN_NM},
-	{'u', "-undefined-only", FLAG_U, BIN_NM},
-	{'U', "-defined-only", FLAG_UU, BIN_NM},
-	{'j', "-simple-output", FLAG_J, BIN_NM},
-	{'a', "-debug-syms", FLAG_A, BIN_NM},
-	{'d', "-data", FLAG_D, BIN_OTOOL},
-	{'h', "-help", FLAG_HELP, BIN_NM | BIN_OTOOL},
-	{0, "", 0, 0}
+/*
+** Defines NM flags and OTOOL flags
+*/
+
+static t_flag_info g_flags[2][10] = {
+	{
+		{'n', "-numeric-sort", FLAG_N},
+		{'r', "-reverse-sort", FLAG_R},
+		{'g', "-extern-only", FLAG_G},
+		{'p', "-no-sort", FLAG_P},
+		{'u', "-undefined-only", FLAG_U},
+		{'U', "-defined-only", FLAG_UU},
+		{'j', "-simple-output", FLAG_J},
+		{'a', "-debug-syms", FLAG_A},
+		{'h', "-help", FLAG_HELP},
+		{0, "", 0}
+	},
+	{
+		{'d', "-data", FLAG_D},
+		{'m', "-macho-header", FLAG_M},
+		{'f', "-fat-header", FLAG_F},
+		{'h', "-help", FLAG_HELP},
+		{0, "", 0}
+	}
 };
 
 static t_flag_info *get_flag(char *str, t_bin bin)
@@ -32,9 +43,9 @@ static t_flag_info *get_flag(char *str, t_bin bin)
 	int i;
 
 	i = 0;
-	while (g_flags[i].shortname) {
-		if (g_flags[i].binaries & bin && ((g_flags[i].shortname == str[0] && !str[1]) || !ft_strcmp(str, g_flags[i].fullname)))
-			return g_flags + i;
+	while (g_flags[bin][i].shortname) {
+		if ((g_flags[bin][i].shortname == str[0] && !str[1]) || !ft_strcmp(str, g_flags[bin][i].fullname))
+			return g_flags[bin] + i;
 		i++;
 	}
 	return NULL;

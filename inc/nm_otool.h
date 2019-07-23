@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 21:15:13 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:17:54 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@
 #include "ft_printf.h"
 
 typedef enum e_bin {
-	BIN_NM = 1<<0,
-	BIN_OTOOL = 1<<1
+	BIN_NM = 0,
+	BIN_OTOOL = 1
 } t_bin;
 
 typedef enum e_flag {
@@ -64,7 +64,9 @@ typedef enum e_flag {
 	FLAG_J = 1<<7,
 	FLAG_A = 1<<8,
 	FLAG_D = 1<<9,
-	FLAG_HELP = 1<<10 // Check it indeed does a long value
+	FLAG_M = 1<<10,
+	FLAG_F = 1<<11,
+	FLAG_HELP = 1<<12 // Check it indeed does a long value
 	// Add flag for otool -t (also default) -...
 } t_flag;
 
@@ -97,7 +99,6 @@ typedef struct s_flag_info {
 	char shortname;
 	char fullname[20];
 	uint64_t value;
-	uint32_t binaries;
 } t_flag_info;
 
 /*
@@ -158,14 +159,10 @@ typedef struct nlist_64 t_nlist_64;
 ** List of debug values used by symbols.
 */
 
-#define DEBUG_SYMBOLS_LENGTH 29
-
 typedef struct s_debug_symbol {
 	char *symbol;
 	uint16_t typevalue;
 } t_debug_symbol;
-
-extern t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH];
 
 /*
 ** Custom symbol and section structures,
@@ -230,6 +227,7 @@ uint32_t ft_bswap_uint32(uint32_t x);
 uint64_t ft_bswap_uint64(uint64_t x);
 uint32_t swapif_u32(t_file *file, uint32_t x);
 uint64_t swapif_u64(t_file *file, uint64_t x);
+size_t ft_pow(size_t a, size_t b);
 
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
 void print_mysyms(t_env *env, t_file *file);

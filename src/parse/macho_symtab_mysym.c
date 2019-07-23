@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 19:58:50 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:42:52 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 22:43:11 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** https://opensource.apple.com/source/cctools/cctools-773/include/mach-o/stab.h
 */
 
-t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH] =
+static t_debug_symbol g_debug_symbols[] =
 {
 	{"GSYM", 0x20},
 	{"FNAME", 0x22},
@@ -47,7 +47,8 @@ t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH] =
 	{"BCOMM", 0xe2},
 	{"ECOMM", 0xe4},
 	{"ECOML", 0xe8},
-	{"LENG", 0xfe}
+	{"LENG", 0xfe},
+	{0, 0}
 };
 
 static t_mysection *find_mysection(t_list *lst, uint8_t n_sect)
@@ -85,7 +86,7 @@ char *get_debug_symbol(uint16_t type)
 	int i;
 
 	i = 0;
-	while (i < DEBUG_SYMBOLS_LENGTH) {
+	while (g_debug_symbols[i].symbol) {
 		if (g_debug_symbols[i].typevalue == type)
 			 return g_debug_symbols[i].symbol;
 		i++;

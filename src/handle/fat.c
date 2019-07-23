@@ -6,11 +6,37 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:50:55 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:17:55 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
+
+static int print_fat_header(t_file *file, t_fat_header *fat_header, unsigned long nfat_arch, t_fat_arch *fat_arch)
+{
+	unsigned long i;
+	size_t power;
+
+	i = 0;
+	ft_printf("Fat headers\nfat_magic 0x%08x\n", fat_header->magic);
+	ft_printf("nfat_arch %d\n", swapif_u32(file, fat_header->nfat_arch));
+	while (i < nfat_arch)
+	{
+		if (check_overflow(file, fat_arch + sizeof(fat_arch)))
+			return (-1);
+		ft_printf("architecture\n", i);
+		ft_printf("    cputype %d\n", swapif_u32(file, fat_arch->cputype));
+		ft_printf("    cpusubtype %d\n", swapif_u32(file, fat_arch->cpusubtype) & ~CPU_SUBTYPE_MASK);
+		ft_printf("    capabilities 0x%02x\n", (swapif_u32(file, (fat_arch->cpusubtype)) & CPU_SUBTYPE_MASK) >> 24);
+		ft_printf("    offset %d\n", swapif_u32(file, fat_arch->offset));
+		ft_printf("    size %d\n", swapif_u32(file, fat_arch->size));
+		power = swapif_u32(file, fat_arch->align);
+		ft_printf("    align 2^%d (%lld)\n", power, ft_pow(2, power));
+		fat_arch = (void *)fat_arch + sizeof(t_fat_arch);
+		i++;
+	}
+	return (SUCCESS);
+}
 
 /*
 ** CPU Informations is defined at <libmacho/arch.c>
@@ -67,8 +93,8 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 int handle_fat(t_env *env, t_file *file)
 {
 	t_fat_arch *fat_arch;
-	uint32_t nfat_arch;
-	uint32_t i;
+	unsigned long nfat_arch;
+	unsigned long i;
 	t_bool print_all_archs;
 
 	i = 0;
@@ -78,6 +104,8 @@ int handle_fat(t_env *env, t_file *file)
 	nfat_arch = ((t_fat_header *)file->start)->nfat_arch;
 	nfat_arch = swapif_u32(file, nfat_arch);
 	fat_arch = file->start + sizeof(t_fat_header);
+	if (env->flags & FLAG_F && env->bin == BIN_OTOOL)
+		return print_fat_header(file, file->start, nfat_arch, fat_arch);
 	while (i < nfat_arch)
 	{
 		if (!process_arch(env, file, print_all_archs, fat_arch))

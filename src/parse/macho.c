@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 22:33:35 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 22:44:51 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int parse_macho(t_env *env, t_file *file)
 		sizeof(t_mach_header) : sizeof(t_mach_header_64)));
 	if (check_overflow(file, lc))
 		return (FAILURE);
-	// if (env->flags & FLAGS_H && env->binary == BIN_OTOOL)
+	if (env->flags & FLAG_M && env->bin == BIN_OTOOL)
 		return print_macho_header(file, file->start);
 	ncmds = (file->arch == ARCH_32) ? ((t_mach_header *)(file->start))->ncmds :
 		((t_mach_header_64 *)(file->start))->ncmds;
