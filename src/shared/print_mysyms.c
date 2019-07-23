@@ -14,8 +14,8 @@
 #include "nm_otool.h"
 
 static int sort_mysyms_num(t_list *lst1, t_list *lst2) {
-	t_symbol *sym1;
-	t_symbol *sym2;
+	t_mysymbol *sym1;
+	t_mysymbol *sym2;
 
 	if (!lst1 || !lst2 || !lst1->content || !lst2->content)
 		return 0;
@@ -27,8 +27,8 @@ static int sort_mysyms_num(t_list *lst1, t_list *lst2) {
 }
 
 static int sort_mysyms_alpha(t_list *lst1, t_list *lst2) {
-	t_symbol *sym1;
-	t_symbol *sym2;
+	t_mysymbol *sym1;
+	t_mysymbol *sym2;
 
 	if (!lst1 || !lst2 || !lst1->content || !lst2->content)
 		return 0;
@@ -107,7 +107,7 @@ static void ft_lstreverse(t_list *lst)
 }
 
 
-static void print_mysyms_line(uint8_t left_padding, t_symbol *sym, t_bool minimal)
+static void print_mysyms_line(uint8_t left_padding, t_mysymbol *sym, t_bool minimal)
 {
 	if (minimal)
 		ft_printf("%s\n", sym->name);
@@ -128,7 +128,7 @@ static void print_mysyms_line(uint8_t left_padding, t_symbol *sym, t_bool minima
 void print_mysyms(t_env *env, t_file *file)
 {
 	t_list *symlst;
-	t_symbol *sym;
+	t_mysymbol *sym;
 	t_bool reverse;
 
 	symlst = file->mysyms;

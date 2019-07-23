@@ -83,9 +83,9 @@ char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c, int *failed)
 // For the debugging values
 //
 
-static void init_mysym(t_file *file, t_symbol *mysym, char *symname, void *sym) {
+static void init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym) {
 	int failed;
-	ft_bzero(mysym, sizeof(t_symbol));
+	ft_bzero(mysym, sizeof(t_mysymbol));
 
 	failed = 0;
 	mysym->type_p = ' '; (void)symname;
@@ -120,7 +120,7 @@ static t_mysection *find_mysection(t_list *lst, uint8_t n_sect) {
 }
 
 //https://github.com/opensource-apple/cctools/blob/master/include/mach-o/nlist.h
-static void match_sym_section(t_list *mysect_lst, t_symbol *mysym) {
+static void match_sym_section(t_list *mysect_lst, t_mysymbol *mysym) {
 	t_mysection *mysect;
 
 	if ((mysect = find_mysection(mysect_lst, mysym->sect))) {
@@ -138,7 +138,7 @@ static void match_sym_section(t_list *mysect_lst, t_symbol *mysym) {
 	}
 }
 
-static void fill_mysym(t_file *file, t_symbol *mysym) {
+static void fill_mysym(t_file *file, t_mysymbol *mysym) {
 	// #define N_ABS 0x2		/* absolute, n_sect == NO_SECT */
 	// #define N_SECT 0xe		/* defined in section number n_sect */
 	// #define N_PBUD 0xc		/* prebound undefined (defined in a dylib) */
@@ -182,7 +182,7 @@ int parse_machoo_symtab(t_file *file, t_symtab_command *symtab_command) { // No 
 	void *strtab;
 	uint64_t nsyms; // 32
 	uint64_t i; // 32too
-	t_symbol mysym;
+	t_mysymbol mysym;
 	char *symname;
 
 	strtab = (void *) file->start + swapif_u32(file, symtab_command->stroff);
@@ -201,7 +201,7 @@ int parse_machoo_symtab(t_file *file, t_symtab_command *symtab_command) { // No 
 		}
 		fill_mysym(file, &mysym);
 
-		ft_lstadd(&file->mysyms, ft_lstnew(&mysym, sizeof(t_symbol)));
+		ft_lstadd(&file->mysyms, ft_lstnew(&mysym, sizeof(t_mysymbol)));
 		i++;
 	}
 

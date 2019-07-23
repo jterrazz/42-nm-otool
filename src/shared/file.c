@@ -6,11 +6,19 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 08:40:53 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:40:48 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
+
+void destroy_file(t_file *file)
+{
+	if (file->mysyms)
+		ft_lstdel(&file->mysyms, NULL);
+	if (file->mysects)
+		ft_lstdel(&file->mysects, NULL);
+}
 
 void init_file(t_file *file, char const *name, uint64_t size, void *start)
 {

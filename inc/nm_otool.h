@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:05:47 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:41:38 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // Makefile messages
 // Test to make a malloc fails (by limiting memory ?)
 // Printf rename t_flag and update in global libs
-// Secure all the lstnew
+// Where init_file = free_file
 
 // Replace My ft_atoi 	int is_neg; ~!!!!!!!!!!!!!!!!! and in global libs !!!!!!!!
 
@@ -27,11 +27,17 @@
 #define DEFAULT_FILE "a.out"
 
 #include <stdlib.h> // For uint32_t (check we use it)
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h> // For segment structure nope
 #include <mach/machine.h> // Do we need it ?
 #include <mach-o/fat.h> // For fat structure
 #include <ar.h> // Fir archive structure
+
 #include "libft.h"
 #include "ft_printf.h"
 
@@ -106,7 +112,7 @@ typedef struct s_debug_symbol {
 extern t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH];
 
 // Rename to mysymbal
-typedef struct s_symbol { // Maybe delete some (probably :) in simtab file particulary )
+typedef struct s_mysymbol { // Maybe delete some (probably :) in simtab file particulary )
 	char *name;
 	t_bool namefailed; // for what ?
 	uint8_t type;
@@ -115,7 +121,7 @@ typedef struct s_symbol { // Maybe delete some (probably :) in simtab file parti
 	uint16_t desc;
 	uint64_t value;
 	char *debug_symbol;
-}				t_symbol;
+}				t_mysymbol;
 
 typedef struct s_mysection {
 	char *name;
@@ -173,6 +179,7 @@ void init_file(t_file *file, char const *name, uint64_t size, void *start);
 void init_virtual_file(t_file *file, t_file *old_file, char *virtualname);
 void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
 void print_mysyms(t_env *env, t_file *file);
+void destroy_file(t_file *file);
 
 int32_t ft_bswap_int32(int32_t x);
 uint32_t ft_bswap_uint32(uint32_t x);

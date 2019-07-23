@@ -6,24 +6,11 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:03:15 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:29:23 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
-
-// 'n', "-numeric-sort", FLAG_N, BIN_NM},
-// {'r', "-reverse-sort", FLAG_R, BIN_NM},
-// {'g', "-extern-only", FLAG_G, BIN_NM},
-// {'p', "-no-sort", FLAG_P, BIN_NM},
-// {'u', "-undefined-only", FLAG_U, BIN_NM},
-// {'U', "-defined-only", FLAG_UU, BIN_NM},
-// {'j', "-simple-output", FLAG_J, BIN_NM},
-// {'a', "-debug-syms", FLAG_A, BIN_NM},
-// {'h', "-help", FLAG_
-
-//nm ./ft_nm -r
-//nm ./ft_nm -r -r
 
 static void print_usage(char const *argv[])
 {

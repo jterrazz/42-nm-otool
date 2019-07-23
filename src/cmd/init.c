@@ -6,17 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:27:11 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:28:08 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
 // -n -n case
-// Add in awesome
-// Test with multiple combinaisons of flags
-// Test with multiple files
-// Test with flags after the file
 
 t_flag_detail g_flags[] = {
 	{'n', "-numeric-sort", FLAG_N, BIN_NM},
@@ -67,7 +63,7 @@ static int set_flags(t_env *env, int argc, char const *argv[], t_bin bin)
 		}
 		else
 		{
-			if (!(filenames = malloc((env->nfiles + 1) * sizeof(char *)))) // print malloc error ? ? ? ? ?
+			if (!(filenames = malloc((env->nfiles + 1) * sizeof(char *))))
 				return (-1);
 			ft_memmove(filenames, env->filenames, env->nfiles * sizeof(char *));
 			free(env->filenames);
