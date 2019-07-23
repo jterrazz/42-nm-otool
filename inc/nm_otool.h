@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:41:38 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:59:48 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,57 @@ typedef enum e_flag {
 	// Add flag for otool -t (also default) -...
 } t_flag;
 
-typedef enum { ARCH_32, ARCH_64 } t_arch;
-typedef enum { E_NULL, E_OVERFLOW } t_file_error; // why
+typedef enum {
+	ARCH_32,
+	ARCH_64
+} t_arch;
 
-typedef int t_bool; // TODO Use official bool
+typedef enum {
+	E_NULL,
+	E_OVERFLOW
+} t_file_error; // why
+
+typedef uint8_t t_bool;
+
+/*
+** Keep the state of the exectution
+*/
+
+typedef struct s_env {
+	char const *execname;
+	int nfiles;
+	char const **filenames;
+	cpu_type_t cputype;
+	t_bin bin;
+	uint64_t flags;
+}				t_env;
+
+typedef struct s_flag_info {
+	char shortname;
+	char fullname[20];
+	uint64_t value;
+	uint32_t binaries;
+} t_flag_info;
+
+/*
+** Keep informations about a file, can be a virtual file
+** (for nested macho files in fat / archives)
+*/
+
+typedef struct s_file {
+	void *start;
+	void *end;
+	t_file_error error;
+	char const *filename;
+	char const *virtualname;
+	uint64_t filesize;
+	t_bool swap_bits;
+	t_bool is_virtual;
+	t_arch arch;
+	uint64_t nsects;
+	t_list *mysects;
+	t_list *mysyms;
+}				t_file;
 
 /*
 ** This structures parse the header of files types supported by nm and otool
@@ -111,7 +158,11 @@ typedef struct s_debug_symbol {
 
 extern t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH];
 
-// Rename to mysymbal
+/*
+** Custom symbol and section structures,
+** Used mainly when priting the data.
+*/
+
 typedef struct s_mysymbol { // Maybe delete some (probably :) in simtab file particulary )
 	char *name;
 	t_bool namefailed; // for what ?
@@ -128,58 +179,40 @@ typedef struct s_mysection {
 	uint64_t index;
 }				t_mysection;
 
-typedef struct s_flag_detail { // rename
-	char shortname;
-	char fullname[20];
-	uint32_t value;
-	uint32_t binaries;
-} t_flag_detail;
-
-// Put in cmd.h
-typedef struct s_env {
-	int argc; // Why ? should not depend on that ???
-	char const **argv; // Why ? should not depend on that ???
-	int nfiles;
-	char const **filenames;
-	cpu_type_t cputype;
-	t_bin bin;
-	uint32_t flags;
-}				t_env;
-
-typedef struct s_file {
-	void *start;
-	void *end;
-	t_file_error error;
-	char const *filename;
-	char const *virtualname;
-	uint64_t filesize;
-	t_bool swap_bits;
-	t_bool is_virtual;
-	t_arch arch;
-	uint64_t nsects;
-	t_list *mysects;
-	t_list *mysyms;
-}				t_file;
-
+/*
+** Command methods
+*/
 
 int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin);
 int cmd_start(t_env *env, char const *filename);
 void cmd_end(t_env *env);
+
+/*
+** Handle methods, used for parsing files structures
+*/
 
 int handle_binary(t_env *env, t_file *file);
 int handle_archive(t_env *env, t_file *file);
 int handle_fat(t_env *env, t_file *file, uint32_t magic);
 void handle_macho(t_env *env, t_file *file, uint32_t magic);
 
+/*
+** Mach-o methods
+*/
+
 int parse_macho(t_env *env, t_file *file);
 int	parse_machoo_segment(t_env *env, t_file *file, void *segment_command);
 int parse_machoo_symtab(t_file *file, t_symtab_command *symtab_command);
 
+/*
+** Shared methods
+*/
+
 void init_file(t_file *file, char const *name, uint64_t size, void *start);
 void init_virtual_file(t_file *file, t_file *old_file, char *virtualname);
-void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
-void print_mysyms(t_env *env, t_file *file);
 void destroy_file(t_file *file);
+t_bool check_overflow(t_file *file, void *ptr);
+char *get_cpu_string(cpu_type_t cputype);
 
 int32_t ft_bswap_int32(int32_t x);
 uint32_t ft_bswap_uint32(uint32_t x);
@@ -187,7 +220,7 @@ uint64_t ft_bswap_uint64(uint64_t x);
 uint32_t swapif_u32(t_file *file, uint32_t x);
 uint64_t swapif_u64(t_file *file, uint64_t x);
 
-t_bool check_overflow(t_file *file, void *ptr);
-char *get_cpu_string(cpu_type_t cputype);
+void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
+void print_mysyms(t_env *env, t_file *file);
 
 #endif

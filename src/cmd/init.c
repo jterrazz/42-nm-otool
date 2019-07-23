@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 17:28:08 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:50:11 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // -n -n case
 
-t_flag_detail g_flags[] = {
+t_flag_info g_flags[] = {
 	{'n', "-numeric-sort", FLAG_N, BIN_NM},
 	{'r', "-reverse-sort", FLAG_R, BIN_NM},
 	{'g', "-extern-only", FLAG_G, BIN_NM},
@@ -27,7 +27,7 @@ t_flag_detail g_flags[] = {
 	{0, "", 0, 0}
 };
 
-static t_flag_detail *get_flag(char *str, t_bin bin)
+static t_flag_info *get_flag(char *str, t_bin bin)
 {
 	int i;
 
@@ -42,7 +42,7 @@ static t_flag_detail *get_flag(char *str, t_bin bin)
 
 static int set_flags(t_env *env, int argc, char const *argv[], t_bin bin)
 {
-	t_flag_detail *flag;
+	t_flag_info *flag;
 	char **filenames;
 
 	while (--argc && ++argv)
@@ -84,8 +84,7 @@ static int set_flags(t_env *env, int argc, char const *argv[], t_bin bin)
 
 int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin) {
 	ft_bzero(env, sizeof(t_env));
-	env->argc = argc;
-	env->argv = argv;
+	env->execname = argv[0];
 	env->bin = bin;
 	env->cputype = CPU_TYPE_X86_64;
 

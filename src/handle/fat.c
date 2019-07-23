@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 09:40:14 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:44:08 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,21 @@ int handle_fat(t_env *env, t_file *file, uint32_t magic) // Secure the ft up the
 	cpu_type_t cputype;
 
 	if (check_overflow(file, file->start + sizeof(t_fat_header)))
-		return FAILURE;
+		return (FAILURE);
 	file->swap_bits = magic == FAT_CIGAM ? TRUE : FALSE;
 	nfat_arch = ((t_fat_header *)file->start)->nfat_arch;
 	nfat_arch = swapif_u32(file, nfat_arch);
 	fat_arch = file->start + sizeof(t_fat_header);
 	while (nfat_arch-- > 0) {
 		if (check_overflow(file, fat_arch + sizeof(fat_arch)))
-			return FAILURE;
+			return (FAILURE);
 		cputype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cputype) : fat_arch->cputype;
 		if (env->cputype == cputype) {
 			offset = (file->swap_bits)
 				? ft_bswap_uint32(fat_arch->offset)
 				: fat_arch->offset;
 			if (offset == 0)
-				return FAILURE;
+				return (FAILURE);
 			init_file(&virtual_file, file->filename, (file->swap_bits)
 				? ft_bswap_uint32(fat_arch->size)
 				: fat_arch->size, file->start + offset);
