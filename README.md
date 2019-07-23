@@ -25,6 +25,7 @@ make fclean
 ```
 
 Bonus:
+- Gestion des binaires corrompus
 - Debug (explain how to debug)
 
 

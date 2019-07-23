@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 12:20:55 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:50:49 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:22:58 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int handle_archive(t_env *env, t_file *file)
 				return FAILURE;
 			create_file(&virtual_file, file->filename, ar_size, ptr + name_size);
 			create_virtual_file(&virtual_file, ptr);
-			handle_binary(env, &virtual_file); // Handle return ?
+			handle_binary(env, &virtual_file);
 			destroy_file(&virtual_file);
 		}
 		ptr += ar_size;

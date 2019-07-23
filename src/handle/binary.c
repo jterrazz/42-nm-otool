@@ -6,18 +6,15 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 08:29:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 19:39:09 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 23:24:17 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-// Also try with archive in archive (mayb go overflow with the size)
-// Check with files that don't start with this BSD thing AR_EFMT1
-// https://en.wikipedia.org/wiki/Ar_(Unix)           BSD Variant !
-// https://opensource.apple.com/source/xnu/xnu-344/EXTERNAL_HEADERS/mach-o/fat.h
-
-// make && ./ft_nm /bin/bash
+/*
+** Dispatch the binary to the different handlers: Fat, Archive, Macho
+*/
 
 static int print_binary_error(t_file *file)
 {
