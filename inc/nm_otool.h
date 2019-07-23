@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:53:14 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 19:19:18 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 // Where init_file = free_file
  // Check to create a file with 1 char size
  // Compare errors results
+ // Simulate a malloc error in mach_segment
+ /// Leaks
 
 #define FAILURE -1
 #define SUCCESS 0

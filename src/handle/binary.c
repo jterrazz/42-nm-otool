@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 08:29:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:25:39 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 19:20:41 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int print_binary_error(t_file *file)
 	else if (file->virtualname)
 		ft_printf("Mach-O universal file: %s for architecture x86_64 is not a Mach-O file or an archive file.\n", file->filename);
 	else
-		ft_printf("%s The file was not recognized as a valid object file\n", file->filename);
+		ft_printf("%s The file was not recognized as a valid object file\n", file->filename); // Malloc should print errors
 	return (FAILURE);
 }
 
