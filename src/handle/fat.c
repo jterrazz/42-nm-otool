@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:51:38 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 19:04:45 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 	if (check_overflow(file, fat_arch + sizeof(fat_arch)))
 		return (-1);
 	cputype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cputype) : fat_arch->cputype;
-
 	if (all_cputypes || env->cputype == cputype)
 	{
 		offset = (file->swap_bits) ? ft_bswap_uint32(fat_arch->offset) : fat_arch->offset;
@@ -50,7 +49,9 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 			return (-1);
 		init_file(&virtual_file, file->filename, (file->swap_bits)
 			? ft_bswap_uint32(fat_arch->size) : fat_arch->size, file->start + offset);
-		handle_binary(env, &virtual_file);
+		init_virtual_file(&virtual_file, file, (char *)file->filename);
+		handle_binary(env, &virtual_file); // handle return ????????
+		destroy_file(&virtual_file);
 		if (!all_cputypes)
 			return (0);
 	}

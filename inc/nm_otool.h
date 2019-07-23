@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:26:57 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 18:53:14 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 // TODO Check for endian everywhere + for 64/32
 // TODO Check for all offsets
+// Free all virtual files
 // Makefile messages
 // Test to make a malloc fails (by limiting memory ?)
 // Printf rename t_flag and update in global libs
