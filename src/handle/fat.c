@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 00:13:51 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 00:41:26 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,11 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 			return (-1);
 		create_file(&virtual_file, file->filename, (file->swap_bits)
 			? ft_bswap_uint32(fat_arch->size) : fat_arch->size, file->start + offset);
-		create_virtual_file(&virtual_file, (char *)file->filename);
-		handle_binary(env, &virtual_file); // handle return ????????
+		if (create_virtual_file(&virtual_file, file, (char *)file->filename)) {
+			file->error = E_OVERFLOW;
+			return (-1);
+		}
+		handle_binary(env, &virtual_file);
 		destroy_file(&virtual_file);
 		if (!all_cputypes)
 			return (0);
@@ -96,6 +99,7 @@ int handle_fat(t_env *env, t_file *file)
 	unsigned long nfat_arch;
 	unsigned long i;
 	t_bool print_all_archs;
+	int ret;
 
 	i = 0;
 	print_all_archs = FALSE;
@@ -108,8 +112,9 @@ int handle_fat(t_env *env, t_file *file)
 		return print_fat_header(file, file->start, nfat_arch, fat_arch);
 	while (i < nfat_arch)
 	{
-		if (!process_arch(env, file, print_all_archs, fat_arch))
-			return (SUCCESS);
+		ret = process_arch(env, file, print_all_archs, fat_arch);
+		if (ret < 1 || ret == 0)
+			return (ret);
 		fat_arch = (void *) fat_arch + sizeof(t_fat_arch);
 		i++;
 		if (i == nfat_arch && !print_all_archs)

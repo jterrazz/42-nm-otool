@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 00:08:47 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 00:35:08 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ int parse_macho_symtab(t_file *file, t_symtab_command *symtab_command);
 */
 
 void create_file(t_file *file, char const *name, uint64_t size, void *start);
-void create_virtual_file(t_file *file, char *virtualname);
+int create_virtual_file(t_file *file, t_file *old_file, char *virtualname);
 void destroy_file(t_file *file);
 t_bool check_overflow(t_file *file, void *ptr);
 char *get_cpu_string(cpu_type_t cputype);
