@@ -6,13 +6,14 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:08:43 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:51:21 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-static int sort_mysyms_num(t_list *lst1, t_list *lst2) {
+static int sort_mysyms_num(t_list *lst1, t_list *lst2)
+{
 	t_mysymbol *sym1;
 	t_mysymbol *sym2;
 
@@ -25,7 +26,8 @@ static int sort_mysyms_num(t_list *lst1, t_list *lst2) {
 	return (sym1->value >= sym2->value);
 }
 
-static int sort_mysyms_alpha(t_list *lst1, t_list *lst2) {
+static int sort_mysyms_alpha(t_list *lst1, t_list *lst2)
+{
 	t_mysymbol *sym1;
 	t_mysymbol *sym2;
 

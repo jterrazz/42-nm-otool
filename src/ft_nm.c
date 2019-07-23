@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:02:47 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:51:31 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static void usage(char const *argv[])
 	ft_printf("%-25s %s\n", "-h --help", "Display available options");
 }
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[])
+{
 	t_env env;
 	int i;
 
