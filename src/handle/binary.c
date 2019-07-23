@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file.c                                             :+:      :+:    :+:   */
+/*   binary.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 12:45:43 by jterrazz         ###   ########.fr       */
+/*   Created: 2019/07/23 08:29:40 by jterrazz          #+#    #+#             */
+/*   Updated: 2019/07/23 08:40:55 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include "../shared.h"
+#include "nm_otool.h"
 
 // Also try with archive in archive (mayb go overflow with the size)
 // Check with files that don't start with this BSD thing AR_EFMT1
@@ -20,36 +19,7 @@
 
 // make && ./ft_nm /bin/bash
 
-void init_file(t_file *file, char const *name, uint64_t size, void *start)
-{
-	ft_bzero(file, sizeof(t_file));
-	file->filename = name;
-	file->filesize = size; // announced filesize
-	file->start = start;
-	file->error = E_NULL;
-	file->swap_bits = FALSE;
-	file->end = file->start + file->filesize; // end also checking for larger data
-}
-
-void init_virtual_file(t_file *file, t_file *old_file, char *virtualname)
-{
-	file->end = file->end < old_file->end ? file->end : old_file->end;
-	file->virtualname = virtualname;
-}
-
-void handle_mach(t_env *env, t_file *file, uint32_t magic) // Stop in case of error with return
-{
-	file->arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
-	file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE; // Delete is not used
-	// check with sizeof
-	if (parse_mach(env, file) && file->error == E_OVERFLOW) // Make different error is no virtualname
-		ft_printf("%s truncated or malformed archive (offset to next archive member past the end of the archive after member %s)\n", file->filename, file->virtualname);
-
-	else if (env->bin == BIN_NM)
-		print_mysyms(env, file);
-}
-
-static int handle_file_error(t_file *file)
+static int handle_binary_error(t_file *file)
 {
 	if (file->virtualname)
 		ft_printf("Mach-O universal file: %s for architecture x86_64 is not a Mach-O file or an archive file.\n", file->filename);
@@ -58,12 +28,13 @@ static int handle_file_error(t_file *file)
 	return FAILURE;
 }
 
-int handle_file(t_env *env, t_file *file)
+// rename to binary
+int handle_binary(t_env *env, t_file *file)
 {
 	uint32_t magic;
 	// uint32_t filetype;
-	if (check_over(file, file->start + sizeof(uint32_t)))
-		return handle_file_error(file);
+	if (check_overflow(file, file->start + sizeof(uint32_t))) // Check to create with 1 char size
+		return handle_binary_error(file);
 	magic = *(uint32_t *)(file->start);
 	// filetype = ((t_mach_header *)ptr)->filetype; // 64bits
 
@@ -78,9 +49,9 @@ int handle_file(t_env *env, t_file *file)
 	// Handle not supported
 	else if (magic == MH_MAGIC || magic == MH_CIGAM
 		|| magic == MH_MAGIC_64 || magic == MH_CIGAM_64) { // Check cigam is working
-		handle_mach(env, file, magic);
+		handle_macho(env, file, magic);
 	} else {
-		return handle_file_error(file);
+		return handle_binary_error(file);
 	}
 	return SUCCESS;
 }

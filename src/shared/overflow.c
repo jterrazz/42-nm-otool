@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bswap_helper.c                                  :+:      :+:    :+:   */
+/*   overflow.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/14 11:01:22 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/06/14 11:36:45 by jterrazz         ###   ########.fr       */
+/*   Created: 2019/07/23 09:20:31 by jterrazz          #+#    #+#             */
+/*   Updated: 2019/07/23 09:21:54 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../shared.h"
+#include "nm_otool.h"
 
-uint32_t swapif_u32(t_file *file, uint32_t x)
+t_bool check_overflow(t_file *file, void *ptr)
 {
-	return file->swap_bits ? ft_bswap_uint32(x) : x;
-}
-
-uint64_t swapif_u64(t_file *file, uint64_t x)
-{
-	return file->swap_bits ? ft_bswap_uint64(x) : x;
+	// Also check for before
+	if ((ptr >= file->start + file->filesize) || (ptr >= file->end)) { // Should be strict ?
+		file->error = E_OVERFLOW;
+		return TRUE;
+	}
+	return FALSE;
 }

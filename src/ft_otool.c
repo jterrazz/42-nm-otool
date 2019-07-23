@@ -6,11 +6,11 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 13:45:32 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 08:36:45 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./shared.h"
+#include "nm_otool.h"
 #include "ft_printf.h"
 
 static void print_usage(char const *argv[])
@@ -39,6 +39,7 @@ int main(int argc, char const *argv[]) {
 		}
 	}
 
+	cmd_end(&env);
 	// free(env->...)
 	return (EXIT_SUCCESS);
 }

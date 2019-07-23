@@ -6,12 +6,11 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 13:56:45 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 08:42:18 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./shared.h"
-#include "ft_printf.h"
+#include "nm_otool.h"
 
 // 'n', "-numeric-sort", FLAG_N, BIN_NM},
 // {'r', "-reverse-sort", FLAG_R, BIN_NM},
@@ -22,6 +21,9 @@
 // {'j', "-simple-output", FLAG_J, BIN_NM},
 // {'a', "-debug-syms", FLAG_A, BIN_NM},
 // {'h', "-help", FLAG_
+
+//nm ./ft_nm -r
+//nm ./ft_nm -r -r
 
 static void print_usage(char const *argv[])
 {
@@ -42,19 +44,20 @@ int main(int argc, char const *argv[]) {
 	t_env env;
 	int i;
 
-	if ((i = cmd_init(&env, argc, argv, BIN_NM)) == -1)
-		return EXIT_FAILURE;
+	if ((i = cmd_init(&env, argc, argv, BIN_NM)) < 0)
+		return (EXIT_FAILURE);
 
 	if (env.flags & FLAG_HELP)
 		print_usage(argv);
 	else {
 		if (i == argc)
-			cmd_start(&env, "a.out");
+			cmd_start(&env, DEFAULT_FILE);
 		while (i < argc) {
 			cmd_start(&env, argv[i]);
 			i++;
 		}
 	}
+	cmd_end(&env);
 
 	// free(env->...)
 	return (EXIT_SUCCESS);

@@ -6,16 +6,16 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/11 23:48:12 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 09:24:08 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_printf.h"
-#include "../shared.h"
+#include "nm_otool.h"
 
 // Probably secure this too
-static void hexdump_segment_content(t_file *file, void *sect)
+static void hexdump_segment_content(t_file *file, void *sect) // Section not segment
 {
 	uint64_t segstart;
 	uint64_t size;
@@ -33,7 +33,7 @@ static void hexdump_segment_content(t_file *file, void *sect)
 		offset = ((t_section_64 *)sect)->offset;
 		name = ((t_section_64 *)sect)->sectname;
 	}
-	if (!ft_strcmp(SECT_TEXT, name)) {
+	if (!ft_strcmp(SECT_TEXT, name)) { // Add bonus for otool
 		ft_printf("Contents of (__TEXT,__text) section\n");
 		ft_hexdump(file->start + offset, size, segstart, file->arch);
 	}
@@ -43,7 +43,7 @@ static int file_add_mysection(t_file *file, void *sect)
 {
 	t_mysection mysect;
 
-	if (check_over(file, sect + (file->arch == ARCH_32 ? sizeof(t_section) : sizeof(t_section_64))))
+	if (check_overflow(file, sect + (file->arch == ARCH_32 ? sizeof(t_section) : sizeof(t_section_64))))
 		return FAILURE;
 	mysect.name = file->arch == ARCH_32 ? ((t_section *)sect)->sectname : ((t_section_64 *)sect)->sectname;
 	mysect.index =  file->nsects;
@@ -65,13 +65,13 @@ int	parse_mach_segment(t_env *env, t_file *file, void *segment_command) {
 	void *section;
 
 	section = segment_command + ((file->arch == ARCH_32) ? sizeof(t_segment_command) : sizeof(t_segment_command_64));
-	if (check_over(file, section))
+	if (check_overflow(file, section))
 		return FAILURE;
 	nsects = (file->arch == ARCH_32) ? ((t_segment_command *) segment_command)->nsects : ((t_segment_command_64 *) segment_command)->nsects;
 	nsects = swapif_u32(file, nsects);
 
 	while (nsects--) {
-		if (check_over(file, section))
+		if (check_overflow(file, section))
 			return FAILURE;
 		// ft_printf("Start of section %d\n", nsects);
 		file->nsects++;

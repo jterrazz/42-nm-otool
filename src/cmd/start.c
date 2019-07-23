@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:45:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 13:40:31 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 08:06:53 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include "../shared.h"
+#include "nm_otool.h"
 #include "libft.h"
 #include "ft_printf.h"
 
@@ -46,7 +46,8 @@ int cmd_start(t_env *env, char const *filename)
         return FAILURE;
     }
     init_file(&file, filename, buf.st_size, ptr);
-    handle_file(env, &file);
+    handle_binary(env, &file);
+    // Free file here
     if (munmap(ptr, buf.st_size) < 0 || close(fd) < 0)
         return FAILURE;
     return (SUCCESS);

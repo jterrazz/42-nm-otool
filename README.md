@@ -24,6 +24,9 @@ make clean
 make fclean
 ```
 
+Bonus:
+- Debug (explain how to debug)
+
 
 ## Implementation
 For a better comprehension of this implementation, please refer to the related medium article.

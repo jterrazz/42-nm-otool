@@ -6,15 +6,15 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:03:36 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 11:22:27 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 01:55:00 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../shared.h"
+#include "nm_otool.h"
 
 
-t_debug_symbol g_debug_symbols[] =
+t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH] =
 {
 {"GSYM", 0x20},
 {"FNAME", 0x22},
@@ -55,9 +55,9 @@ char	*ft_strdup_safe(t_file *file, char *s1, char c, t_bool inc_c, int *failed)
 
 	i = 0;
 	size = 0;
-	while (!check_over(file, s1 + size) && s1[size] && s1[size] != c)
+	while (!check_overflow(file, s1 + size) && s1[size] && s1[size] != c)
 		size++;
-	if (check_over(file, s1 + size)) {
+	if (check_overflow(file, s1 + size)) {
 		*failed = 1;
 		return ft_strdup("bad string index");
 	}
@@ -89,7 +89,7 @@ static void init_mysym(t_file *file, t_symbol *mysym, char *symname, void *sym) 
 	if (failed)
 		mysym->namefailed = TRUE;
 	if (!mysym->name)
-		return; // Set file to error and return (maybe some will return null in not check_over)
+		return; // Set file to error and return (maybe some will return null in not check_overflow)
 	// TODO Free it !!!!!!
 	if (file->arch == ARCH_32) {
 		mysym->type = ((t_nlist *)sym)->n_type; // No swap ???
@@ -176,8 +176,8 @@ static void fill_mysym(t_file *file, t_symbol *mysym) {
 int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command) { // No need for 64 ?
 	void *symtab;
 	void *strtab;
-	uint64_t nsyms;
-	uint64_t i;
+	uint64_t nsyms; // 32
+	uint64_t i; // 32too
 	t_symbol mysym;
 	char *symname;
 
@@ -187,7 +187,7 @@ int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command) { // No ne
 	i = 0;
 
 	while (i < nsyms) {
-		if (check_over(file, strtab) || check_over(file, symtab + ((file->arch == ARCH_32) ? sizeof(t_nlist) : sizeof(t_nlist_64))))
+		if (check_overflow(file, strtab) || check_overflow(file, symtab + ((file->arch == ARCH_32) ? sizeof(t_nlist) : sizeof(t_nlist_64))))
 			return FAILURE;
 		symname = strtab + swapif_u32(file, (file->arch == ARCH_32) ? ((t_nlist *)symtab + i)->n_un.n_strx : ((t_nlist_64 *)symtab + i)->n_un.n_strx);
 		if (file->arch == ARCH_32) {

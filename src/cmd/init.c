@@ -6,14 +6,18 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/13 12:23:22 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 08:07:35 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../shared.h"
-#include "ft_printf.h"
+#include "nm_otool.h"
 
 // -n -n case
+// Add in awesome
+// Test with multiple combinaisons of flags
+// Test with multiple files
+// Test with flags after the file
+
 t_flag_detail g_flags[] = {
 	{'n', "-numeric-sort", FLAG_N, BIN_NM},
 	{'r', "-reverse-sort", FLAG_R, BIN_NM},

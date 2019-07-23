@@ -6,12 +6,12 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/12 15:30:18 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 09:24:10 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "../shared.h"
+#include "nm_otool.h"
 
 /*
 Otool will print directly when reading the segment
@@ -34,26 +34,20 @@ int parse_mach(t_env *env, t_file *file)
 	uint32_t ncmds;
 	t_load_command *lc;
 
-	lc = (t_load_command *)(file->start +
-		((file->arch == ARCH_32) ?
-		sizeof(t_mach_header) : sizeof(t_mach_header_64))); // secure
-	if (check_over(file, lc))
-		return FAILURE;
-	ncmds = (file->arch == ARCH_32) ?
-		((t_mach_header *)(file->start))->ncmds : // inverted
-		((t_mach_header_64 *)(file->start))->ncmds; // inverted
+	lc = (t_load_command *)(file->start + ((file->arch == ARCH_32) ?
+		sizeof(t_mach_header) : sizeof(t_mach_header_64)));
+	if (check_overflow(file, lc))
+		return (FAILURE);
+	ncmds = (file->arch == ARCH_32) ? ((t_mach_header *)(file->start))->ncmds :
+		((t_mach_header_64 *)(file->start))->ncmds;
 	ncmds = swapif_u32(file, ncmds);
 
-	// ft_printf("There are %lld load commands\n", ncmds);
 	while (ncmds--) {
-		if (check_over(file, lc + sizeof(t_load_command)))
-			return FAILURE;
-		// ft_printf("Command nb %lld start\n", ncmds);
+		if (check_overflow(file, lc + sizeof(t_load_command)))
+			return (FAILURE);
 		if (parse_load_command(env, file, lc))
-			return FAILURE;
+			return (FAILURE);
 		lc = (void *)lc + swapif_u32(file, lc->cmdsize); // Secure for corruption ?
-		// ft_printf("Command nb %lld end\n", ncmds);
 	}
-	// ft_printf("Ending parsing mach files\n");
 	return SUCCESS;
 }

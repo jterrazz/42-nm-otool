@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/07/13 13:42:13 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/07/23 09:20:54 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,11 @@ LIB_PATH = libs
 BUILD_PATH = obj
 SRC_PATH = src
 
-SOURCES += cmd/init.c cmd/start.c
-SOURCES += handle/file.c handle/archive.c handle/fat.c
+SOURCES += cmd/init.c cmd/start.c cmd/end.c
+SOURCES += handle/archive.c handle/fat.c handle/binary.c handle/macho.c
 SOURCES += parse/mach_segment.c parse/mach_symtab.c parse/mach.c
-SOURCES += print/ft_hexdump.c print/mysyms.c
-SOURCES += utils/ft_bswap.c utils/ft_bswap_helper.c
+SOURCES += shared/ft_hexdump.c shared/print_mysyms.c shared/overflow.c
+SOURCES += shared/ft_bswap.c shared/ft_bswap_helper.c shared/file.c
 
 SOURCES1 = ft_nm.c $(SOURCES)
 SOURCES2 = ft_otool.c $(SOURCES)
