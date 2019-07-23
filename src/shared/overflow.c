@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 09:20:31 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 09:21:54 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 09:39:12 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 t_bool check_overflow(t_file *file, void *ptr)
 {
-	// Also check for before
-	if ((ptr >= file->start + file->filesize) || (ptr >= file->end)) { // Should be strict ?
+	if ((ptr > file->start + file->filesize) || (ptr > file->end) || (ptr < file->start)) {
 		file->error = E_OVERFLOW;
 		return TRUE;
 	}

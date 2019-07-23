@@ -6,16 +6,16 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 09:24:10 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 09:39:53 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "nm_otool.h"
 
 /*
 Otool will print directly when reading the segment
 */
+
 static int parse_load_command(t_env *env, t_file *file, t_load_command *lc) { // return failure ????
 	// + Do clearer way to separate otool/nm
 	uint32_t cmd;
@@ -42,7 +42,8 @@ int parse_mach(t_env *env, t_file *file)
 		((t_mach_header_64 *)(file->start))->ncmds;
 	ncmds = swapif_u32(file, ncmds);
 
-	while (ncmds--) {
+	while (ncmds--)
+	{
 		if (check_overflow(file, lc + sizeof(t_load_command)))
 			return (FAILURE);
 		if (parse_load_command(env, file, lc))

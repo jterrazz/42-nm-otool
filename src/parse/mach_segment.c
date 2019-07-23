@@ -6,12 +6,10 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 09:24:08 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 09:39:50 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "ft_printf.h"
 #include "nm_otool.h"
 
 // Probably secure this too

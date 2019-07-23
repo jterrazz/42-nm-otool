@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 08:54:09 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 09:40:14 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <mach-o/arch.h> // delete if not using official arr.
 
 // Find global list ? http://web.mit.edu/darwin/src/modules/cctools/libmacho/arch.c
+// Put in static var (remove all globals)
 char *get_cpu_string(cpu_type_t cputype)
 {
 	if (cputype == CPU_TYPE_I386)

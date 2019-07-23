@@ -6,12 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 12:20:55 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 09:24:08 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 16:12:39 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
+// Everyhere there is a t_file, we need to free it
 int handle_archive(t_env *env, t_file *file)
 {
 	t_ar_hdr *header;
@@ -42,6 +43,6 @@ int handle_archive(t_env *env, t_file *file)
 
 		i++;
 	}
-		return SUCCESS;
+	return (SUCCESS);
 	// Free file ?
 }
