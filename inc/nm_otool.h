@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 09:24:08 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:05:47 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ typedef enum { E_NULL, E_OVERFLOW } t_file_error; // why
 
 typedef int t_bool; // TODO Use official bool
 
+/*
+** This structures parse the header of files types supported by nm and otool
+*/
+
 typedef struct fat_header t_fat_header;
 typedef struct fat_arch t_fat_arch;
 typedef struct ar_hdr t_ar_hdr;
@@ -65,13 +69,14 @@ typedef struct mach_header t_mach_header;
 typedef struct mach_header_64 t_mach_header_64;
 
 /*
-** The file has many 'load commands' after its header, the type defines how we will decode the data
+** A macho file contains many type of load commands.
+** For this project, we will only need LC_SYMTAB and LC_SEGMENT.
 */
 
 typedef struct load_command t_load_command;
 
 /*
-** A segment is made up of zero or more sections.
+** A LC_SEGMENT contains a list of sections defined below.
 */
 
 typedef struct segment_command t_segment_command;
@@ -79,14 +84,26 @@ typedef struct segment_command_64 t_segment_command_64;
 typedef struct section t_section;
 typedef struct section_64 t_section_64;
 
+/*
+** A LC_SYMTAB contains a list of symbols defined below.
+*/
+
 typedef struct symtab_command t_symtab_command;
 typedef struct nlist t_nlist;
 typedef struct nlist_64 t_nlist_64;
+
+/*
+** List of debug values used by symbols.
+*/
+
+#define DEBUG_SYMBOLS_LENGTH 29
 
 typedef struct s_debug_symbol {
 	char *symbol;
 	uint16_t value;
 } t_debug_symbol;
+
+extern t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH];
 
 // Rename to mysymbal
 typedef struct s_symbol { // Maybe delete some (probably :) in simtab file particulary )
@@ -106,7 +123,7 @@ typedef struct s_mysection {
 }				t_mysection;
 
 typedef struct s_flag_detail { // rename
-	char symbol;
+	char shortname;
 	char fullname[20];
 	uint32_t value;
 	uint32_t binaries;
@@ -115,8 +132,10 @@ typedef struct s_flag_detail { // rename
 // Put in cmd.h
 typedef struct s_env {
 	int argc; // Why ? should not depend on that ???
-	cpu_type_t cputype;
 	char const **argv; // Why ? should not depend on that ???
+	int nfiles;
+	char const **filenames;
+	cpu_type_t cputype;
 	t_bin bin;
 	uint32_t flags;
 }				t_env;
@@ -136,8 +155,6 @@ typedef struct s_file {
 	t_list *mysyms;
 }				t_file;
 
-#define DEBUG_SYMBOLS_LENGTH 29
-extern t_debug_symbol g_debug_symbols[DEBUG_SYMBOLS_LENGTH];
 
 int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin);
 int cmd_start(t_env *env, char const *filename);
@@ -148,9 +165,9 @@ int handle_archive(t_env *env, t_file *file);
 int handle_fat(t_env *env, t_file *file, uint32_t magic);
 void handle_macho(t_env *env, t_file *file, uint32_t magic);
 
-int parse_mach(t_env *env, t_file *file);
-int	parse_mach_segment(t_env *env, t_file *file, void *segment_command);
-int parse_mach_symtab(t_file *file, t_symtab_command *symtab_command);
+int parse_macho(t_env *env, t_file *file);
+int	parse_machoo_segment(t_env *env, t_file *file, void *segment_command);
+int parse_machoo_symtab(t_file *file, t_symtab_command *symtab_command);
 
 void init_file(t_file *file, char const *name, uint64_t size, void *start);
 void init_virtual_file(t_file *file, t_file *old_file, char *virtualname);

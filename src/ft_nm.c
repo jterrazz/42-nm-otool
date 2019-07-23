@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 08:42:18 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:03:15 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,17 @@ int main(int argc, char const *argv[]) {
 	t_env env;
 	int i;
 
-	if ((i = cmd_init(&env, argc, argv, BIN_NM)) < 0)
+	i = 0;
+	if (cmd_init(&env, argc, argv, BIN_NM) < 0)
 		return (EXIT_FAILURE);
 
 	if (env.flags & FLAG_HELP)
 		print_usage(argv);
 	else {
-		if (i == argc)
+		if (!env.nfiles)
 			cmd_start(&env, DEFAULT_FILE);
-		while (i < argc) {
-			cmd_start(&env, argv[i]);
+		while (i < env.nfiles) {
+			cmd_start(&env, env.filenames[i]);
 			i++;
 		}
 	}

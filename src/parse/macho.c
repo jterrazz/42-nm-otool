@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mach.c                                             :+:      :+:    :+:   */
+/*   macho.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 09:39:53 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 16:16:21 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ static int parse_load_command(t_env *env, t_file *file, t_load_command *lc) { //
 	cmd = swapif_u32(file, lc->cmd);
 
 	if (cmd == LC_SEGMENT || cmd == LC_SEGMENT_64)
-		return parse_mach_segment(env, file, lc);
+		return parse_machoo_segment(env, file, lc);
 	else if (env->bin == BIN_NM && cmd == LC_SYMTAB) // 64 / If no otool
-		return parse_mach_symtab(file, (void *)lc);
+		return parse_machoo_symtab(file, (void *)lc);
 	return SUCCESS;
 }
 
-int parse_mach(t_env *env, t_file *file)
+int parse_macho(t_env *env, t_file *file)
 {
-	uint32_t ncmds;
 	t_load_command *lc;
+	uint32_t ncmds;
 
 	lc = (t_load_command *)(file->start + ((file->arch == ARCH_32) ?
 		sizeof(t_mach_header) : sizeof(t_mach_header_64)));

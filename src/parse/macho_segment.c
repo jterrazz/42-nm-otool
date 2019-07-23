@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 09:39:50 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 16:13:37 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int file_add_mysection(t_file *file, void *sect)
 ** - setting the file->mysects
 */
 
-int	parse_mach_segment(t_env *env, t_file *file, void *segment_command) {
+int	parse_machoo_segment(t_env *env, t_file *file, void *segment_command) {
 	uint32_t nsects;
 	void *section;
 

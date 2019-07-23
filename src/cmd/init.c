@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 08:07:35 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 17:09:46 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,41 @@ static t_flag_detail *get_flag(char *str, t_bin bin)
 	int i;
 
 	i = 0;
-	while (g_flags[i].symbol) {
-		if (g_flags[i].binaries & bin && ((g_flags[i].symbol == str[0] && str[0] && !str[1]) || !ft_strcmp(str, g_flags[i].fullname)))
+	while (g_flags[i].shortname) {
+		if (g_flags[i].binaries & bin && ((g_flags[i].shortname == str[0] && !str[1]) || !ft_strcmp(str, g_flags[i].fullname)))
 			return g_flags + i;
 		i++;
 	}
 	return NULL;
 }
 
-static int init_flags(t_env *env, int argc, char const *argv[], t_bin bin)
+static int set_flags(t_env *env, int argc, char const *argv[], t_bin bin)
 {
-	int i;
 	t_flag_detail *flag;
+	char **filenames;
+	int i;
 
 	i = 1;
-	while (i < argc && argv[i][0] == '-') {
-		if (!(flag = get_flag((char *) argv[i] + 1, bin))) {
-			ft_printf("nmnm: Unknow command line argument %s. Try nmnm -help\n", argv[i]);
-			return (-1);
+	while (i < argc && argv[i]) {
+		if (argv[i][0] == '-') {
+			if (!(flag = get_flag((char *) argv[i] + 1, bin))) {
+				ft_printf("nmnm: Unknow command line argument %s. Try nmnmnmnmnmnmnmnmnmnmnmnmnmnmnmnmnmnmnmm -help\n", argv[i]); // TODO
+				return (-1);
+			}
+			env->flags |= flag->value;
+		} else {
+			if (!(filenames = malloc((env->nfiles + 1) * sizeof(char *)))) // print malloc error ? ? ? ? ?
+				return (-1);
+			ft_memmove(filenames, env->filenames, env->nfiles * sizeof(char *));
+			free(env->filenames);
+			filenames[env->nfiles] = (char *) argv[i];
+			env->filenames = (const char **) filenames;
+			env->nfiles++;
 		}
-		env->flags = env->flags | flag->value;
+
 		i++;
 	}
-	return i;
+	return (i);
 }
 
 /*
@@ -72,5 +84,5 @@ int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin) {
 	env->bin = bin;
 	env->cputype = CPU_TYPE_X86_64;
 
-	return init_flags(env, argc, argv, bin);
+	return set_flags(env, argc, argv, bin);
 }

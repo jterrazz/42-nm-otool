@@ -17,7 +17,7 @@ void handle_macho(t_env *env, t_file *file, uint32_t magic) // Stop in case of e
 	file->arch = (magic == MH_MAGIC || magic == MH_CIGAM) ? ARCH_32 : ARCH_64;
 	file->swap_bits = (magic == MH_MAGIC || magic == MH_MAGIC_64) ? FALSE : TRUE;
 	// check with sizeof
-	if (parse_mach(env, file) && file->error == E_OVERFLOW) // Make different error is no virtualname
+	if (parse_macho(env, file) && file->error == E_OVERFLOW) // Make different error is no virtualname
 		ft_printf("%s truncated or malformed archive (offset to next archive member past the end of the archive after member %s)\n", file->filename, file->virtualname);
 
 	else if (env->bin == BIN_NM)
