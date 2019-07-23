@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 19:42:35 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:09:44 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void destroy_file(t_file *file)
 {
 	if (file->mysyms)
 		ft_lstdel(&file->mysyms, NULL);
+		// mysym->name
 	if (file->mysects)
 		ft_lstdel(&file->mysects, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 18:26:19 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:08:43 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,7 @@ static void print_mysyms_line(uint8_t left_padding, t_mysymbol *sym, t_bool mini
 		ft_printf("%*c %c %s\n", left_padding, ' ', sym->type_p, sym->name);
 }
 
-// Make tests with -g -n -r
-// Test flag -u WITH -U
-// Is a directory. error
-// Explain the letters meaning
+
 void print_mysyms(t_env *env, t_file *file)
 {
 	t_list *symlst;

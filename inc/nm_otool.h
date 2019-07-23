@@ -6,13 +6,14 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 19:42:35 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:12:05 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef NM_OTOOL_H
 #define NM_OTOOL_H
 
+// Add void * for all of check_overflow
 // TODO Check for endian everywhere + for 64/32
 // TODO Check for all offsets
 // Free all virtual files
@@ -24,6 +25,10 @@
  // Compare errors results
  // Simulate a malloc error in mach_segment
  /// Leaks
+ // Make tests with -g -n -r
+ // Test flag -u WITH -U
+ // Is a directory. error
+ // Explain the letters meaning
 
 #define FAILURE -1
 #define SUCCESS 0
@@ -214,6 +219,9 @@ void create_virtual_file(t_file *file, t_file *old_file, char *virtualname);
 void destroy_file(t_file *file);
 t_bool check_overflow(t_file *file, void *ptr);
 char *get_cpu_string(cpu_type_t cputype);
+t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym);
+void fill_mysym(t_file *file, t_mysymbol *mysym);
+char	*ft_strdup_overflow(t_file *file, char *s1, char c, t_bool inc_c, int *failed);
 
 int32_t ft_bswap_int32(int32_t x);
 uint32_t ft_bswap_uint32(uint32_t x);
