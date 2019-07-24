@@ -6,13 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:08:25 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/05/02 23:51:12 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 16:37:43 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void		free_multiple(char *s1, char *s2, int x, int y)
+void			free_multiple(char *s1, char *s2, int x, int y)
 {
 	if (x)
 		free(s1);

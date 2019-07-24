@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 11:32:29 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 16:25:06 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int print_fat_header(t_file *file, t_fat_header *fat_header, unsigned lon
 ** https://github.com/opensource-apple/cctools/blob/master/libstuff/arch.c
 */
 
-static struct arch_flag g_arch_flags[] = {
+static t_arch_flag g_arch_flags[] = {
     { "any",	CPU_TYPE_ANY,	  CPU_SUBTYPE_MULTIPLE },
     { "little",	CPU_TYPE_ANY,	  CPU_SUBTYPE_LITTLE_ENDIAN },
     { "big",	CPU_TYPE_ANY,	  CPU_SUBTYPE_BIG_ENDIAN },

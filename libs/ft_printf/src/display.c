@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 06:51:18 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/04 10:51:18 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 16:36:59 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void			set_precision_number(char **str, t_flags *flags, int is_null)
 
 	if (flags->flag_precision > 0)
 	{
-		len = flags->flag_precision - p_ft_strlen(*str) + (**str == '-' ? 1 : 0);
+		len = flags->flag_precision -
+			p_ft_strlen(*str) + (**str == '-' ? 1 : 0);
 		if (len > 0)
 		{
 			if (!(new_s = p_ft_strnew(len)))
