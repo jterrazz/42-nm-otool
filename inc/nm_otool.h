@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 16:35:46 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 17:56:55 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,13 +189,15 @@ void			cmd_end(t_env *env);
 int				handle_binary(t_env *env, t_file *file);
 int				handle_archive(t_env *env, t_file *file);
 int				handle_fat(t_env *env, t_file *file);
+int			print_fat_header(t_file *file, t_fat_header *fat_header,
+	unsigned long nfat_arch, t_fat_arch *fat_arch);
 
 /*
 ** Mach-o methods
 */
 
 int				parse_macho(t_env *env, t_file *file);
-int				parse_machoo_segment(t_env *env,
+int				parse_macho_segment(t_env *env,
 	t_file *file, void *segment_command);
 int				parse_macho_symtab(t_file *file,
 	t_symtab_command *symtab_command);

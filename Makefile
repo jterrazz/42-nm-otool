@@ -6,7 +6,7 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/07/24 00:22:13 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/07/24 17:52:09 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ BUILD_PATH = obj
 SRC_PATH = src
 
 SOURCES += cmd/init.c cmd/start.c cmd/end.c
-SOURCES += handle/archive.c handle/fat.c handle/binary.c
+SOURCES += handle/archive.c handle/fat.c handle/binary.c handle/fat_print.c
 SOURCES += parse/macho_segment.c parse/macho_symtab.c parse/macho.c parse/macho_symtab_mysym.c
 SOURCES += shared/ft_hexdump.c shared/print_mysyms.c shared/overflow.c
 SOURCES += shared/ft_bswap.c shared/ft_bswap_helper.c shared/file.c shared/ft_pow.c

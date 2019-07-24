@@ -57,7 +57,7 @@ static int parse_load_command(t_env *env, t_file *file, t_load_command *lc, uint
 		return (FAILURE);
 	}
 	if (cmd == LC_SEGMENT || cmd == LC_SEGMENT_64)
-		return parse_machoo_segment(env, file, lc);
+		return parse_macho_segment(env, file, lc);
 	else if (env->bin == BIN_NM && cmd == LC_SYMTAB)
 		return parse_macho_symtab(file, (void *)lc);
 	return (SUCCESS);

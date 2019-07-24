@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 11:46:35 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 17:59:45 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,26 @@ static int create_mysects(t_file *file, void *sect)
 	t_mysection mysect;
 	t_list *lst;
 
-	mysect.name = file->arch == ARCH_32 ? ((t_section *)sect)->sectname : ((t_section_64 *)sect)->sectname;
+	mysect.name = file->arch == ARCH_32 ? ((t_section *)sect)->sectname
+		: ((t_section_64 *)sect)->sectname;
 	mysect.index =  file->nsects;
 	if (!(lst = ft_lstnew(&mysect, sizeof(t_mysection))))
 		return (FAILURE);
 	ft_lstadd(&file->mysects, lst);
+	return (SUCCESS);
+}
+
+int parse_macho_segment_init(t_file *file, void **section, uint32_t *nsects, void *segment_command)
+{
+
+	*section = segment_command + ((file->arch == ARCH_32)
+		? sizeof(t_segment_command) : sizeof(t_segment_command_64));
+	if (check_overflow(file, section))
+		return (FAILURE);
+	*nsects = (file->arch == ARCH_32) ? ((t_segment_command *)
+		segment_command)->nsects
+		: ((t_segment_command_64 *) segment_command)->nsects;
+	*nsects = swapif_u32(file, *nsects);
 	return (SUCCESS);
 }
 
@@ -75,19 +90,18 @@ static int create_mysects(t_file *file, void *sect)
 ** nm will create a file->mysects list.
 */
 
-int	parse_machoo_segment(t_env *env, t_file *file, void *segment_command) {
-	uint32_t nsects;
-	void *section;
-	uint64_t section_size;
+int	parse_macho_segment(t_env *env, t_file *file, void *segment_command)
+{
+	uint64_t	section_size;
+	uint32_t	nsects;
+	void		*section;
 
-	section_size = ((file->arch == ARCH_32) ? sizeof(t_section) : sizeof(t_section_64));
-	section = segment_command + ((file->arch == ARCH_32) ? sizeof(t_segment_command) : sizeof(t_segment_command_64));
-	if (check_overflow(file, section))
+	if (parse_macho_segment_init(file, &section, &nsects, segment_command))
 		return (FAILURE);
-	nsects = (file->arch == ARCH_32) ? ((t_segment_command *) segment_command)->nsects : ((t_segment_command_64 *) segment_command)->nsects;
-	nsects = swapif_u32(file, nsects);
-
-	while (nsects--) {
+	section_size = ((file->arch == ARCH_32) ? sizeof(t_section)
+		: sizeof(t_section_64));
+	while (nsects--)
+	{
 		if (check_overflow(file, section) || check_overflow(file, section + section_size))
 			return (FAILURE);
 		file->nsects++;
@@ -95,10 +109,8 @@ int	parse_machoo_segment(t_env *env, t_file *file, void *segment_command) {
 		{
 			if (print_section(env, file, section))
 				return (FAILURE);
-		} else {
-			if (create_mysects(file, section))
-				return (FAILURE);
-		}
+		} else if (create_mysects(file, section))
+			return (FAILURE);
 		section += section_size;
 	}
 	return (SUCCESS);
