@@ -57,9 +57,3 @@ To understand how I implemented this program, you can refer to the medium articl
 - [mach-o/n-list.h](https://opensource.apple.com/source/xnu/xnu-201/EXTERNAL_HEADERS/mach-o/nlist.h.auto.html)
 - [mach-o/fat.h](https://opensource.apple.com/source/xnu/xnu-344/EXTERNAL_HEADERS/mach-o/fat.h)
 - [mach-o/machine.h](https://opensource.apple.com/source/xnu/xnu-4570.41.2/osfmk/mach/machine.h.auto.html)
-
-## Testing
-A big thank you to the following repos for their executables 🥰:
-- https://gitlab.com/louisportay/break-nm
-- https://github.com/mmeisson/tests_42
-- https://forum.intra.42.fr/topics/1007/messages?page=1#6251
