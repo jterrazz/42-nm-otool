@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 12:20:55 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 03:07:28 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 03:11:27 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ int handle_archive(t_env *env, t_file *file)
 	i = 0;
 	ptr = file->start + SARMAG;
 
+	if (env->bin == BIN_OTOOL)
+		ft_printf("Archive: %s\n", file->filename);
+
 	while (ptr < file->start + file->filesize)
 	{
 		ar_header = ptr;
@@ -38,7 +41,9 @@ int handle_archive(t_env *env, t_file *file)
 				return FAILURE;
 			create_file(&virtual_file, file->filename, ar_size, ptr + name_size);
 			create_virtual_file(&virtual_file, ptr);
-			ft_printf("\n%s(%s):\n", virtual_file.filename, virtual_file.virtualname);
+			if (env->bin == BIN_NM)
+				ft_printf("\n");
+			ft_printf("%s(%s):\n", virtual_file.filename, virtual_file.virtualname);
 			handle_binary(env, &virtual_file);
 			destroy_file(&virtual_file);
 		}
