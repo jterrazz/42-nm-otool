@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 17:51:52 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 20:58:58 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,27 +148,23 @@ int handle_fat_section(t_env *env, t_file *file, t_bool print_all_archs, t_fat_a
 	unsigned long	i;
 	int				ret;
 	unsigned long	nfat_arch;
+	t_bool			printed_error;
 
 	i = 0;
 	ret = 0;
+	printed_error = 0;
 	nfat_arch = ((t_fat_header *)file->start)->nfat_arch;
 	nfat_arch = swapif_u32(file, nfat_arch);
 	while (i < nfat_arch)
 	{
-		ret += process_arch(env, file, print_all_archs, fat_arch);
+		ret = process_arch(env, file, print_all_archs, fat_arch);
 		if (!print_all_archs && ret != 0)
 			return (ret);
+		printed_error |= ret < 0;
 		fat_arch = (void *)fat_arch + sizeof(t_fat_arch);
 		i++;
-		if (i == nfat_arch && !print_all_archs)
-		{
-			i = 0;
-			ret = 0;
-			print_all_archs = TRUE;
-			fat_arch = file->start + sizeof(t_fat_header);
-		}
 	}
-	return (ret);
+	return (printed_error ? -1 : 1);
 }
 
 int					handle_fat(t_env *env, t_file *file)
@@ -185,10 +181,10 @@ int					handle_fat(t_env *env, t_file *file)
 	fat_arch = file->start + sizeof(t_fat_header);
 	if (env->flags & FLAG_F && env->bin == BIN_OTOOL)
 		return (print_fat_header(file, file->start, nfat_arch, fat_arch));
-	ret = handle_fat_section(env, file, TRUE, fat_arch);
+	ret = handle_fat_section(env, file, FALSE, fat_arch);
 	if (ret == 0)
 		ret = handle_fat_section(env, file, TRUE, fat_arch);
 	if (ret < 0)
 		file->error = E_WAS_PRINTED;
-	return (ret);
+	return (ret < 0 ? FAILURE : SUCCESS);
 }
