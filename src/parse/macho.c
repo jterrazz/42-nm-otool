@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 09:16:17 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 10:13:31 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,22 @@ static int print_macho_header(t_file *file, void *header_ptr)
 ** Otool will print directly when reading the segment
 */
 
-static int parse_load_command(t_env *env, t_file *file, t_load_command *lc, uint32_t i) {
+static int parse_load_command(t_env *env, t_file *file, t_load_command *lc, uint32_t i, void *endofcmds) {
 	uint32_t cmd;
+	uint64_t cmd_size;
 
 	cmd = swapif_u32(file, lc->cmd);
-
-	if (i == 0 && lc->cmdsize % 8)
+	cmd_size = lc->cmdsize;
+	// Not sure at all
+	if (i == 0 && cmd_size % 8)
 	{
 		ft_printf("%s: %s truncated or malformed object (load command %d cmdsize not a multiple of 8)\n", env->execname, file->filename, i);
+		file->error = E_WAS_PRINTED;
+		return (FAILURE);
+	} else
+		cmd_size = cmd_size || 1;
+	if ((void *)lc + cmd_size > endofcmds) {
+		ft_printf("%s: %s truncated or malformed object (load command %d extends past the end all load commands in the file)\n", env->execname, file->filename, i);
 		file->error = E_WAS_PRINTED;
 		return (FAILURE);
 	}
@@ -59,6 +67,7 @@ int parse_macho(t_env *env, t_file *file)
 {
 	t_load_command *lc;
 	uint32_t ncmds;
+	void *endofcmds;
 	uint32_t i;
 
 	lc = (t_load_command *)(file->start + ((file->arch == ARCH_32) ?
@@ -70,12 +79,14 @@ int parse_macho(t_env *env, t_file *file)
 	ncmds = (file->arch == ARCH_32) ? ((t_mach_header *)(file->start))->ncmds :
 		((t_mach_header_64 *)(file->start))->ncmds;
 	ncmds = swapif_u32(file, ncmds);
+	endofcmds = (void *)lc + swapif_u32(file, (file->arch == ARCH_32) ? ((t_mach_header *)(file->start))->sizeofcmds :
+		((t_mach_header_64 *)(file->start))->sizeofcmds);
 	i = 0;
 	while (i < ncmds)
 	{
 		if (check_overflow(file, lc + 1))
 			return (FAILURE);
-		if (parse_load_command(env, file, lc, i))
+		if (parse_load_command(env, file, lc, i, endofcmds))
 			return (FAILURE);
 		i++;
 		lc = (void *)lc + swapif_u32(file, lc->cmdsize);

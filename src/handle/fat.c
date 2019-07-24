@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 09:51:27 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 09:52:27 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@ static struct arch_flag g_arch_flags[] = {
     { "any",	CPU_TYPE_ANY,	  CPU_SUBTYPE_MULTIPLE },
     { "little",	CPU_TYPE_ANY,	  CPU_SUBTYPE_LITTLE_ENDIAN },
     { "big",	CPU_TYPE_ANY,	  CPU_SUBTYPE_BIG_ENDIAN },
-
-/* 64-bit Mach-O architectures */
-    /* specific architecture implementations */
     { "ppc601", CPU_TYPE_POWERPC, CPU_SUBTYPE_POWERPC_601 },
     { "ppc603", CPU_TYPE_POWERPC, CPU_SUBTYPE_POWERPC_603 },
     { "ppc603e",CPU_TYPE_POWERPC, CPU_SUBTYPE_POWERPC_603e },
@@ -84,15 +81,11 @@ static struct arch_flag g_arch_flags[] = {
     { "armv7m", CPU_TYPE_ARM,     CPU_SUBTYPE_ARM_V7M },
     { "armv7em", CPU_TYPE_ARM,    CPU_SUBTYPE_ARM_V7EM },
     { "arm64v8",CPU_TYPE_ARM64,   CPU_SUBTYPE_ARM64_V8 },
-    /* architecture families */
     { "ppc64",     CPU_TYPE_POWERPC64, CPU_SUBTYPE_POWERPC_ALL },
     { "x86_64",    CPU_TYPE_X86_64, CPU_SUBTYPE_X86_64_ALL },
     { "x86_64h",   CPU_TYPE_X86_64, CPU_SUBTYPE_X86_64_H },
     { "arm64",     CPU_TYPE_ARM64,     CPU_SUBTYPE_ARM64_ALL },
-    /* specific architecture implementations */
     { "ppc970-64", CPU_TYPE_POWERPC64, CPU_SUBTYPE_POWERPC_970 },
-/* 32-bit Mach-O architectures */
-    /* architecture families */
     { "ppc",    CPU_TYPE_POWERPC, CPU_SUBTYPE_POWERPC_ALL },
     { "i386",   CPU_TYPE_I386,    CPU_SUBTYPE_I386_ALL },
     { "m68k",   CPU_TYPE_MC680x0, CPU_SUBTYPE_MC680x0_ALL },
