@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 18:06:08 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 20:14:02 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int parse_macho_segment_init(t_file *file, void **section, uint32_t *nsects, voi
 
 	*section = segment_command + ((file->arch == ARCH_32)
 		? sizeof(t_segment_command) : sizeof(t_segment_command_64));
-	if (check_overflow(file, section))
+	if (check_overflow(file, *section))
 		return (FAILURE);
 	*nsects = (file->arch == ARCH_32) ? ((t_segment_command *)
 		segment_command)->nsects
