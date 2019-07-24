@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 10:43:00 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 10:48:29 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,12 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 		offset = (file->swap_bits) ? ft_bswap_uint32(fat_arch->offset) : fat_arch->offset;
 		if (offset == 0)
 			return (-1);
-		// if (check_overflow(file, file->start + offset + 10))
+			// if (check_overflow(file, file->start + offset + 10))
 		// 	return (-1);
 		create_file(&virtual_file, file->filename, (file->swap_bits)
 			? ft_bswap_uint32(fat_arch->size) : fat_arch->size, file->start + offset);
-		create_virtual_file(&virtual_file, (char *)file->filename);
+		if (create_virtual_file(&virtual_file, file, (char *)file->filename))
+			return (-1);
 
 		if (all_cputypes && env->bin == BIN_NM)
 			ft_printf("\n%s (for architecture %s):\n", file->filename, get_cpu_string(cputype, cpusubtype));

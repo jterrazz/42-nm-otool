@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 03:06:32 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 10:47:56 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,13 @@ void create_file(t_file *file, char const *name, uint64_t size, void *start)
 	file->end = file->start + file->filesize;
 }
 
-void create_virtual_file(t_file *file, char *virtualname)
+int create_virtual_file(t_file *file, t_file *old_file, char *virtualname)
 {
+	if (check_overflow(old_file, file->start) || check_overflow(old_file, file->end)) {
+		file->error = E_OVERFLOW;
+		return (FAILURE);
+	}
 	file->virtualname = virtualname;
 	file->is_virtual = TRUE;
+	return (SUCCESS);
 }
