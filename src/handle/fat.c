@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 17:20:55 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 17:50:34 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,34 +172,21 @@ int					process_arch(t_env *env, t_file *file,
 ** the section of our computer cpu_type, else we print all of them.
 */
 
-int handle_fat_section(t_env *env, t_file *file)
+int handle_fat_section(t_env *env, t_file *file, t_bool print_all_archs, t_fat_arch *fat_arch)
 {
-
-}
-
-int					handle_fat(t_env *env, t_file *file)
-{
-	t_fat_arch		*fat_arch;
-	unsigned long	nfat_arch;
 	unsigned long	i;
-	t_bool			print_all_archs;
 	int				ret;
+	unsigned long	nfat_arch;
 
 	i = 0;
 	ret = 0;
-	print_all_archs = FALSE;
-	if (check_overflow(file, file->start + sizeof(t_fat_header)))
-		return (FAILURE);
 	nfat_arch = ((t_fat_header *)file->start)->nfat_arch;
 	nfat_arch = swapif_u32(file, nfat_arch);
-	fat_arch = file->start + sizeof(t_fat_header);
-	if (env->flags & FLAG_F && env->bin == BIN_OTOOL)
-		return (print_fat_header(file, file->start, nfat_arch, fat_arch));
 	while (i < nfat_arch)
 	{
 		ret += process_arch(env, file, print_all_archs, fat_arch);
 		if (!print_all_archs && ret != 0)
-			return (ret > 0 ? SUCCESS : FAILURE);
+			return (ret);
 		fat_arch = (void *)fat_arch + sizeof(t_fat_arch);
 		i++;
 		if (i == nfat_arch && !print_all_archs)
@@ -210,6 +197,26 @@ int					handle_fat(t_env *env, t_file *file)
 			fat_arch = file->start + sizeof(t_fat_header);
 		}
 	}
+	return (ret);
+}
+
+int					handle_fat(t_env *env, t_file *file)
+{
+	unsigned long	nfat_arch;
+	t_fat_arch		*fat_arch;
+	int				ret;
+
+	ret = 0;
+	nfat_arch = ((t_fat_header *)file->start)->nfat_arch;
+	nfat_arch = swapif_u32(file, nfat_arch);
+	if (check_overflow(file, file->start + sizeof(t_fat_header)))
+		return (FAILURE);
+	fat_arch = file->start + sizeof(t_fat_header);
+	if (env->flags & FLAG_F && env->bin == BIN_OTOOL)
+		return (print_fat_header(file, file->start, nfat_arch, fat_arch));
+	ret = handle_fat_section(env, file, TRUE, fat_arch);
+	if (ret == 0)
+		ret = handle_fat_section(env, file, TRUE, fat_arch);
 	if (ret < 0)
 		file->error = E_WAS_PRINTED;
 	return (ret);
