@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 17:59:45 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 18:06:08 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,40 +18,43 @@
 // 	ft_hexdump(file->start + offset, size, segstart, file->arch);
 // }
 
+static void init_mysect(t_file *file, void *sect, t_mysection *mysect)
+{
+	if (file->arch == ARCH_32) {
+		mysect->addr = swapif_u32(file, ((t_section *)sect)->addr);
+		mysect->size = swapif_u32(file, ((t_section *)sect)->size);
+		mysect->offset = swapif_u32(file, ((t_section *)sect)->offset);
+		mysect->name = ((t_section *)sect)->sectname;
+	} else {
+		mysect->addr = swapif_u64(file, ((t_section_64 *)sect)->addr);
+		mysect->size = swapif_u64(file, ((t_section_64 *)sect)->size);
+		mysect->offset = swapif_u32(file, ((t_section_64 *)sect)->offset);
+		mysect->name = ((t_section_64 *)sect)->sectname;
+	}
+}
+
 static int print_section(t_env *env, t_file *file, void *sect)
 {
-	uint64_t segstart;
-	uint64_t size;
-	uint32_t offset;
-	char *name;
+	t_mysection mysect;
 
-	if (file->arch == ARCH_32) {
-		segstart = swapif_u32(file, ((t_section *)sect)->addr);
-		size = swapif_u32(file, ((t_section *)sect)->size);
-		offset = swapif_u32(file, ((t_section *)sect)->offset);
-		name = ((t_section *)sect)->sectname;
-	} else {
-		segstart = swapif_u64(file, ((t_section_64 *)sect)->addr);
-		size = swapif_u64(file, ((t_section_64 *)sect)->size);
-		offset = swapif_u32(file, ((t_section_64 *)sect)->offset);
-		name = ((t_section_64 *)sect)->sectname;
-	}
+	init_mysect(file, sect, &mysect);
 	if ((env->flags & FLAG_M) || (env->flags & FLAG_F))
 		return (SUCCESS);
-	if (!ft_strcmp(SECT_TEXT, name) && (env->flags & FLAG_T || !(env->flags & FLAG_D)))
+	if (!ft_strcmp(SECT_TEXT, mysect.name)
+		&& (env->flags & FLAG_T || !(env->flags & FLAG_D)))
 	{
-		if (check_overflow(file, file->start + offset + size))
+		if (check_overflow(file, file->start + mysect.offset + mysect.size))
 			return FAILURE;
 		ft_printf("Contents of (__TEXT,__text) section\n");
-		ft_hexdump(file->start + offset, size, segstart, file);
+		ft_hexdump(file->start + mysect.offset, mysect.size, mysect.addr, file);
 	}
 	if (env->flags & FLAG_D)
 	{
-		if (!ft_strcmp(SECT_DATA, name)) {
-			if (check_overflow(file, file->start + offset + size))
+		if (!ft_strcmp(SECT_DATA, mysect.name)) {
+			if (check_overflow(file, file->start + mysect.offset + mysect.size))
 				return FAILURE;
 			ft_printf("Contents of (__DATA,__data) section\n");
-			ft_hexdump(file->start + offset, size, segstart, file);
+			ft_hexdump(file->start + mysect.offset, mysect.size, mysect.addr, file);
 		}
 	}
 	return (SUCCESS);

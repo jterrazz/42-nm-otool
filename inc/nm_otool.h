@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 17:56:55 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 18:03:40 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,9 @@ typedef struct	s_mysymbol {
 typedef struct	s_mysection {
 	char		*name;
 	uint64_t	index;
+	uint64_t	addr;
+	uint64_t	size;
+	uint32_t	offset;
 }				t_mysection;
 
 /*
