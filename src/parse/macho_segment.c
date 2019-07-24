@@ -6,11 +6,17 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 00:58:16 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 11:04:15 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
+
+// static int print_data(t_file *file, uint32_t offset, uint64_t size, uint64_t segstart)
+// {
+// 	ft_printf("Contents of (__TEXT,__text) section\n");
+// 	ft_hexdump(file->start + offset, size, segstart, file->arch);
+// }
 
 static int print_section(t_env *env, t_file *file, void *sect)
 {
@@ -20,14 +26,14 @@ static int print_section(t_env *env, t_file *file, void *sect)
 	char *name;
 
 	if (file->arch == ARCH_32) {
-		segstart = ((t_section *)sect)->addr;
-		size = ((t_section *)sect)->size;
-		offset = ((t_section *)sect)->offset;
+		segstart = swapif_u32(file, ((t_section *)sect)->addr);
+		size = swapif_u32(file, ((t_section *)sect)->size);
+		offset = swapif_u32(file, ((t_section *)sect)->offset);
 		name = ((t_section *)sect)->sectname;
 	} else {
-		segstart = ((t_section_64 *)sect)->addr;
-		size = ((t_section_64 *)sect)->size;
-		offset = ((t_section_64 *)sect)->offset;
+		segstart = swapif_u64(file, ((t_section_64 *)sect)->addr);
+		size = swapif_u64(file, ((t_section_64 *)sect)->size);
+		offset = swapif_u32(file, ((t_section_64 *)sect)->offset);
 		name = ((t_section_64 *)sect)->sectname;
 	}
 	if ((env->flags & FLAG_M) || (env->flags & FLAG_F))

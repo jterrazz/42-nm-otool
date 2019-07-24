@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:58:59 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 20:48:04 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 11:06:59 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 void ft_hexdump(void *start, uint64_t size, uint64_t start_address, t_arch arch)
 {
 	uint8_t i;
+	size_t count;
 
+	count=0;
 	while (size)
 	{
 		i = size > 16 ? 16 : size;
@@ -28,9 +30,14 @@ void ft_hexdump(void *start, uint64_t size, uint64_t start_address, t_arch arch)
 
 		while (size && i-- > 0)
 		{
-			ft_printf("%02x ", * (uint8_t *) start);
-			start += 1;
-			size -= 1;
+			ft_printf("%02x", * (uint8_t *) start);
+			if (arch == ARCH_64)
+				ft_printf(" ");
+			else if (count % 4 == 3)
+				ft_printf(" ");
+			start++;
+			size--;
+			count++;
 		}
 		ft_printf("\n");
 		start_address += 16;
