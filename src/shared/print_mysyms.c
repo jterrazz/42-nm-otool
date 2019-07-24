@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 18:20:04 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 20:30:47 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void print_mysyms(t_env *env, t_file *file)
 			? sort_mysyms_num : sort_mysyms_alpha);
 	else
 		reverse = !reverse;
-	if (env->flags & FLAG_R)
+	if (env->flags & FLAG_R || env->flags & FLAG_P)
 		ft_lstreverse(symlst);
 	while (symlst)
 	{
