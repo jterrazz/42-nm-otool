@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 11:08:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 00:09:22 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 16:41:36 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Defines NM flags and OTOOL flags
 */
 
-static t_flag_info g_flags[2][10] = {
+static t_flag_info	g_flags[2][10] = {
 	{
 		{'n', "-numeric-sort", FLAG_N},
 		{'r', "-reverse-sort", FLAG_R},
@@ -39,38 +39,43 @@ static t_flag_info g_flags[2][10] = {
 	}
 };
 
-static t_flag_info *get_flag(char *str, t_bin bin)
+static t_flag_info	*get_flag(char *str, t_bin bin)
 {
 	int i;
 
 	i = 0;
-	while (g_flags[bin][i].shortname) {
-		if ((g_flags[bin][i].shortname == str[0] && !str[1]) || !ft_strcmp(str, g_flags[bin][i].fullname))
-			return g_flags[bin] + i;
+	while (g_flags[bin][i].shortname)
+	{
+		if ((g_flags[bin][i].shortname == str[0] && !str[1])
+			|| !ft_strcmp(str, g_flags[bin][i].fullname))
+			return (g_flags[bin] + i);
 		i++;
 	}
-	return NULL;
+	return (NULL);
 }
 
-static int set_flags(t_env *env, char *argv, t_bin bin)
+static int			set_flags(t_env *env, char *argv, t_bin bin)
 {
 	t_flag_info *flag;
 
 	if (!(flag = get_flag(argv + 1, bin)))
 	{
-		ft_printf("%s: Unknow command line argument '%s'. Try '%s' -help\n", env->execname, argv, env->execname);
+		ft_printf("%s: Unknow command line argument '%s'. Try '%s' -help\n",
+		env->execname, argv, env->execname);
 		return (FAILURE);
 	}
 	if (env->flags & flag->value)
 	{
-		ft_printf("%s: for the %s option: may only occur zero or one times!\n", env->execname, flag->fullname);
+		ft_printf("%s: for the %s option: may only occur zero or one times!\n",
+		env->execname, flag->fullname);
 		return (FAILURE);
 	}
 	env->flags |= flag->value;
 	return (SUCCESS);
 }
 
-static int set_args(t_env *env, int argc, char const *argv[], t_bin bin)
+static int			set_args(t_env *env, int argc,
+	char const *argv[], t_bin bin)
 {
 	char **filenames;
 
@@ -87,8 +92,8 @@ static int set_args(t_env *env, int argc, char const *argv[], t_bin bin)
 				return (-1);
 			ft_memmove(filenames, env->filenames, env->nfiles * sizeof(char *));
 			free(env->filenames);
-			filenames[env->nfiles] = (char *) *argv;
-			env->filenames = (char const **) filenames;
+			filenames[env->nfiles] = (char *)*argv;
+			env->filenames = (char const **)filenames;
 			env->nfiles++;
 		}
 	}
@@ -102,11 +107,12 @@ static int set_args(t_env *env, int argc, char const *argv[], t_bin bin)
 ** Returns SUCCESS or FAILURE.
 */
 
-int cmd_init(t_env *env, int argc, char const *argv[], t_bin bin) {
+int					cmd_init(t_env *env, int argc,
+	char const *argv[], t_bin bin)
+{
 	ft_bzero(env, sizeof(t_env));
 	env->execname = argv[0];
 	env->bin = bin;
 	env->cputype = CPU_TYPE_X86_64;
-
-	return set_args(env, argc, argv, bin);
+	return (set_args(env, argc, argv, bin));
 }

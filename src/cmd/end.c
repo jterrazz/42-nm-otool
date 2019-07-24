@@ -6,13 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 08:07:20 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 23:22:38 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 16:38:59 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-void cmd_end(t_env *env)
+void	cmd_end(t_env *env)
 {
 	free(env->filenames);
 }
