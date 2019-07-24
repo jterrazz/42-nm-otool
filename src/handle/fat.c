@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 09:52:27 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 10:43:00 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ char *get_cpu_string(cpu_type_t cputype, cpu_subtype_t cpusubtype)
 
 /*
 ** Handle nested files for the current cpu_type, or types if
-** current is not found. It returns 0 if the current cpu_type is found,
-** or 1 if not. In case of an error, returns -1.
+** current is not found. It returns 1 if was printed as expected,
+** or 0 if not. In case of an error, returns -1.
 */
 
 // if (i == 0 && lc->cmdsize % 8)
@@ -128,7 +128,9 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 	uint32_t offset;
 	cpu_type_t cputype;
 	cpu_type_t cpusubtype;
+	int ret;
 
+	ret = 0;
 	if (check_overflow(file, fat_arch + 1))
 		return (-1);
 	cputype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cputype) : fat_arch->cputype;
@@ -146,12 +148,14 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 
 		if (all_cputypes && env->bin == BIN_NM)
 			ft_printf("\n%s (for architecture %s):\n", file->filename, get_cpu_string(cputype, cpusubtype));
-		handle_binary(env, &virtual_file); // Handle
+		ret = handle_binary(env, &virtual_file);
 		destroy_file(&virtual_file);
-		if (!all_cputypes)
-			return (0);
+		if (!all_cputypes && ret == 0)
+			return (1);
 	}
-	return (1);
+	if (!all_cputypes)
+		return (0);
+	return (ret);
 }
 
 /*
@@ -169,6 +173,7 @@ int handle_fat(t_env *env, t_file *file)
 	int ret;
 
 	i = 0;
+	ret = 0;
 	print_all_archs = FALSE;
 	if (check_overflow(file, file->start + sizeof(t_fat_header)))
 		return (FAILURE);
@@ -179,17 +184,20 @@ int handle_fat(t_env *env, t_file *file)
 		return print_fat_header(file, file->start, nfat_arch, fat_arch);
 	while (i < nfat_arch)
 	{
-		ret = process_arch(env, file, print_all_archs, fat_arch); // Handle
-		if (ret < 1 || ret == 0)
-			return (ret);
+		ret += process_arch(env, file, print_all_archs, fat_arch);
+		if (!print_all_archs && ret != 0)
+			return (ret > 0 ? SUCCESS : FAILURE);
 		fat_arch = (void *) fat_arch + sizeof(t_fat_arch);
 		i++;
 		if (i == nfat_arch && !print_all_archs)
 		{
 			i = 0;
+			ret = 0;
 			print_all_archs = TRUE;
 			fat_arch = file->start + sizeof(t_fat_header);
 		}
 	}
-	return (SUCCESS);
+	if (ret < 0)
+		file->error = E_WAS_PRINTED;
+	return (ret);
 }
