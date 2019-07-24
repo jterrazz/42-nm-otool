@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 10:13:31 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 18:09:36 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int print_macho_header(t_file *file, void *header_ptr)
 {
-	t_mach_header *header_32;
-	t_mach_header_64 *header_64;
+	t_mach_header_64	*header_64;
+	t_mach_header		*header_32;
 
 	ft_printf("Mach header\n");
 	ft_printf("      magic cputype cpusubtype  caps    filetype ncmds sizeofcmds      flags\n");
@@ -38,12 +38,11 @@ static int print_macho_header(t_file *file, void *header_ptr)
 */
 
 static int parse_load_command(t_env *env, t_file *file, t_load_command *lc, uint32_t i, void *endofcmds) {
-	uint32_t cmd;
-	uint64_t cmd_size;
+	uint32_t	cmd;
+	uint64_t	cmd_size;
 
 	cmd = swapif_u32(file, lc->cmd);
 	cmd_size = lc->cmdsize;
-	// Not sure at all
 	if (i == 0 && cmd_size % 8)
 	{
 		ft_printf("%s: %s truncated or malformed object (load command %d cmdsize not a multiple of 8)\n", env->execname, file->filename, i);
@@ -65,10 +64,10 @@ static int parse_load_command(t_env *env, t_file *file, t_load_command *lc, uint
 
 int parse_macho(t_env *env, t_file *file)
 {
-	t_load_command *lc;
-	uint32_t ncmds;
-	void *endofcmds;
-	uint32_t i;
+	t_load_command	*lc;
+	uint32_t		ncmds;
+	void			*endofcmds;
+	uint32_t		i;
 
 	lc = (t_load_command *)(file->start + ((file->arch == ARCH_32) ?
 		sizeof(t_mach_header) : sizeof(t_mach_header_64)));
@@ -76,19 +75,17 @@ int parse_macho(t_env *env, t_file *file)
 		return (FAILURE);
 	if (env->flags & FLAG_M && env->bin == BIN_OTOOL)
 		return print_macho_header(file, file->start);
-	ncmds = (file->arch == ARCH_32) ? ((t_mach_header *)(file->start))->ncmds :
-		((t_mach_header_64 *)(file->start))->ncmds;
-	ncmds = swapif_u32(file, ncmds);
-	endofcmds = (void *)lc + swapif_u32(file, (file->arch == ARCH_32) ? ((t_mach_header *)(file->start))->sizeofcmds :
-		((t_mach_header_64 *)(file->start))->sizeofcmds);
+	ncmds = swapif_u32(file, (file->arch == ARCH_32)
+		? ((t_mach_header *)(file->start))->ncmds :
+		((t_mach_header_64 *)(file->start))->ncmds);
+	endofcmds = (void *)lc + swapif_u32(file, (file->arch == ARCH_32)
+		? ((t_mach_header *) (file->start))->sizeofcmds
+		: ((t_mach_header_64 *)(file->start))->sizeofcmds);
 	i = 0;
 	while (i < ncmds)
 	{
-		if (check_overflow(file, lc + 1))
+		if (check_overflow(file, lc + 1) || parse_load_command(env, file, lc, i++, endofcmds))
 			return (FAILURE);
-		if (parse_load_command(env, file, lc, i, endofcmds))
-			return (FAILURE);
-		i++;
 		lc = (void *)lc + swapif_u32(file, lc->cmdsize);
 	}
 	return (SUCCESS);

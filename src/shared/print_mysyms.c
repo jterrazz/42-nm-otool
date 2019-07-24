@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 15:13:32 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 03:47:48 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 18:20:04 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,6 @@ static void lst_swap(t_list *lst1, t_list *lst2)
 	lst2->content_size = content_size_tmp;
 }
 
-/*
-Explain the algo here
-*/
 static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
 	t_list *to_replace;
 	t_list *el;
@@ -83,6 +80,7 @@ static void ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2)) {
  B C A D
  B C D A
 */
+
 static void ft_lstreverse(t_list *lst)
 {
 	t_list *el;
@@ -121,35 +119,39 @@ static void print_mysyms_line(uint8_t left_padding, t_mysymbol *sym, t_bool mini
 		ft_printf("%*c %c %s\n", left_padding, ' ', sym->type_p, sym->name);
 }
 
+void print_mysym(t_env *env, t_file *file, t_mysymbol *sym)
+{
+	if ((!(env->flags & FLAG_A) && sym->type_p == '-')
+		|| (env->flags & FLAG_U && sym->type_p != 'U')
+		|| (env->flags & FLAG_UU && sym->type_p == 'U')
+		|| (env->flags & FLAG_G && (sym->type_p < 'A' || sym->type_p >'Z'))
+		|| (!(env->flags & FLAG_A) && sym->type_p == '-')
+	)
+		;
+	else
+		print_mysyms_line((file->arch == ARCH_32)
+		? 8 : 16, sym, env->flags & FLAG_U || env->flags & FLAG_J);
+}
 
 void print_mysyms(t_env *env, t_file *file)
 {
-	t_list *symlst;
-	t_mysymbol *sym;
-	t_bool reverse;
+	t_list		*symlst;
+	t_mysymbol	*sym;
+	t_bool		reverse;
 
 	symlst = file->mysyms;
 	reverse = env->flags & FLAG_R;
-
 	if (!(env->flags & FLAG_P))
-		ft_lstsort(symlst, env->flags & FLAG_N ? sort_mysyms_num : sort_mysyms_alpha);
+		ft_lstsort(symlst, env->flags & FLAG_N
+			? sort_mysyms_num : sort_mysyms_alpha);
 	else
 		reverse = !reverse;
-
 	if (env->flags & FLAG_R)
 		ft_lstreverse(symlst);
-
-	while (symlst) {
+	while (symlst)
+	{
 		sym = symlst->content;
-		if ((!(env->flags & FLAG_A) && sym->type_p == '-')
-			|| (env->flags & FLAG_U && sym->type_p != 'U')
-			|| (env->flags & FLAG_UU && sym->type_p == 'U')
-			|| (env->flags & FLAG_G && (sym->type_p < 'A' || sym->type_p >'Z'))
-			|| (!(env->flags & FLAG_A) && sym->type_p == '-')
-		)
-			;
-		else
-			print_mysyms_line((file->arch == ARCH_32) ? 8 : 16, sym, env->flags & FLAG_U || env->flags & FLAG_J);
+		print_mysym(env, file , sym);
 		symlst = symlst->next;
 	}
 }

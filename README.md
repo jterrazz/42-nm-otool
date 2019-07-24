@@ -1,69 +1,65 @@
 # 42-nm-otool
 Custom C implementation of **nm** and **otool** commands.
-- **ft_nm** displays the name list (symbol table of nlist structures) of each object file in the argument list.
-- **ft_tool** display the contents of the (\__TEXT,__text).
-https://linux.die.net/man/1/nm
-Gather Information on Mach-O architecture files.
+- `ft_nm <args>` displays the name list (symbol table of nlist structures) of the `<args>` files
+- `ft_tool` displays the content of the (\__TEXT,__text) segment
 
-## How to use it
+This project will makes you understand how Mach-O files are structured.
 
-### Compile
+## How to use
+
+### Build
 ``` bash
 make
+
+# Clean commands
+make clean
+make fclean
+make re
 ```
 
 ### Usage
 
 ``` bash
-./ft_nm file # File can be: exec, .a, .so, .dylib, .o.
+# Files supported: exec, .a, .so, .dylib, .o.
+./ft_nm file
 ./ft_otool file
 ```
 
-### Clean
-``` bash
-make clean
-make fclean
-```
-
-Bonus:
-- Gestion des binaires corrompus
-- Debug (explain how to debug)
-
-
 ## Implementation
-For a better comprehension of this implementation, please refer to the related medium article.
+- Support for archives
+- Support for fat binaries
+- Support for debug symbols (`gcc -g <args>` files).
+- Many flags (see ./ft_nm -h or ./ft_otool -h)
+- Checks for corruption
 
-### Structure
+To understand how I implemented this program, you can refer to the medium article of this project.
+
+### File structure
 ``` bash
+/inc
+    # Self made printf
+    # Self made libc
+    nm_otool.h
 /src
-    /cmd
-    /hande # handle mach-o files and find nested ones
-    /parse # parse the segment and/or symtab of a mach-o file
-    /print
-    /utils
+    /cmd # Parse argv and set the program state
+    /hande # Handle structure for magic files
+    /parse # Parse the inner structures
+    /shared
+
+    # Root files
+    ft_nm.c
+    ft_otool.c
 ```
 
-### System header ressources
-- https://opensource.apple.com/source/xnu/xnu-792/EXTERNAL_HEADERS/mach-o/loader.h
-- https://opensource.apple.com/source/xnu/xnu-1228/EXTERNAL_HEADERS/ar.h.auto.html
-- https://opensource.apple.com/source/xnu/xnu-201/EXTERNAL_HEADERS/mach-o/nlist.h.auto.html
-- https://opensource.apple.com/source/xnu/xnu-344/EXTERNAL_HEADERS/mach-o/fat.h
-- https://opensource.apple.com/source/xnu/xnu-4570.41.2/osfmk/mach/machine.h.auto.html
+### Predefined values
+- [mach-o/loader.h](https://opensource.apple.com/source/xnu/xnu-792/EXTERNAL_HEADERS/mach-o/loader.h)
+- [mach-o/ar.h](https://opensource.apple.com/source/xnu/xnu-1228/EXTERNAL_HEADERS/ar.h.auto.html)
+- [mach-o/n-list.h](https://opensource.apple.com/source/xnu/xnu-201/EXTERNAL_HEADERS/mach-o/nlist.h.auto.html)
+- [mach-o/fat.h](https://opensource.apple.com/source/xnu/xnu-344/EXTERNAL_HEADERS/mach-o/fat.h)
+- [mach-o/machine.h](https://opensource.apple.com/source/xnu/xnu-4570.41.2/osfmk/mach/machine.h.auto.html)
 
 ## Testing
-
-### Build an executable with the debugger
-
-``` bash
-gcc -g <args>
-```
-
-How to test files here (automate cmd)
-
-A big thank you to the following repos for their executables:
+A big thank you to the following repos for their executables 🥰:
 - https://gitlab.com/louisportay/break-nm
 - https://github.com/mmeisson/tests_42
 - https://forum.intra.42.fr/topics/1007/messages?page=1#6251
-
-## TODO
-Secure the lib functions: ft_memdel ft_strdel ft_lst...
