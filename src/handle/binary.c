@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 08:29:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 10:35:10 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 16:14:26 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 ** Dispatch the binary to the different handlers: Fat, Archive, Macho
 */
 
-static int print_binary_error(t_file *file)
+static int print_binary_error(t_env *env, t_file *file)
 {
 	if (file->error == E_WAS_PRINTED)
 		;
 	else if (file->error == E_OVERFLOW)
-		ft_printf("%s truncated or malformed file\n", file->filename);
+		ft_printf("%s: %s truncated or malformed file\n", env->execname, file->filename);
 	else
 		ft_printf("%s The file was not recognized as a valid object file\n", file->filename);
 	return (FAILURE);
@@ -64,6 +64,6 @@ int start_binary(t_env *env, t_file *file)
 int handle_binary(t_env *env, t_file *file)
 {
 	if (start_binary(env, file))
-		return print_binary_error(file);
+		return print_binary_error(env, file);
 	return (SUCCESS);
 }
