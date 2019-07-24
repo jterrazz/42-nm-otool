@@ -11,3 +11,4 @@ tmp*
 a.out
 ft_nm
 ft_otool
+!test/**

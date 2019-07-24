@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 08:29:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 00:41:43 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 03:34:46 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static int print_binary_error(t_file *file)
 
 static int start_macho_parsing(t_env *env, t_file *file)
 {
+	if (env->bin == BIN_OTOOL)
+		ft_printf("%s:\n", file->filename);
 	if (parse_macho(env, file))
 		return (FAILURE);
 	if (env->bin == BIN_NM)
