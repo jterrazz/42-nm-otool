@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 17:17:35 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 17:20:55 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,11 @@ int					process_arch(t_env *env, t_file *file,
 ** contains informations about the for this cputype. We first try priting
 ** the section of our computer cpu_type, else we print all of them.
 */
+
+int handle_fat_section(t_env *env, t_file *file)
+{
+
+}
 
 int					handle_fat(t_env *env, t_file *file)
 {
