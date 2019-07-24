@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 09:06:04 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 09:37:49 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,13 @@ typedef struct s_flag_info {
 	char fullname[20];
 	uint64_t value;
 } t_flag_info;
+
+struct arch_flag {
+    char *name;
+    cpu_type_t cputype;
+    cpu_subtype_t cpusubtype;
+};
+
 
 /*
 ** Keep informations about a file, can be a virtual file
@@ -200,7 +207,7 @@ void create_file(t_file *file, char const *name, uint64_t size, void *start);
 void create_virtual_file(t_file *file, char *virtualname);
 void destroy_file(t_file *file);
 t_bool check_overflow(t_file *file, void *ptr);
-char *get_cpu_string(cpu_type_t cputype);
+char *get_cpu_string(cpu_type_t cputype, cpu_subtype_t cpusubtype);
 t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym);
 void fill_mysym(t_file *file, t_mysymbol *mysym);
 char	*ft_strdup_overflow(t_file *file, char *s1, char c, int *failed);

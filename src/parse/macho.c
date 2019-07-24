@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 09:08:29 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 09:16:17 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,17 @@ static int print_macho_header(t_file *file, void *header_ptr)
 ** Otool will print directly when reading the segment
 */
 
-static int parse_load_command(t_env *env, t_file *file, t_load_command *lc) {
+static int parse_load_command(t_env *env, t_file *file, t_load_command *lc, uint32_t i) {
 	uint32_t cmd;
 
 	cmd = swapif_u32(file, lc->cmd);
 
+	if (i == 0 && lc->cmdsize % 8)
+	{
+		ft_printf("%s: %s truncated or malformed object (load command %d cmdsize not a multiple of 8)\n", env->execname, file->filename, i);
+		file->error = E_WAS_PRINTED;
+		return (FAILURE);
+	}
 	if (cmd == LC_SEGMENT || cmd == LC_SEGMENT_64)
 		return parse_machoo_segment(env, file, lc);
 	else if (env->bin == BIN_NM && cmd == LC_SYMTAB)
@@ -69,13 +75,7 @@ int parse_macho(t_env *env, t_file *file)
 	{
 		if (check_overflow(file, lc + 1))
 			return (FAILURE);
-		if (lc->cmdsize % 8)
-		{
-			ft_printf("%s: %s truncated or malformed object (load command %d cmdsize not a multiple of 8)\n", env->execname, file->filename, i);
-			file->error = E_WAS_PRINTED;
-			return (FAILURE);
-		}
-		if (parse_load_command(env, file, lc))
+		if (parse_load_command(env, file, lc, i))
 			return (FAILURE);
 		i++;
 		lc = (void *)lc + swapif_u32(file, lc->cmdsize);
