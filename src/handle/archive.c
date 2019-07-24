@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 12:20:55 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 03:11:27 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 04:22:28 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int handle_archive(t_env *env, t_file *file)
 			if (env->bin == BIN_NM)
 				ft_printf("\n");
 			ft_printf("%s(%s):\n", virtual_file.filename, virtual_file.virtualname);
-			handle_binary(env, &virtual_file);
+			handle_binary(env, &virtual_file); // Handle
 			destroy_file(&virtual_file);
 		}
 		ptr += ar_size;

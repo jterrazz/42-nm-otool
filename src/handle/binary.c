@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 08:29:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 03:34:46 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 09:06:10 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 
 static int print_binary_error(t_file *file)
 {
-	if (file->error == E_OVERFLOW)
+	if (file->error == E_WAS_PRINTED)
+		;
+	else if (file->error == E_OVERFLOW)
 		ft_printf("%s truncated or malformed file\n", file->filename);
 	else
 		ft_printf("%s The file was not recognized as a valid object file\n", file->filename);

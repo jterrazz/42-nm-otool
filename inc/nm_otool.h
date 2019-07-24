@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 03:06:42 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 09:06:04 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ typedef enum {
 
 typedef enum {
 	E_NULL,
-	E_OVERFLOW
+	E_OVERFLOW,
+	E_WAS_PRINTED
 } t_file_error;
 
 typedef uint8_t t_bool;
