@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:45:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 16:43:25 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 22:27:12 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ int			cmd_start(t_env *env, char const *filename)
 		return (FAILURE);
 	}
 	create_file(&file, filename, filesize, filestart);
-	if (handle_binary(env, &file))
+	if (handle_binary(env, &file)) {
+		destroy_file(&file);
 		return (FAILURE);
+	}
 	destroy_file(&file);
 	if (munmap(filestart, filesize) < 0 || close(fd) < 0)
 		return (FAILURE);
