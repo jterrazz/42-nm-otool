@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 19:53:59 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 22:28:21 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ int main(int argc, char const *argv[])
 		if (!env.nfiles)
 		{
 			if (cmd_start(&env, DEFAULT_FILE))
-				return EXIT_FAILURE;
+				return (EXIT_FAILURE);
 		}
 		while (i < env.nfiles) {
 			if (cmd_start(&env, env.filenames[i]))
-				return EXIT_FAILURE;
+				return (EXIT_FAILURE);
 			i++;
 		}
 	}
