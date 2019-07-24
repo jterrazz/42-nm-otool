@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 10:46:35 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 12:15:08 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ uint32_t swapif_u32(t_file *file, uint32_t x);
 uint64_t swapif_u64(t_file *file, uint64_t x);
 size_t ft_pow(size_t a, size_t b);
 
-void ft_hexdump(void *start, uint64_t size, uint64_t printed_start, t_arch arch);
+void ft_hexdump(void *start, int64_t size, int64_t printed_start, t_file *file);
 void print_mysyms(t_env *env, t_file *file);
 
 #endif

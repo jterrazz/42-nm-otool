@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 10:48:29 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 11:32:29 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,13 +135,13 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 		return (-1);
 	cputype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cputype) : fat_arch->cputype;
 	cpusubtype = (file->swap_bits) ? ft_bswap_int32(fat_arch->cpusubtype) : fat_arch->cpusubtype;
+	offset = (file->swap_bits) ? ft_bswap_uint32(fat_arch->offset) : fat_arch->offset;
+	// if (check_overflow(file, file->start + offset + sizeof(t_fat_arch)))
+	// 	return (-1);
+	if (offset == 0)
+		return (-1);
 	if (all_cputypes || env->cputype == cputype)
 	{
-		offset = (file->swap_bits) ? ft_bswap_uint32(fat_arch->offset) : fat_arch->offset;
-		if (offset == 0)
-			return (-1);
-			// if (check_overflow(file, file->start + offset + 10))
-		// 	return (-1);
 		create_file(&virtual_file, file->filename, (file->swap_bits)
 			? ft_bswap_uint32(fat_arch->size) : fat_arch->size, file->start + offset);
 		if (create_virtual_file(&virtual_file, file, (char *)file->filename))
@@ -149,6 +149,11 @@ int process_arch(t_env *env, t_file *file, t_bool all_cputypes, t_fat_arch *fat_
 
 		if (all_cputypes && env->bin == BIN_NM)
 			ft_printf("\n%s (for architecture %s):\n", file->filename, get_cpu_string(cputype, cpusubtype));
+
+		// if (check_overflow(&virtual_file, file->start + offset + 1000))
+		// 	return (-1);
+
+
 		ret = handle_binary(env, &virtual_file);
 		destroy_file(&virtual_file);
 		if (!all_cputypes && ret == 0)

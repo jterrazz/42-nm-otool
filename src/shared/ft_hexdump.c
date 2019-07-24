@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:58:59 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 11:06:59 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 12:30:49 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,42 @@
 ** `start_address` is the printed address from the value at *start.
 */
 
-void ft_hexdump(void *start, uint64_t size, uint64_t start_address, t_arch arch)
+void ft_hexdump_line_values(char *start, int64_t len, t_file *file)
 {
-	uint8_t i;
-	size_t count;
+	int8_t i;
 
-	count=0;
-	while (size)
+	i=0;
+
+	while (i < len)
 	{
-		i = size > 16 ? 16 : size;
-		ft_printf("%0*llx%s", (arch == ARCH_32) ? 8 : 16, start_address, "\t");
-
-		while (size && i-- > 0)
+		if (!file->swap_bits && file->arch == ARCH_32)
 		{
-			ft_printf("%02x", * (uint8_t *) start);
-			if (arch == ARCH_64)
-				ft_printf(" ");
-			else if (count % 4 == 3)
-				ft_printf(" ");
-			start++;
-			size--;
-			count++;
+			if (i + 3 - 2* (i % 4) < len)
+			ft_printf("%02x", (uint8_t) start[i + 3 - 2* (i % 4)]);
 		}
+		else
+			ft_printf("%02x", (uint8_t) start[i]);
+		if (file->arch == ARCH_64)
+			ft_printf(" ");
+		else if (i % 4 == 3)
+			ft_printf(" ");
+		i++;
+	}
+}
+
+void ft_hexdump(void *start, int64_t size, int64_t start_address, t_file *file)
+{
+	int64_t len;
+
+	len = size > 16 ? 16 : size;
+	while (len > 0)
+	{
+		ft_printf("%0*llx%s", (file->arch == ARCH_32) ? 8 : 16, start_address, "\t");
+		ft_hexdump_line_values(start, len, file);
 		ft_printf("\n");
+		start += 16;
 		start_address += 16;
+		size -= 16;
+		len = size > 16 ? 16 : size;
 	}
 }

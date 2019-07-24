@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/09 23:01:29 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 11:17:43 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/24 11:46:35 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,22 @@ static int print_section(t_env *env, t_file *file, void *sect)
 		offset = swapif_u32(file, ((t_section_64 *)sect)->offset);
 		name = ((t_section_64 *)sect)->sectname;
 	}
-	if (check_overflow(file, file->start + offset + size))
-		return FAILURE;
 	if ((env->flags & FLAG_M) || (env->flags & FLAG_F))
 		return (SUCCESS);
 	if (!ft_strcmp(SECT_TEXT, name) && (env->flags & FLAG_T || !(env->flags & FLAG_D)))
 	{
+		if (check_overflow(file, file->start + offset + size))
+			return FAILURE;
 		ft_printf("Contents of (__TEXT,__text) section\n");
-		ft_hexdump(file->start + offset, size, segstart, file->arch);
+		ft_hexdump(file->start + offset, size, segstart, file);
 	}
 	if (env->flags & FLAG_D)
 	{
 		if (!ft_strcmp(SECT_DATA, name)) {
+			if (check_overflow(file, file->start + offset + size))
+				return FAILURE;
 			ft_printf("Contents of (__DATA,__data) section\n");
-			ft_hexdump(file->start + offset, size, segstart, file->arch);
+			ft_hexdump(file->start + offset, size, segstart, file);
 		}
 	}
 	return (SUCCESS);
