@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 22:16:53 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 08:07:27 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void destroy_my_syms(void *content, size_t content_size)
 	sym = content;
 	if (sym->name)
 		free(sym->name);
+	sym->name = NULL;
 	free(content);
 	(void)content_size;
 }
