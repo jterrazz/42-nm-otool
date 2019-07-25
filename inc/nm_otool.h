@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 09:54:49 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 10:45:22 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,5 +233,10 @@ size_t			ft_pow(size_t a, size_t b);
 void			ft_hexdump(void *start, int64_t size,
 	int64_t printed_start, t_file *file);
 void			print_mysyms(t_env *env, t_file *file);
+
+int				sort_mysyms_num(t_list *lst1, t_list *lst2);
+int				sort_mysyms_alpha(t_list *lst1, t_list *lst2);
+void			ft_lstsort(t_list *lst, int (*f)(t_list *lst1, t_list *lst2));
+void			ft_lstreverse(t_list *lst);
 
 #endif
