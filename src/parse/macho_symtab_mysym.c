@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 19:58:50 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 00:47:58 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 10:05:30 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static t_debug_symbol g_debug_symbols[] =
 	{"LSYM", 0x80},
 	{"BINCL", 0x82},
 	{"SOL", 0x84},
-	{"PARAMS" , 0x86},
+	{"PARAMS", 0x86},
 	{"VERSION", 0x88},
-	{"OLEVEL" , 0x8A},
+	{"OLEVEL", 0x8A},
 	{"PSYM", 0xa0},
 	{"EINCL", 0xa2},
 	{"ENTRY", 0xa4},
@@ -51,18 +51,18 @@ static t_debug_symbol g_debug_symbols[] =
 	{0, 0}
 };
 
-static t_mysection *find_mysection(t_list *lst, uint8_t n_sect)
+static t_mysection	*find_mysection(t_list *lst, uint8_t n_sect)
 {
-	while (lst && lst->content) {
+	while (lst && lst->content)
+	{
 		if (((t_mysection *)lst->content)->index == n_sect)
-			return lst->content;
+			return (lst->content);
 		lst = lst->next;
 	}
-
-	return NULL;
+	return (NULL);
 }
 
-static void match_sym_section(t_list *mysect_lst, t_mysymbol *mysym)
+static void			match_sym_section(t_list *mysect_lst, t_mysymbol *mysym)
 {
 	t_mysection *mysect;
 
@@ -81,20 +81,21 @@ static void match_sym_section(t_list *mysect_lst, t_mysymbol *mysym)
 	}
 }
 
-char *get_debug_symbol(uint16_t type)
+char				*get_debug_symbol(uint16_t type)
 {
 	int i;
 
 	i = 0;
-	while (g_debug_symbols[i].symbol) {
+	while (g_debug_symbols[i].symbol)
+	{
 		if (g_debug_symbols[i].typevalue == type)
-			 return g_debug_symbols[i].symbol;
+			return (g_debug_symbols[i].symbol);
 		i++;
 	}
 	return (NULL);
 }
 
-void fill_mysym(t_file *file, t_mysymbol *mysym)
+void				fill_mysym(t_file *file, t_mysymbol *mysym)
 {
 	if (N_STAB & mysym->type)
 	{
@@ -123,7 +124,8 @@ void fill_mysym(t_file *file, t_mysymbol *mysym)
 ** I do that for not dealing with 32/64 structures anymore
 */
 
-t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym)
+t_mysymbol			*init_mysym(t_file *file,
+	t_mysymbol *mysym, char *symname, void *sym)
 {
 	int namefailed;
 
@@ -135,12 +137,15 @@ t_mysymbol *init_mysym(t_file *file, t_mysymbol *mysym, char *symname, void *sym
 		mysym->namefailed = TRUE;
 	if (!mysym->name)
 		return (NULL);
-	if (file->arch == ARCH_32) {
+	if (file->arch == ARCH_32)
+	{
 		mysym->type = swapif_u32(file, ((t_nlist *)sym)->n_type);
 		mysym->sect = swapif_u32(file, ((t_nlist *)sym)->n_sect);
 		mysym->desc = swapif_u32(file, ((t_nlist *)sym)->n_desc);
 		mysym->value = swapif_u32(file, ((t_nlist *)sym)->n_value);
-	} else {
+	}
+	else
+	{
 		mysym->type = swapif_u64(file, ((t_nlist_64 *)sym)->n_type);
 		mysym->sect = swapif_u64(file, ((t_nlist_64 *)sym)->n_sect);
 		mysym->desc = swapif_u64(file, ((t_nlist_64 *)sym)->n_desc);

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 20:12:47 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 10:07:00 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,15 @@ static int print_macho_header(t_file *file, void *header_ptr)
 
 	ft_printf("Mach header\n");
 	ft_printf("      magic cputype cpusubtype  caps    filetype ncmds sizeofcmds      flags\n");
-	if (file->arch == ARCH_64) {
+	if (file->arch == ARCH_64)
+	{
 		header_64 = header_ptr;
 		ft_printf(" 0x%08x %8ld %10ld  0x%02x %11d %5d %10d 0x%08x\n", header_64->magic, header_64->cputype,
 		header_64->cpusubtype & ~CPU_SUBTYPE_MASK, (header_64->cpusubtype & CPU_SUBTYPE_MASK) >> 24,
 		header_64->filetype, header_64->ncmds, header_64->sizeofcmds, header_64->flags);
-	} else {
+	}
+	else
+	{
 		header_32 = header_ptr;
 		ft_printf(" 0x%08x %8ld %10ld  0x%02x %11d %5d %10d 0x%08x\n", header_32->magic, header_32->cputype,
 		header_32->cpusubtype & ~CPU_SUBTYPE_MASK, (header_32->cpusubtype & CPU_SUBTYPE_MASK) >> 24,
