@@ -6,13 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 23:17:20 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/23 23:17:26 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 10:33:26 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-size_t ft_pow(size_t a, size_t b)
+size_t	ft_pow(size_t a, size_t b)
 {
 	size_t a_bis;
 
@@ -22,5 +22,5 @@ size_t ft_pow(size_t a, size_t b)
 		a *= a_bis;
 		b--;
 	}
-	return a;
+	return (a);
 }

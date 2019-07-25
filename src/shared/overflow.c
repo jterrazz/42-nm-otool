@@ -6,22 +6,24 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 09:20:31 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 18:11:18 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 10:33:58 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-t_bool check_overflow_wo_error(t_file *file, void *ptr)
+t_bool	check_overflow_wo_error(t_file *file, void *ptr)
 {
-	if ((ptr > file->start + file->filesize) || (ptr > file->end) || (ptr < file->start))
+	if ((ptr > file->start + file->filesize)
+		|| (ptr > file->end) || (ptr < file->start))
 		return (TRUE);
 	return (FALSE);
 }
 
-t_bool check_overflow(t_file *file, void *ptr)
+t_bool	check_overflow(t_file *file, void *ptr)
 {
-	if (check_overflow_wo_error(file, ptr) == TRUE) {
+	if (check_overflow_wo_error(file, ptr) == TRUE)
+	{
 		file->error = E_OVERFLOW;
 		return (TRUE);
 	}
