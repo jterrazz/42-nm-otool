@@ -6,26 +6,30 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 15:07:40 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 10:09:09 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 10:43:16 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
 
-static void usage(char const *bin)
+static void		usage(char const *bin)
 {
 	ft_printf("USAGE: %s [options] <input files>\n", bin);
 	ft_printf("\nOPTIONS:\n\nGeneral options:\n\n");
-	ft_printf("  %  -25s %s\n", "-t --text-section", "Displays the text section");
-	ft_printf("  %  -25s %s\n", "-d --data-section", "Displays the data section");
-	ft_printf("  %  -25s %s\n", "-m --macho-header", "Displays the mach-o headers");
-	ft_printf("  %  -25s %s\n", "-f --fat-header", "Displays the fat headers");
+	ft_printf("  %  -25s %s\n", "-t --text-section",
+		"Displays the text section");
+	ft_printf("  %  -25s %s\n", "-d --data-section",
+		"Displays the data section");
+	ft_printf("  %  -25s %s\n", "-m --macho-header",
+		"Displays the mach-o headers");
+	ft_printf("  %  -25s %s\n", "-f --fat-header",
+		"Displays the fat headers");
 }
 
-int main(int argc, char const *argv[])
+int				main(int argc, char const *argv[])
 {
-	t_env env;
-	int i;
+	t_env		env;
+	int			i;
 
 	i = 0;
 	if (cmd_init(&env, argc, argv, BIN_OTOOL) == -1)
@@ -36,7 +40,8 @@ int main(int argc, char const *argv[])
 	{
 		if (!env.nfiles)
 		{
-			ft_printf("error: %s: at least one file must be specified\n", argv[0]);
+			ft_printf("error: %s: at least one file must be specified\n",
+				argv[0]);
 			return (EXIT_FAILURE);
 		}
 		while (i < env.nfiles)
@@ -46,7 +51,6 @@ int main(int argc, char const *argv[])
 			i++;
 		}
 	}
-
 	cmd_end(&env);
 	return (EXIT_SUCCESS);
 }
