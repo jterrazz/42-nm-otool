@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 12:20:55 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/24 20:46:32 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 17:50:20 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	parse_archive_section(t_env *env, t_file *file,
 	uint64_t	name_size;
 	t_file		virtual_file;
 	void		*ptr;
+	int			ret;
 
 	ptr = (void *)ar_header + sizeof(t_ar_hdr);
 	name_size = !ft_strncmp(ar_header->ar_name,
@@ -27,13 +28,13 @@ int	parse_archive_section(t_env *env, t_file *file,
 		return (FAILURE);
 	create_file(&virtual_file, file->filename,
 		ar_size - sizeof(ar_header), ptr + name_size);
-	create_virtual_file(&virtual_file, file, ptr);
+	create_virtual_file(&virtual_file, file, ptr, FILE_ARCHIVE);
 	if (env->bin == BIN_NM)
 		ft_printf("\n");
 	ft_printf("%s(%s):\n", virtual_file.filename, virtual_file.virtualname);
-	handle_binary(env, &virtual_file);
+	ret = handle_binary(env, &virtual_file);
 	destroy_file(&virtual_file);
-	return (SUCCESS);
+	return (ret);
 }
 
 int	handle_archive(t_env *env, t_file *file)
@@ -46,7 +47,7 @@ int	handle_archive(t_env *env, t_file *file)
 	i = 0;
 	ptr = file->start + SARMAG;
 	if (env->bin == BIN_OTOOL)
-		ft_printf("Archive: %s\n", file->filename);
+		ft_printf("Archive : %s\n", file->filename);
 	while (ptr < file->start + file->filesize)
 	{
 		ar_header = ptr;

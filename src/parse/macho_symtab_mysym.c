@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 19:58:50 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 10:05:30 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 17:42:57 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,16 +139,16 @@ t_mysymbol			*init_mysym(t_file *file,
 		return (NULL);
 	if (file->arch == ARCH_32)
 	{
-		mysym->type = swapif_u32(file, ((t_nlist *)sym)->n_type);
-		mysym->sect = swapif_u32(file, ((t_nlist *)sym)->n_sect);
-		mysym->desc = swapif_u32(file, ((t_nlist *)sym)->n_desc);
+		mysym->type = ((t_nlist *)sym)->n_type;
+		mysym->sect = ((t_nlist *)sym)->n_sect;
+		mysym->desc = ((t_nlist *)sym)->n_desc;
 		mysym->value = swapif_u32(file, ((t_nlist *)sym)->n_value);
 	}
 	else
 	{
-		mysym->type = swapif_u64(file, ((t_nlist_64 *)sym)->n_type);
-		mysym->sect = swapif_u64(file, ((t_nlist_64 *)sym)->n_sect);
-		mysym->desc = swapif_u64(file, ((t_nlist_64 *)sym)->n_desc);
+		mysym->type = ((t_nlist_64 *)sym)->n_type;
+		mysym->sect = ((t_nlist_64 *)sym)->n_sect;
+		mysym->desc = ((t_nlist_64 *)sym)->n_desc;
 		mysym->value = swapif_u64(file, ((t_nlist_64 *)sym)->n_value);
 	}
 	return (mysym);

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 12:19:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 10:29:20 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 12:36:22 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void		create_file(t_file *file, char const *name,
 }
 
 int			create_virtual_file(t_file *file,
-	t_file *old_file, char *virtualname)
+	t_file *old_file, char const *virtualname, t_file_type type)
 {
 	file->virtualname = virtualname;
-	file->is_virtual = TRUE;
+	file->virtualtype = type;
 	if (check_overflow(old_file, file->start)
 		|| check_overflow(old_file, file->end))
 	{

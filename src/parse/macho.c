@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:16:24 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 10:27:25 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 16:14:17 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,6 @@ static int	parse_load_command_errors(t_env *env, t_file *file,
 		sizeof(t_mach_header) : sizeof(t_mach_header_64))) + swapif_u32(file,
 		(file->arch == ARCH_32) ? ((t_mach_header *)(file->start))->sizeofcmds
 		: ((t_mach_header_64 *)(file->start))->sizeofcmds);
-	if (i == 0 && cmd_size % 8)
-	{
-		ft_printf("%s: %s truncated or malformed object (load command %d \
-cmdsize not a multiple of 8)\n", env->execname, file->filename, i);
-		file->error = E_WAS_PRINTED;
-		return (FAILURE);
-	}
 	if ((void *)lc + (cmd_size || 1) > endofcmds)
 	{
 		ft_printf("%s: %s truncated or malformed object (load command %d exten\

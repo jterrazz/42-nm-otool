@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 10:11:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 09:58:21 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 17:52:54 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int					process_arch(t_env *env, t_file *file,
 	{
 		create_file(&virtual_file, file->filename, (file->swap_bits)
 	? ft_bswap_uint32(fat_arch->size) : fat_arch->size, file->start + offset);
-		if (create_virtual_file(&virtual_file, file, (char *)file->filename))
+		if (create_virtual_file(&virtual_file, file, file->filename, FILE_FAT))
 			return (-1);
 		if (all_cputypes && env->bin == BIN_NM)
 			ft_printf("\n%s (for architecture %s):\n",
@@ -165,7 +165,7 @@ int					handle_fat_section(t_env *env, t_file *file,
 		fat_arch = (void *)fat_arch + sizeof(t_fat_arch);
 		i++;
 	}
-	return (printed_error ? -1 : 1);
+	return (printed_error ? 1 : ret);
 }
 
 int					handle_fat(t_env *env, t_file *file)
@@ -185,7 +185,5 @@ int					handle_fat(t_env *env, t_file *file)
 	ret = handle_fat_section(env, file, FALSE, fat_arch);
 	if (ret == 0)
 		ret = handle_fat_section(env, file, TRUE, fat_arch);
-	if (ret < 0)
-		file->error = E_WAS_PRINTED;
 	return (ret < 0 ? FAILURE : SUCCESS);
 }

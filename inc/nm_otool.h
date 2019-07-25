@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 10:47:37 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 10:45:22 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 12:37:01 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ typedef enum	e_flag {
 	FLAG_T = 1 << 12,
 	FLAG_HELP = 1 << 13
 }				t_flag;
+
+typedef enum	e_file_type {
+	FILE_MACHO = 1 << 0,
+	FILE_ARCHIVE = 1 << 1,
+	FILE_FAT = 1 << 2
+}				t_file_type;
 
 typedef enum	e_arch {
 	ARCH_32,
@@ -103,7 +109,7 @@ typedef struct	s_file {
 	char const		*virtualname;
 	uint64_t		filesize;
 	t_bool			swap_bits;
-	t_bool			is_virtual;
+	t_file_type		virtualtype;
 	t_arch			arch;
 	uint64_t		nsects;
 	t_list			*mysects;
@@ -212,7 +218,7 @@ int				parse_macho_symtab(t_file *file,
 void			create_file(t_file *file,
 	char const *name, uint64_t size, void *start);
 int				create_virtual_file(t_file *file,
-	t_file *old_file, char *virtualname);
+	t_file *old_file, char const *virtualname, t_file_type type);
 void			destroy_file(t_file *file);
 t_bool			check_overflow(t_file *file, void *ptr);
 char			*get_cpu_string(cpu_type_t cputype,

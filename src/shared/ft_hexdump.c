@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:58:59 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 11:48:17 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 18:00:40 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 void	ft_hexdump_line_values(char *start, int64_t len, t_file *file)
 {
-	int8_t i;
+	int64_t i;
 
 	i = 0;
 	while (i < len)
@@ -34,9 +34,9 @@ void	ft_hexdump_line_values(char *start, int64_t len, t_file *file)
 				else
 					ft_printf(" ");
 			}
-			continue;
 		}
-		ft_printf("%02x ", (uint8_t)start[i]);
+		else
+			ft_printf("%02x ", (uint8_t)start[i]);
 		i++;
 	}
 }
