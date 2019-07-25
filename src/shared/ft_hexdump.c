@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 00:58:59 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/25 10:33:09 by jterrazz         ###   ########.fr       */
+/*   Updated: 2019/07/25 11:48:17 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,19 @@ void	ft_hexdump_line_values(char *start, int64_t len, t_file *file)
 	i = 0;
 	while (i < len)
 	{
-		if (!file->swap_bits && file->arch == ARCH_32)
+		if (file->swap_bits)
 		{
 			if (i + 3 - 2 * (i % 4) < len)
+			{
 				ft_printf("%02x", (uint8_t)start[i + 3 - 2 * (i % 4)]);
+				if (i % 4 == 3 && file->arch == ARCH_64)
+					ft_printf(" ");
+				else
+					ft_printf(" ");
+			}
+			continue;
 		}
-		else
-			ft_printf("%02x", (uint8_t)start[i]);
-		if (file->arch == ARCH_64)
-			ft_printf(" ");
-		else if (i % 4 == 3)
-			ft_printf(" ");
+		ft_printf("%02x ", (uint8_t)start[i]);
 		i++;
 	}
 }
