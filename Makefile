@@ -6,12 +6,12 @@
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/23 18:00:29 by jterrazz          #+#    #+#              #
-#    Updated: 2019/07/25 10:36:24 by jterrazz         ###   ########.fr        #
+#    Updated: 2019/07/25 10:57:25 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INC_PATH = inc
-LIB_PATH = libs
+LIB_PATH = libft
 BUILD_PATH = obj
 SRC_PATH = src
 
@@ -25,7 +25,7 @@ SOURCES += shared/ft_bswap.c shared/ft_bswap_helper.c shared/file.c
 SOURCES1 = ft_nm.c $(SOURCES)
 SOURCES2 = ft_otool.c $(SOURCES)
 
-LIB_SOURCES = $(LIB_PATH)/libft/libft.a $(LIB_PATH)/ft_printf/libftprintf.a
+LIB_SOURCES = $(LIB_PATH)/libft.a $(LIB_PATH)/ft_printf/libftprintf.a
 
 OBJECTS1 = $(SOURCES1:%.c=$(BUILD_PATH)/%.o)
 OBJECTS2 = $(SOURCES2:%.c=$(BUILD_PATH)/%.o)
@@ -46,7 +46,7 @@ FLAGS_CC = -Wall -Wextra -Werror
 # COMMANDS  		    													   #
 # **************************************************************************** #
 
-.PHONY: all libs clean fclean re
+.PHONY: all libs clean fclean re ft_nm ft_otool
 
 all: $(NAME)
 
@@ -60,7 +60,7 @@ $(NAME2): libs $(OBJECTS2)
 
 libs:
 	@make -s -C $(LIB_PATH)/ft_printf
-	@make -s -C $(LIB_PATH)/libft
+	@make -s -C $(LIB_PATH)
 
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p $(@D)
@@ -68,13 +68,13 @@ $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
 
 clean:
 	@make clean -C $(LIB_PATH)/ft_printf
-	@make clean -C $(LIB_PATH)/libft
+	@make clean -C $(LIB_PATH)
 	@rm -rf $(BUILD_PATH)
 	@echo "Clean \033[33mok\033[0m"
 
 fclean: clean
 	@make fclean -C $(LIB_PATH)/ft_printf
-	@make fclean -C $(LIB_PATH)/libft
+	@make fclean -C $(LIB_PATH)
 	@rm -f $(NAME1) $(NAME2) $(LIB_NAME)
 	@echo "Fclean \033[33mok\033[0m"
 
