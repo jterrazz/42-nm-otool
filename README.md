@@ -34,7 +34,7 @@ make re
 - Many flags (see ./ft_nm -h or ./ft_otool -h)
 - Checks for corruption
 
-To understand how I implemented this program, you can refer to the [medium article of this project](https://medium.com/p/7d4fef3d7507).
+To understand how I implemented this program, you can refer to the [article of this project](https://www.jterrazz.com/articles/3-reverse-engineer-binaries-with-nm-and-otool).
 
 ### File structure
 ``` bash
