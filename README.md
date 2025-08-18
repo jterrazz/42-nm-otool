@@ -1,9 +1,11 @@
-> Hey there, app enthusiasts! 👋 Ready to dive into the world of game-changing apps? At [jterrazz.com](https://jterrazz.com), I'm all about crafting useful applications and sharing the journey! Discover coding insights, self-improvement hacks, and sneak peeks of my latest projects (psst... my next app is all about leveling up in life! 🚀). Come along for the ride - you might just find the spark for your next big idea! 💡💻
+*Hey there – I’m Jean-Baptiste, just another developer doing weird things with code. All my projects live on [jterrazz.com](https://jterrazz.com) – complete with backstories and lessons learned. Feel free to poke around – you might just find something useful!*
 
-# 42-nm-otool
+# 42 Nm Otool
 Custom C implementation of **nm** and **otool** commands.
 - `ft_nm <args>` displays the name list (symbol table of nlist structures) of the `<args>` files
 - `ft_tool` displays the content of the (\__TEXT,__text) segment
+
+**[Access the repository story here](https://www.jterrazz.com/articles/3-decoding-the-magic-my-journey-building-nm-and-otool)**
 
 This project will makes you understand how Mach-O files are structured.
 
@@ -34,7 +36,7 @@ make re
 - Many flags (see ./ft_nm -h or ./ft_otool -h)
 - Checks for corruption
 
-To understand how I implemented this program, you can refer to the [article of this project](https://www.jterrazz.com/articles/3-reverse-engineer-binaries-with-nm-and-otool).
+To understand how I implemented this program, you can refer to the [article of this project](https://www.jterrazz.com/articles/3-decoding-the-magic-my-journey-building-nm-and-otool).
 
 ### File structure
 ``` bash
